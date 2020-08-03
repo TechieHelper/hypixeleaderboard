@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <title>Home Page</title>
+        <link rel="stylesheet" href="/static/stylesheet.css" />
+</head>
+<body>
+    <div class="topnav">
+        <a class="active" href="/">Home</a>
+        <a href="/bedwars/">Bedwars</a>
+        <a href="/skywars/">Skywars</a>
+    </div>
+
+    <p>Most Recent Game Type: {{data['mostRecentGameType']}}</p>
+    <p>Particle Pack: {{data['particlePack']}}</p>
+    <p>Last Login: {{data['lastLogout']|format_datetime}}</p>
+</body>
+</html>

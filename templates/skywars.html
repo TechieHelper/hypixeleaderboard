@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <title>Home Page</title>
+        <link rel="stylesheet" href="/static/stylesheet.css" />
+</head>
+<body>
+    <div class="topnav">
+        <a href="/">Home</a>
+        <a href="/bedwars/">Bedwars</a>
+        <a class="active" href="/skywars/">Skywars</a>
+    </div>
+
+    <h1>{{data['displayname']}}</h1>
+
+    <form method="POST">
+        <input type="text" name="playerName" alt="Username">
+        <input type="submit" value="Submit">
+    </form>
+
+    <h1>Skywars</h1>
+</body>
+</html>
