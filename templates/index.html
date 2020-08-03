@@ -12,8 +12,8 @@
         <a href="/skywars/">Skywars</a>
     </div>
 
-    <p>Most Recent Game Type: {{data['mostRecentGameType']}}</p>
-    <p>Particle Pack: {{data['particlePack']}}</p>
+    <p>Most Recent Game Type: {{data['mostRecentGameType'][0]}}{{data['mostRecentGameType'][1:]|lower}}</p>
+    <p>Particle Pack: {{data['particlePack'][0]}}{{data['particlePack'][1:]|lower}}</p>
     <p>Last Login: {{data['lastLogout']|format_datetime}}</p>
 </body>
 </html>

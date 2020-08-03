@@ -2,7 +2,11 @@
 <html lang="en-US">
 <head>
     <title>Home Page</title>
-        <link rel="stylesheet" href="/static/stylesheet.css" />
+    <link rel="stylesheet" href="/static/stylesheet.css" />
+    {% set GAME_MODES_SKYWARS = ['_solo_normal', '_solo_insane', '_team', '_team_insane', '_lab', '_lab_team'] %}
+    {% set REQUIRED_STATS_SKYWARS = ['kills', 'deaths', '!kills;deaths', 'wins', 'losses', '!wins;losses'] %}
+    {% set EXTRA_STATS_SKYWARS = [] %}
+
 </head>
 <body>
     <div class="topnav">
@@ -19,5 +23,38 @@
     </form>
 
     <h1>Skywars</h1>
+
+    <table>
+        <tr>
+            <th></th>
+            <th>Kills</th>
+            <th>Deaths</th>
+            <th>KDR</th>
+            <th>Wins</th>
+            <th>Losses</th>
+            <th>Win/Loss Ratio</th>
+        </tr>
+        {% for mode in GAME_MODES_SKYWARS %}
+            <tr>
+                {% if mode == '' %} <th>All Time</th>
+                {% elif mode == '_solo_normal' %} <th>Solo Normal</th>
+                {% elif mode == '_solo_insane' %} <th>Solo Insane</th>
+                {% elif mode == '_team' %} <th>Team Normal</th>
+                {% elif mode == '_team_insane' %} <th>Team Insane</th>
+                {% elif mode == '_lab' %} <th>Solo Labs</th>
+                {% elif mode == '_lab_team' %} <th>Team Labs</th>
+                {% endif %}
+
+                {% for stat in REQUIRED_STATS_SKYWARS %}
+                    {% if stat[:1] == '!' %}
+                        {% set tempList = stat[1:].split(';') %}
+                        <td style="font-weight: bold">{{'%0.2f' % (skywarsData[tempList[0] + mode] / skywarsData[tempList[1] + mode])}}</td>
+                    {% else %}
+                        <td>{{skywarsData[stat + mode]}}</td>
+                    {% endif %}
+                {% endfor%}
+            </tr>
+        {% endfor %}
+    </table>
 </body>
 </html>
