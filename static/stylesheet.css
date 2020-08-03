@@ -20,13 +20,14 @@ td {
 }
 
 .topnav {
-  background-color: #333;
+  background-color: #ffffff;
   overflow: hidden;
+  color: black;
 }
 
 .topnav a {
   float: left;
-  color: #f2f2f2;
+  color: black;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none
@@ -34,11 +35,11 @@ td {
 }
 
 .topnav a:hover {
-  background-color: #ddd;
+  background-color: #329da8;
   color: black;
 }
 
 .topnav a.active {
-  background-color: #4caf50;
+  background-color: #329da8;
   color: white;
 }
