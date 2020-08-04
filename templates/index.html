@@ -12,8 +12,17 @@
         <a href="/skywars/">Skywars</a>
     </div>
 
-    <p>Most Recent Game Type: {{data['mostRecentGameType'][0]}}{{data['mostRecentGameType'][1:]|lower}}</p>
-    <p>Particle Pack: {{data['particlePack'][0]}}{{data['particlePack'][1:]|lower}}</p>
+    <p>Most Recent Game Type: {{data['mostRecentGameType']|capitalizeFirstLetter}}</p>
+    <p>Particle Pack: {{data['particlePack']|capitalizeFirstLetter}}</p>
     <p>Last Login: {{data['lastLogout']|format_datetime}}</p>
+    <p>Current Outfit:</p>
+    <p>Helmet: {{data['outfit']['HELMET']|capitalizeFirstLetter}}</p>
+    <p>Chestplate: {{data['outfit']['CHESTPLATE']|capitalizeFirstLetter}}</p>
+    <p>Leggings: {{data['outfit']['LEGGINGS']|capitalizeFirstLetter}}</p>
+    <p>Boots: {{data['outfit']['BOOTS']|capitalizeFirstLetter}}</p>
+
+    <footer>
+        <a href="mailto:oliverlford@icloud.com?subject=Assistance Required">Contact Us</a>
+    </footer>
 </body>
 </html>

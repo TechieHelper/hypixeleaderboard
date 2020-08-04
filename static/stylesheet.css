@@ -43,3 +43,90 @@ td {
   background-color: #329da8;
   color: white;
 }
+
+table.mainTable {
+  border: 1px solid #329DA8;
+  background-color: #F0FFFF;
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+}
+table.mainTable td, table.mainTable th {
+  border: 1px solid #AAAAAA;
+  padding: 3px 2px;
+}
+table.mainTable tbody td {
+  font-size: 13px;
+}
+table.mainTable thead {
+  background: #329DA8;
+  background: -moz-linear-gradient(top, #65b5be 0%, #46a6b0 66%, #329DA8 100%);
+  background: -webkit-linear-gradient(top, #65b5be 0%, #46a6b0 66%, #329DA8 100%);
+  background: linear-gradient(to bottom, #65b5be 0%, #46a6b0 66%, #329DA8 100%);
+  border-bottom: 2px solid #444444;
+}
+table.mainTable thead th {
+  font-size: 15px;
+  font-weight: bold;
+  color: #FFFFFF;
+  border-left: 2px solid #D0E4F5;
+}
+table.mainTable thead th:first-child {
+  border-left: none;
+}
+
+table.mainTable tfoot td {
+  font-size: 14px;
+}
+table.mainTable tfoot .links {
+  text-align: right;
+}
+table.mainTable tfoot .links a{
+  display: inline-block;
+  background: #1C6EA4;
+  color: #FFFFFF;
+  padding: 2px 8px;
+  border-radius: 5px;
+}
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: red;
+  color: white;
+  text-align: center;
+}
+
+/* width */
+
+::-webkit-scrollbar {
+
+width: 10px;
+
+}
+
+/* Track */
+
+::-webkit-scrollbar-track {
+
+background: #f1f1f1;
+
+}
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+
+background: #888;
+
+}
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+
+background: #555;
+
+}
