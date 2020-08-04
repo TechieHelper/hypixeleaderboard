@@ -4,11 +4,25 @@
     <title>Home Page</title>
     <link rel="stylesheet" href="/static/stylesheet.css" />
     <script data-ad-client="ca-pub-4000110191768629" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-WFPKGQH');</script>
+    <!-- End Google Tag Manager -->
+
     {% set GAME_MODES_BEDWARS = ['', 'eight_one_', 'eight_two_', 'four_three_', 'four_four_'] %}
     {% set REQUIRED_STATS_BEDWARS = ['kills_bedwars', 'deaths_bedwars', '!kills_bedwars;deaths_bedwars', 'final_kills_bedwars', 'final_deaths_bedwars', '!final_kills_bedwars;final_deaths_bedwars', 'wins_bedwars', 'losses_bedwars', '!wins_bedwars;losses_bedwars', 'beds_broken_bedwars', 'beds_lost_bedwars', '!beds_broken_bedwars;beds_lost_bedwars'] %}
     {% set EXTRA_STATS_BEDWARS = ['winstreak', 'games_played_bedwars', 'items_purchased_bedwars', 'permanent _items_purchased_bedwars', 'resources_collected_bedwars', 'iron_resources_collected_bedwars', 'gold_resources_collected_bedwars', 'diamond_resources_collected_bedwars', 'emerald_resources_collected_bedwars'] %}
 </head>
 <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WFPKGQH"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
     <div class="topnav">
         <a href="/home/">Home</a>
         <a class="active" href="/bedwars/">Bedwars</a>
