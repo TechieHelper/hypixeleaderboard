@@ -4,7 +4,7 @@ import requests, json, os, time, datetime
 app = Flask(__name__)
 
 
-@app.route("/")
+@app.route("/home/")
 def home():
     data = generateData()
     return render_template("index.html", data=data)
@@ -12,6 +12,12 @@ def home():
 
 @app.route("/bedwars/")
 def bedwars():
+    data = generateData()
+    return render_template("bedwars.html", data=data, bedwarsData=data['stats']['Bedwars'])
+
+
+@app.route("/")
+def bedwarsTemp():
     data = generateData()
     return render_template("bedwars.html", data=data, bedwarsData=data['stats']['Bedwars'])
 
@@ -39,6 +45,13 @@ def bedwars_post():
     global inputtedName
     inputtedName = request.form['playerName']
     return redirect('/bedwars/', code=302)
+
+
+@app.route("/", methods=['POST'])
+def bedwarsTemp_post():
+    global inputtedName
+    inputtedName = request.form['playerName']
+    return redirect('/', code=302)
 
 
 
