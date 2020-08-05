@@ -22,6 +22,16 @@ def bedwarsTemp():
     return render_template("bedwars.html", data=data, bedwarsData=data['stats']['Bedwars'])
 
 
+@app.route("/privacy-policy/")
+def privacyPolicy():
+    return render_template("privacyPolicy.html")
+
+
+@app.route("/terms-of-service/")
+def termsOfService():
+    return render_template("termsOfService.html")
+
+
 @app.route("/skywars/")
 def skywars():
     data = generateData()
