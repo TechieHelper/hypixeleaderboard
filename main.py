@@ -97,13 +97,7 @@ def generateData():
 
 def getUUIDFromName():
     try:
-        name = inputtedName
-    except:
-        name = "TechieHelper"
-
-    if name == "": name = "TechieHelper"
-    try:
-        api_request = requests.get("https://api.mojang.com/users/profiles/minecraft/" + name)
+        api_request = requests.get("https://api.mojang.com/users/profiles/minecraft/" + inputtedName)
         api = json.loads(api_request.content)
         return api['id']
     except:
