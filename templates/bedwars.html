@@ -3,6 +3,7 @@
 <head>
     <title>Home Page</title>
     <link rel="stylesheet" href="/static/stylesheet.css" />
+    <link rel="stylesheet" type="text/css" href="/static/Bootstrap/dist/css/bootstrap.min.css">
     <script data-ad-client="ca-pub-4000110191768629" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
     <!-- Google Tag Manager -->
@@ -38,86 +39,92 @@
     </form>
 
     <h1>Bedwars</h1>
+    <div class="row">
+        <div class="col-sm-10 table-responsive">
+            <table class="table-hover table-bordered table-striped table w-100">
+                <tr>
+                    <th></th>
+                    <th>Kills</th>
+                    <th>Deaths</th>
+                    <th>KDR</th>
+                    <th>Final Kills</th>
+                    <th>Final Deaths</th>
+                    <th>Final KDR</th>
+                    <th>Wins</th>
+                    <th>Losses</th>
+                    <th>Win/Loss Ratio</th>
+                    <th>Beds Broken</th>
+                    <th>Beds Lost</th>
+                    <th>Beds Broken/Lost Ratio</th>
+                </tr>
+                {% for mode in GAME_MODES_BEDWARS %}
+                    <tr>
+                        {% if mode == '' %} <th>All Time</th>
+                        {% elif mode == 'eight_one_' %} <th>Solos</th>
+                        {% elif mode == 'eight_two_' %} <th>Duos</th>
+                        {% elif mode == 'four_three_' %} <th>3v3v3v3</th>
+                        {% elif mode == 'four_four_' %} <th>4v4v4v4</th>
+                        {% elif mode == 'eight_two_rush_' %} <th>Duos Rush</th>
+                        {% elif mode == 'four_four_rush_' %} <th>4v4v4v4 Rush</th>
+                        {% endif %}
 
-    <table class="mainTable">
-        <tr>
-            <th></th>
-            <th>Kills</th>
-            <th>Deaths</th>
-            <th>KDR</th>
-            <th>Final Kills</th>
-            <th>Final Deaths</th>
-            <th>Final KDR</th>
-            <th>Wins</th>
-            <th>Losses</th>
-            <th>Win/Loss Ratio</th>
-            <th>Beds Broken</th>
-            <th>Beds Lost</th>
-            <th>Beds Broken/Lost Ratio</th>
-        </tr>
-        {% for mode in GAME_MODES_BEDWARS %}
-            <tr>
-                {% if mode == '' %} <th>All Time</th>
-                {% elif mode == 'eight_one_' %} <th>Solos</th>
-                {% elif mode == 'eight_two_' %} <th>Duos</th>
-                {% elif mode == 'four_three_' %} <th>3v3v3v3</th>
-                {% elif mode == 'four_four_' %} <th>4v4v4v4</th>
-                {% elif mode == 'eight_two_rush_' %} <th>Duos Rush</th>
-                {% elif mode == 'four_four_rush_' %} <th>4v4v4v4 Rush</th>
-                {% endif %}
+                        {% for stat in REQUIRED_STATS_BEDWARS %}
+                            {% if stat[:1] == '!' %}
+                                {% set tempList = stat[1:].split(';') %}
+                                <td style="font-weight: bold">{{'%0.2f' % (bedwarsData[mode + tempList[0]] / bedwarsData[mode + tempList[1]])}}</td>
+                            {% else %}
+                                <td>{{bedwarsData[mode + stat]}}</td>
+                            {% endif %}
+                        {% endfor%}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="col-sm-2">
+            <p>AD PLACEHOLDER</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-10 table-responsive">
+            <table class="table-hover table-bordered table-striped table w-100">
+                <tr>
+                    <th></th>
+                    <th>Winstreak</th>
+                    <th>Games Played</th>
+                    <th>Items Purchased</th>
+                    <th>Permanent Items Purchased</th>
+                    <th>Resources Collected</th>
+                    <th>Iron Collected</th>
+                    <th>Gold Collected</th>
+                    <th>Diamonds Collected</th>
+                    <th>Emeralds Collected</th>
+                </tr>
+                {% for mode in GAME_MODES_BEDWARS %}
+                    <tr>
+                        {% if mode == '' %} <th>All Time</th>
+                        {% elif mode == 'eight_one_' %} <th>Solos</th>
+                        {% elif mode == 'eight_two_' %} <th>Duos</th>
+                        {% elif mode == 'four_three_' %} <th>3v3v3v3</th>
+                        {% elif mode == 'four_four_' %} <th>4v4v4v4</th>
+                        {% elif mode == 'eight_two_rush_' %} <th>Duos Rush</th>
+                        {% elif mode == 'four_four_rush_' %} <th>4v4v4v4 Rush</th>
+                        {% endif %}
 
-                {% for stat in REQUIRED_STATS_BEDWARS %}
-                    {% if stat[:1] == '!' %}
-                        {% set tempList = stat[1:].split(';') %}
-                        <td style="font-weight: bold">{{'%0.2f' % (bedwarsData[mode + tempList[0]] / bedwarsData[mode + tempList[1]])}}</td>
-                    {% else %}
-                        <td>{{bedwarsData[mode + stat]}}</td>
-                    {% endif %}
-                {% endfor%}
-            </tr>
-        {% endfor %}
-    </table>
-
-    <table>
-        <tr>
-            <th></th>
-            <th>Winstreak</th>
-            <th>Games Played</th>
-            <th>Items Purchased</th>
-            <th>Permanent Items Purchased</th>
-            <th>Resources Collected</th>
-            <th>Iron Collected</th>
-            <th>Gold Collected</th>
-            <th>Diamonds Collected</th>
-            <th>Emeralds Collected</th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th>Diamonds Collected</th>
-        </tr>
-        {% for mode in GAME_MODES_BEDWARS %}
-            <tr>
-                {% if mode == '' %} <th>All Time</th>
-                {% elif mode == 'eight_one_' %} <th>Solos</th>
-                {% elif mode == 'eight_two_' %} <th>Duos</th>
-                {% elif mode == 'four_three_' %} <th>3v3v3v3</th>
-                {% elif mode == 'four_four_' %} <th>4v4v4v4</th>
-                {% elif mode == 'eight_two_rush_' %} <th>Duos Rush</th>
-                {% elif mode == 'four_four_rush_' %} <th>4v4v4v4 Rush</th>
-                {% endif %}
-
-                {% for stat in EXTRA_STATS_BEDWARS %}
-                    {% if stat[:1] == '!' %}
-                        {% set tempList = stat[1:].split(';') %}
-                        <td>{{'%0.2f' % (bedwarsData[mode + tempList[0]] / bedwarsData[mode + tempList[1]])}}</td>
-                    {% else %}
-                        <td>{{bedwarsData[mode + stat]}}</td>
-                    {% endif %}
-                {% endfor%}
-            </tr>
-        {% endfor %}
-    </table>
+                        {% for stat in EXTRA_STATS_BEDWARS %}
+                            {% if stat[:1] == '!' %}
+                                {% set tempList = stat[1:].split(';') %}
+                                <td>{{'%0.2f' % (bedwarsData[mode + tempList[0]] / bedwarsData[mode + tempList[1]])}}</td>
+                            {% else %}
+                                <td>{{bedwarsData[mode + stat]}}</td>
+                            {% endif %}
+                        {% endfor%}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="col-sm-2">
+            <p>Ad holder</p>
+        </div>
+    </div>
 </body>
 </html>

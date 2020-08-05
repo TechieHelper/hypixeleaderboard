@@ -54,6 +54,14 @@ def bedwarsTemp_post():
     return redirect('/', code=302)
 
 
+@app.template_filter()
+def checkIfValid(data, dataPoint):
+    try:
+        return data[dataPoint]
+    except:
+        return "-"
+
+
 
 @app.template_filter()
 def format_datetime(value):
@@ -93,5 +101,5 @@ def getUUIDFromName():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0")
+    app.run()
 
