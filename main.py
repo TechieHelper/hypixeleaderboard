@@ -45,23 +45,20 @@ def contactUs():
 
 @app.route("/skywars/", methods=['POST'])
 def skywars_post():
-    global inputtedName
-    inputtedName = request.form['playerName']
-    return redirect('/skywars/', code=302)
+    data = generateData(request.form['playerName'])
+    return render_template("skywars.html", data=data, skywarsData=data['stats']['SkyWars'])
 
 
 @app.route("/bedwars/", methods=['POST'])
 def bedwars_post():
-    global inputtedName
-    inputtedName = request.form['playerName']
-    return redirect('/bedwars/', code=302)
+    data = generateData(request.form['playerName'])
+    return render_template("bedwars.html", data=data, bedwarsData=data['stats']['Bedwars'])
 
 
 @app.route("/", methods=['POST'])
 def bedwarsTemp_post():
-    global inputtedName
-    inputtedName = request.form['playerName']
-    return redirect('/', code=302)
+    data = generateData(request.form['playerName'])
+    return render_template("bedwars.html", data=data, bedwarsData=data['stats']['Bedwars'])
 
 
 @app.template_filter()
@@ -84,9 +81,9 @@ def capitalizeFirstLetter(value):
     return " ".join([i[0].upper() + i[1:].lower() for i in valueList])
 
 
-def generateData():
+def generateData(name="TechieHelper"):
     try:
-        api_request = requests.get("https://api.hypixel.net/player?uuid=" + getUUIDFromName() + "&key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
+        api_request = requests.get("https://api.hypixel.net/player?uuid=" + getUUIDFromName(name) + "&key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
         api = json.loads(api_request.content)
     except:
         with open("exampleData.json") as f:
@@ -95,9 +92,9 @@ def generateData():
     return api['player']
 
 
-def getUUIDFromName():
+def getUUIDFromName(name):
     try:
-        api_request = requests.get("https://api.mojang.com/users/profiles/minecraft/" + inputtedName)
+        api_request = requests.get("https://api.mojang.com/users/profiles/minecraft/" + name)
         api = json.loads(api_request.content)
         return api['id']
     except:
