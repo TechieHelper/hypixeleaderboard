@@ -10,6 +10,12 @@ def home():
     return render_template("index.html", data=data)
 
 
+@app.route("/suggestions/")
+def suggestions():
+    data = generateData()
+    return render_template("suggestions.html")
+
+
 @app.route("/bedwars/")
 def bedwars():
     data = generateData()
@@ -47,6 +53,20 @@ def skywars():
 @app.route("/contact-us/")
 def contactUs():
     return render_template("contactUs.html")
+
+
+@app.route("/suggestions/", methods=['POST'])
+def suggestions_post():
+    data = request.form['comment']
+    with open("comments.json") as f:
+        comments = json.loads(f.read())
+
+    with open("comments.json", "w") as f:
+        comments['comments'].append(data)
+        comments = "{\"comments\": [" + ", ".join(["\"" + comment + "\"" for comment in comments['comments']]) + "]}"
+        f.write(comments)
+
+    return redirect("../bedwars/", code=302)
 
 
 @app.route("/home/", methods=['POST'])
