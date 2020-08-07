@@ -37,46 +37,68 @@
         </div>
     </div>
 
-    <h1>{{data['displayname']}}</h1>
-
-    <form method="POST">
-        <input type="text" name="playerName" alt="Username">
-        <input type="submit" value="Submit">
-    </form>
-
     <h1>Skywars</h1>
 
-    <table>
-        <tr>
-            <th></th>
-            <th>Kills</th>
-            <th>Deaths</th>
-            <th>KDR</th>
-            <th>Wins</th>
-            <th>Losses</th>
-            <th>Win/Loss Ratio</th>
-        </tr>
-        {% for mode in GAME_MODES_SKYWARS %}
-            <tr>
-                {% if mode == '' %} <th>All Time</th>
-                {% elif mode == '_solo_normal' %} <th>Solo Normal</th>
-                {% elif mode == '_solo_insane' %} <th>Solo Insane</th>
-                {% elif mode == '_team' %} <th>Team Normal</th>
-                {% elif mode == '_team_insane' %} <th>Team Insane</th>
-                {% elif mode == '_lab' %} <th>Solo Labs</th>
-                {% elif mode == '_lab_team' %} <th>Team Labs</th>
-                {% endif %}
+    <form method="POST">
+        <div class="row">
+            <div class="col-sm-2">
+                <p>Username: </p>
+            </div>
+            <div class="col-sm-2">
+                <input type="text" name="playerName" alt="Username">
+            </div>
+            <div class="col-sm-1"></div>
+            <div class="col-sm-1">
+                <input type="submit" value="Submit">
+            </div>
+            <div class="col-sm-6"></div>
+        </div>
+    </form>
 
-                {% for stat in REQUIRED_STATS_SKYWARS %}
-                    {% if stat[:1] == '!' %}
-                        {% set tempList = stat[1:].split(';') %}
-                        <td style="font-weight: bold">{{'%0.2f' % (skywarsData[tempList[0] + mode] / skywarsData[tempList[1] + mode])}}</td>
-                    {% else %}
-                        <td>{{skywarsData[stat + mode]}}</td>
-                    {% endif %}
-                {% endfor%}
-            </tr>
-        {% endfor %}
-    </table>
+    <h1>{{data['displayname']}}</h1>
+
+    <div class="row">
+        <div class="col-sm-10 table-responsive pl-4">
+            <table class="table-hover table-bordered table-striped table w-100">
+                <tr>
+                    <th></th>
+                    <th>Kills</th>
+                    <th>Deaths</th>
+                    <th>KDR</th>
+                    <th>Wins</th>
+                    <th>Losses</th>
+                    <th>Win/Loss Ratio</th>
+                </tr>
+                {% for mode in GAME_MODES_SKYWARS %}
+                    <tr>
+                        {% if mode == '' %} <th>All Time</th>
+                        {% elif mode == '_solo_normal' %} <th>Solo Normal</th>
+                        {% elif mode == '_solo_insane' %} <th>Solo Insane</th>
+                        {% elif mode == '_team' %} <th>Team Normal</th>
+                        {% elif mode == '_team_insane' %} <th>Team Insane</th>
+                        {% elif mode == '_lab' %} <th>Solo Labs</th>
+                        {% elif mode == '_lab_team' %} <th>Team Labs</th>
+                        {% endif %}
+
+                        {% for stat in REQUIRED_STATS_SKYWARS %}
+                            {% if stat[:1] == '!' %}
+                                {% set tempList = stat[1:].split(';') %}
+                                {% if skywarsData[tempList[0] + mode] != "-" %}
+                                    <td style="font-weight: bold">{{'%0.2f' % (skywarsData[tempList[0] + mode] / skywarsData[tempList[1] + mode])}}</td>
+                                {% else %}
+                                    <td style="font-weight: bold">-</td>
+                                {% endif %}
+                            {% else %}
+                                <td>{{skywarsData[stat + mode]}}</td>
+                            {% endif %}
+                        {% endfor%}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="col-sm-2">
+            <p>Ad holder</p>
+        </div>
+    </div>
 </body>
 </html>

@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="/static/stylesheet.css" />
     <link rel="stylesheet" type="text/css" href="/static/Bootstrap/dist/css/bootstrap.min.css">
     <script data-ad-client="ca-pub-4000110191768629" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script type="text/javascript" src="/static/displayDetailsController.js"></script>
 
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -102,12 +103,17 @@
             </table>
         </div>
         <div class="col-sm-2">
-            <p>AD PLACEHOLDER</p>
+            <p>Ad placeholder</p>
         </div>
     </div>
+
+    <div class="pl-2">
+        <button onclick="toggle_visibility('extraDetailsTable');" class="btn btn-light">Display Details</button>
+    </div>
+
     <div class="row">
         <div class="col-sm-10 table-responsive pl-4">
-            <table class="table-hover table-bordered table-striped table w-100">
+            <table class="table-hover table-bordered table-striped table w-100" id="extraDetailsTable" style="display:none">
                 <tr>
                     <th></th>
                     <th>Winstreak</th>
@@ -134,7 +140,11 @@
                         {% for stat in EXTRA_STATS_BEDWARS %}
                             {% if stat[:1] == '!' %}
                                 {% set tempList = stat[1:].split(';') %}
-                                <td>{{'%0.2f' % (bedwarsData[mode + tempList[0]] / bedwarsData[mode + tempList[1]])}}</td>
+                                {% if bedwarsData[mode + tempList[0]] != "-" %}
+                                    <td style="font-weight: bold">{{'%0.2f' % (bedwarsData[mode + tempList[0]] / bedwarsData[mode + tempList[1]])}}</td>
+                                {% else %}
+                                    <td style="font-weight: bold">-</td>
+                                {% endif %}
                             {% else %}
                                 <td>{{bedwarsData[mode + stat]}}</td>
                             {% endif %}
@@ -144,7 +154,7 @@
             </table>
         </div>
         <div class="col-sm-2">
-            <p>Ad holder</p>
+            <p>Ad placeholder</p>
         </div>
     </div>
 </body>
