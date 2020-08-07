@@ -16,6 +16,12 @@ def bedwars():
     return render_template("bedwars.html", data=data, bedwarsData=data['stats']['Bedwars'])
 
 
+@app.route("/duels/")
+def duels():
+    data = generateData()
+    return render_template("duels.html", data=data, duelsData=data['stats']['Duels'])
+
+
 @app.route("/")
 def bedwarsTemp():
     data = generateData()
@@ -41,6 +47,12 @@ def skywars():
 @app.route("/contact-us/")
 def contactUs():
     return render_template("contactUs.html")
+
+
+@app.route("/home/", methods=['POST'])
+def home_post():
+    data = generateData(request.form['playerName'])
+    return render_template("index.html", data=data)
 
 
 @app.route("/skywars/", methods=['POST'])
@@ -81,13 +93,18 @@ def capitalizeFirstLetter(value):
     return " ".join([i[0].upper() + i[1:].lower() for i in valueList])
 
 
-def generateData(name="TechieHelper"):
-    try:
-        api_request = requests.get("https://api.hypixel.net/player?uuid=" + getUUIDFromName(name) + "&key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
-        api = json.loads(api_request.content)
-    except:
-        with open("exampleData.json") as f:
+def generateData(name="_"):
+    uuid = getUUIDFromName(name)
+    if uuid == "Unknown Name":
+        with open("dashedData.json") as f:
             api = json.loads(f.read())
+    else:
+        try:
+            api_request = requests.get("https://api.hypixel.net/player?uuid=" + uuid + "&key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
+            api = json.loads(api_request.content)
+        except:
+            with open("dashedData.json") as f:
+                api = json.loads(f.read())
 
     return api['player']
 
@@ -98,9 +115,8 @@ def getUUIDFromName(name):
         api = json.loads(api_request.content)
         return api['id']
     except:
-        return "2e26f35fb6a74939937776b1149b4b4d"
+        return "Unknown Name"
 
 
 if __name__ == "__main__":
     app.run()
-
