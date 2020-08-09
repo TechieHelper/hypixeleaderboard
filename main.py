@@ -16,6 +16,17 @@ def suggestions():
     return render_template("suggestions.html")
 
 
+@app.route("/leaderboards/<gameType>/")
+def leaderboardsAutoGen(gameType):
+    data = generateLeaderboardData()
+    return render_template("leaderboardAutoGen.html", gameType=gameType, data=data[leaderboardURLFormatting(gameType)])
+
+
+@app.route("/leaderboards/")
+def leaderboards():
+    return render_template("leaderboards.html")
+
+
 @app.route("/bedwars/")
 def bedwars():
     data = generateData()
@@ -69,6 +80,9 @@ def suggestions_post():
     return redirect("../bedwars/", code=302)
 
 
+
+
+
 @app.route("/home/", methods=['POST'])
 def home_post():
     data = generateData(request.form['playerName'])
@@ -113,6 +127,31 @@ def capitalizeFirstLetter(value):
     return " ".join([i[0].upper() + i[1:].lower() for i in valueList])
 
 
+def generateLeaderboardData():
+    try:
+        api_request = requests.get("https://api.hypixel.net/leaderboards?key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
+        api = json.loads(api_request.content)
+    except:
+        with open("dashedLeaderboardData.json") as f:
+            api = json.loads(f.read())
+
+    return api['leaderboards']
+
+
+def leaderboardURLFormatting(value):
+    output = ""
+    for i in value:
+        if i == "-":
+            i = "_"
+        else:
+            i = i.upper()
+
+        output += i
+
+    return output
+
+
+
 def generateData(name="_"):
     uuid = getUUIDFromName(name)
     if uuid == "Unknown Name":
@@ -136,6 +175,21 @@ def getUUIDFromName(name):
         return api['id']
     except:
         return "Unknown Name"
+
+
+@app.template_filter()
+def getRankFromUUID(uuid):
+    try:
+        api_request = requests.get("https://api.hypixel.net/player?uuid=" + uuid + "&key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
+        api = json.loads(api_request.content)
+        return api['player']['displayname']
+    except:
+        return "Unknown Name"
+
+
+@app.template_filter()
+def customEnumerate(value):
+    return enumerate(value)
 
 
 if __name__ == "__main__":
