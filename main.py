@@ -180,10 +180,23 @@ def getUUIDFromName(name):
 @app.template_filter()
 def getRankFromUUID(uuid):
     try:
-        api_request = requests.get("https://api.hypixel.net/player?uuid=" + uuid + "&key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
-        api = json.loads(api_request.content)
-        return api['player']['displayname']
-    except:
+        try:
+            with open("knownUsers.json") as f:
+                knownUsers = json.loads(f.read())
+
+            return knownUsers[uuid]
+
+        except KeyError:
+            api_request = requests.get("https://api.hypixel.net/player?uuid=" + uuid + "&key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
+            api = json.loads(api_request.content)
+            with open("knownUsers.json") as f:
+                knownUsers = json.loads(f.read())
+            with open("knownUsers.json", "w") as r:
+                knownUsers[uuid] = api['player']['displayname']
+                json.dump(knownUsers, r)
+            return api['player']['displayname']
+
+    except KeyError:
         return "Unknown Name"
 
 
