@@ -11,7 +11,12 @@ h2 {
   letter-spacing: -2px;
   text-color: #000000;
 }
+
 th {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 2;
   border: 1px solid black;
 }
 
@@ -131,3 +136,6 @@ background: #888;
 background: #555;
 
 }
+
+.tableFixHead thead th { position: sticky; top: 0; }
+.tableFixHead          { overflow-y: auto; height: 100px; }

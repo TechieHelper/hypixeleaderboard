@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="/static/Bootstrap/dist/css/bootstrap.min.css">
     <script type="text/javascript" src="/static/displayDetailsController.js"></script>
     <script type="text/javascript">
+
         window._mNHandle = window._mNHandle || {};
         window._mNHandle.queue = window._mNHandle.queue || [];
         medianet_versionId = "3121199";
@@ -20,9 +21,10 @@
     })(window,document,'script','dataLayer','GTM-WFPKGQH');</script>
     <!-- End Google Tag Manager -->
 
-    {% set GAME_MODES_BEDWARS = ['', 'eight_one_', 'eight_two_', 'four_three_', 'four_four_'] %}
+    {% set GAME_MODES_BEDWARS = ['', 'eight_one_', 'eight_two_', 'four_three_', 'four_four_', 'two_four_', 'eight_one_rush_', 'eight_two_rush_', 'four_four_rush_', 'eight_one_ultimate_', 'eight_two_ultimate_', 'four_four_ultimate_', 'eight_two_lucky_', 'four_four_lucky_', 'castle_'] %}
     {% set REQUIRED_STATS_BEDWARS = ['kills_bedwars', 'deaths_bedwars', '!kills_bedwars;deaths_bedwars', 'final_kills_bedwars', 'final_deaths_bedwars', '!final_kills_bedwars;final_deaths_bedwars', 'wins_bedwars', 'losses_bedwars', '!wins_bedwars;losses_bedwars', 'beds_broken_bedwars', 'beds_lost_bedwars', '!beds_broken_bedwars;beds_lost_bedwars'] %}
     {% set EXTRA_STATS_BEDWARS = ['winstreak', 'games_played_bedwars', 'items_purchased_bedwars', 'permanent _items_purchased_bedwars', 'resources_collected_bedwars', 'iron_resources_collected_bedwars', 'gold_resources_collected_bedwars', 'diamond_resources_collected_bedwars', 'emerald_resources_collected_bedwars'] %}
+    {% set GAME_MODES_LISTING = {"": "All Time", "eight_one_": "Solos", "eight_two_": "Duos", "four_three_": "3v3v3v3", "four_four_": "4v4v4v4", "eight_one_rush_": "Solos Rush", "eight_two_rush_": "Duos Rush", "four_four_rush_": "4v4v4v4 Rush", "two_four_": "4v4", "eight_one_ultimate_": "Solos Ultimate", "eight_two_ultimate_": "Duos Ultimate", "four_four_ultimate_": "4v4v4v4 Ultimate", "eight_two_lucky_": "Duos Lucky", "four_four_lucky_": "4v4v4v4 Lucky", "castle_": "Castle"} %}
 </head>
 <body>
     <!-- Google Tag Manager (noscript) -->
@@ -73,7 +75,7 @@
 
     <div class="row">
         <div class="col-sm-10 table-responsive pl-4">
-            <table class="table-hover table-bordered table-striped table w-100">
+            <table class="tableFixHead table-hover table-bordered table-striped table w-100">
                 <tr>
                     <th></th>
                     <th>Kills</th>
@@ -91,25 +93,18 @@
                 </tr>
                 {% for mode in GAME_MODES_BEDWARS %}
                     <tr>
-                        {% if mode == '' %} <th>All Time</th>
-                        {% elif mode == 'eight_one_' %} <th>Solos</th>
-                        {% elif mode == 'eight_two_' %} <th>Duos</th>
-                        {% elif mode == 'four_three_' %} <th>3v3v3v3</th>
-                        {% elif mode == 'four_four_' %} <th>4v4v4v4</th>
-                        {% elif mode == 'eight_two_rush_' %} <th>Duos Rush</th>
-                        {% elif mode == 'four_four_rush_' %} <th>4v4v4v4 Rush</th>
-                        {% endif %}
+                        <th>{{GAME_MODES_LISTING[mode]}}</th>
 
                         {% for stat in REQUIRED_STATS_BEDWARS %}
                             {% if stat[:1] == '!' %}
                                 {% set tempList = stat[1:].split(';') %}
-                                {% if bedwarsData[mode + tempList[0]] != "-" %}
+                                {% if bedwarsData|tableTry(mode + tempList[0]) != "-" and bedwarsData|tableTry(mode + tempList[1]) != "-" %}
                                     <td style="font-weight: bold">{{'%0.2f' % (bedwarsData[mode + tempList[0]] / bedwarsData[mode + tempList[1]])}}</td>
                                 {% else %}
                                     <td style="font-weight: bold">-</td>
                                 {% endif %}
                             {% else %}
-                                <td>{{bedwarsData[mode + stat]}}</td>
+                                <td>{{bedwarsData|tableTry(mode + stat)}}</td>
                             {% endif %}
                         {% endfor%}
                     </tr>
@@ -152,25 +147,18 @@
                 </tr>
                 {% for mode in GAME_MODES_BEDWARS %}
                     <tr>
-                        {% if mode == '' %} <th>All Time</th>
-                        {% elif mode == 'eight_one_' %} <th>Solos</th>
-                        {% elif mode == 'eight_two_' %} <th>Duos</th>
-                        {% elif mode == 'four_three_' %} <th>3v3v3v3</th>
-                        {% elif mode == 'four_four_' %} <th>4v4v4v4</th>
-                        {% elif mode == 'eight_two_rush_' %} <th>Duos Rush</th>
-                        {% elif mode == 'four_four_rush_' %} <th>4v4v4v4 Rush</th>
-                        {% endif %}
+                        <th>{{GAME_MODES_LISTING[mode]}}</th>
 
                         {% for stat in EXTRA_STATS_BEDWARS %}
                             {% if stat[:1] == '!' %}
                                 {% set tempList = stat[1:].split(';') %}
-                                {% if bedwarsData[mode + tempList[0]] != "-" %}
-                                    <td style="font-weight: bold">{{'%0.2f' % (bedwarsData[mode + tempList[0]] / bedwarsData[mode + tempList[1]])}}</td>
+                                {% if bedwarsData|tableTry(mode + tempList[0]) != "-" %}
+                                    <td style="font-weight: bold">{{'%0.2f' % (bedwarsData|tableTry(mode + tempList[0]) / bedwarsData|tableTry(mode + tempList[1]))}}</td>
                                 {% else %}
                                     <td style="font-weight: bold">-</td>
                                 {% endif %}
                             {% else %}
-                                <td>{{bedwarsData[mode + stat]}}</td>
+                                <td>{{bedwarsData|tableTry(mode + stat)}}</td>
                             {% endif %}
                         {% endfor%}
                     </tr>

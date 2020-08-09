@@ -201,6 +201,15 @@ def getRankFromUUID(uuid):
 
 
 @app.template_filter()
+def tableTry(dict, pos):
+    try:
+        return dict[pos]
+    except:
+        return "-"
+
+
+
+@app.template_filter()
 def customEnumerate(value):
     return enumerate(value)
 
