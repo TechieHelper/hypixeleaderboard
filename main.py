@@ -92,19 +92,19 @@ def home_post():
 @app.route("/skywars/", methods=['POST'])
 def skywars_post():
     data = generateData(request.form['playerName'])
-    return render_template("skywars.html", data=data, skywarsData=data['stats']['SkyWars'])
+    return render_template("skywars.html", data=data, skywarsData=customReturn(data, ['stats', 'SkyWars']))
 
 
 @app.route("/bedwars/", methods=['POST'])
 def bedwars_post():
     data = generateData(request.form['playerName'])
-    return render_template("bedwars.html", data=data, bedwarsData=data['stats']['Bedwars'])
+    return render_template("bedwars.html", data=data, bedwarsData=customReturn(data, ['stats', 'Bedwars']))
 
 
 @app.route("/", methods=['POST'])
 def bedwarsTemp_post():
     data = generateData(request.form['playerName'])
-    return render_template("bedwars.html", data=data, bedwarsData=data['stats']['Bedwars'])
+    return render_template("bedwars.html", data=data, bedwarsData=customReturn(data, ['stats', 'Bedwars']))
 
 
 @app.template_filter()
@@ -212,6 +212,17 @@ def tableTry(dict, pos):
 @app.template_filter()
 def customEnumerate(value):
     return enumerate(value)
+
+
+def customReturn(data, dataPoints):
+    try:
+        newData = data
+        for arg in dataPoints:
+            newData = newData[arg]
+    except (KeyError, TypeError):
+        with open("dashedData.json") as f:
+            newData = json.loads(f.read())['player']['stats']['Bedwars']
+    return newData
 
 
 if __name__ == "__main__":
