@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  {% set GAME_TYPES = ["bedwars", "skywars", "duels", "arena", "mcgo", "battleground", "survival-games", "uhc", "walls", "paintball", "murder-mystery", "super-smash", "speed-uhc", "tntgames", "gingerbread", "build-battle", "arcade", "skyclash", "quakecraft", "true-combat", "walls3", "vampirez"] %}
+  <url>
+    <loc>{{ base_url }}</loc>
+    <lastmod>2020-08-12</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  {% for article in articles %}
+  <url>
+    <loc>{{ base_url }}/{{ article[0] }}</loc>
+    <lastmod>{{ article[1] }}</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  {% endfor %}
+  {% for gameType in GAME_TYPES %}
+  <url>
+    <loc>{{ base_url }}/leaderboards/{{ gameType }}</loc>
+    <lastmod>2020-08-12</lastmod>
+    <changefreq>daily</changefreq>
+  </url>
+  {% endfor %}
+</urlset>

@@ -1,13 +1,41 @@
 from flask import Flask, redirect, url_for, render_template, request
 import requests, json, os, time, datetime
+from os import listdir
+from os.path import isfile, join
+from datetime import datetime
 
 app = Flask(__name__)
 
 
-@app.route("/home/")
+def getUUIDFromName(name):
+    try:
+        api_request = requests.get("https://api.mojang.com/users/profiles/minecraft/" + name)
+        api = json.loads(api_request.content)
+        return api['id']
+    except:
+        return "Unknown Name"
+
+
+def generateData(name="_"):
+    uuid = getUUIDFromName(name)
+    if uuid == "Unknown Name":
+        with open("dashedData.json") as f:
+            api = json.loads(f.read())
+    else:
+        try:
+            api_request = requests.get("https://api.hypixel.net/player?uuid=" + uuid + "&key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
+            api = json.loads(api_request.content)
+        except:
+            with open("dashedData.json") as f:
+                api = json.loads(f.read())
+
+    return api['player']
+
+
+@app.route("/")
 def home():
     data = generateData()
-    return render_template("index.html", data=data)
+    return render_template("home.html", data=data)
 
 
 @app.route("/suggestions/")
@@ -27,6 +55,32 @@ def leaderboards():
     return render_template("leaderboards.html")
 
 
+@app.route("/robots.txt")
+def robotstxt():
+    return render_template("robots.txt")
+
+
+@app.route("/sitemap.xml")
+def sitemap():
+    files = [f for f in listdir("C:/Users/olive/Desktop/coding/After Da USB/sites/proj/templates")]
+    filteredFiles = [f for f in files if f[f.find("."):] == ".html" and f != "ROOT_TEMPLATE.html" and f != "leaderboardAutoGen.html"]
+    for index in range(len(filteredFiles)):
+        filteredFiles[index] = [filteredFiles[index]]
+
+        filteredFiles[index].append(datetime.fromtimestamp(os.path.getmtime("C:/Users/olive/Desktop/coding/After Da USB/sites/proj/templates/" + filteredFiles[index][0])).strftime("%Y-%m-%d"))
+
+        temp = filteredFiles[index][0]
+        temp2 = ""
+        for letter in temp:
+            if letter.islower() or letter == ".":
+                temp2 += letter
+            else:
+                temp2 += "-" + letter.lower()
+        filteredFiles[index][0] = temp2
+
+    return render_template('sitemap.xml', base_url="http://hypixeleaderboards.com", articles=filteredFiles)
+
+
 @app.route("/bedwars/")
 def bedwars():
     data = generateData()
@@ -44,12 +98,6 @@ def bedwars2():
 def duels():
     data = generateData()
     return render_template("duels.html", data=data, duelsData=data['stats']['Duels'])
-
-
-@app.route("/")
-def bedwarsTemp():
-    data = generateData()
-    return render_template("bedwars.html", data=data, bedwarsData=data['stats']['Bedwars'])
 
 
 @app.route("/privacy-policy/")
@@ -99,7 +147,7 @@ def suggestions_post():
 @app.route("/home/", methods=['POST'])
 def home_post():
     data = generateData(request.form['playerName'])
-    return render_template("index.html", data=data)
+    return render_template("home.html", data=data)
 
 
 @app.route("/skywars/", methods=['POST'])
@@ -180,32 +228,6 @@ def leaderboardURLFormatting(value):
 @app.route("/player/")
 def player():
     return render_template("player.html")
-
-
-
-def generateData(name="_"):
-    uuid = getUUIDFromName(name)
-    if uuid == "Unknown Name":
-        with open("dashedData.json") as f:
-            api = json.loads(f.read())
-    else:
-        try:
-            api_request = requests.get("https://api.hypixel.net/player?uuid=" + uuid + "&key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
-            api = json.loads(api_request.content)
-        except:
-            with open("dashedData.json") as f:
-                api = json.loads(f.read())
-
-    return api['player']
-
-
-def getUUIDFromName(name):
-    try:
-        api_request = requests.get("https://api.mojang.com/users/profiles/minecraft/" + name)
-        api = json.loads(api_request.content)
-        return api['id']
-    except:
-        return "Unknown Name"
 
 
 @app.template_filter()

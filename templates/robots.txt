@@ -1,0 +1,3 @@
+Sitemap: http://hypixeleaderboards.com/sitemap.xml
+User-agent: *
+Disallow:
