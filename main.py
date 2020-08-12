@@ -33,6 +33,13 @@ def bedwars():
     return render_template("bedwars.html", data=data, bedwarsData=data['stats']['Bedwars'])
 
 
+@app.route("/player/bedwars/")
+def bedwars2():
+    data = generateData()
+    return render_template("bedwars.html", data=data, bedwarsData=data['stats']['Bedwars'])
+
+
+
 @app.route("/duels/")
 def duels():
     data = generateData()
@@ -57,6 +64,12 @@ def termsOfService():
 
 @app.route("/skywars/")
 def skywars():
+    data = generateData()
+    return render_template("skywars.html", data=data, skywarsData=data['stats']['SkyWars'])
+
+
+@app.route("/player/skywars/")
+def skywars2():
     data = generateData()
     return render_template("skywars.html", data=data, skywarsData=data['stats']['SkyWars'])
 
@@ -95,10 +108,23 @@ def skywars_post():
     return render_template("skywars.html", data=data, skywarsData=customReturn(data, ['stats', 'SkyWars']))
 
 
+@app.route("/player/skywars/", methods=['POST'])
+def skywars_post2():
+    data = generateData(request.form['playerName'])
+    return render_template("skywars.html", data=data, skywarsData=customReturn(data, ['stats', 'SkyWars']))
+
+
 @app.route("/bedwars/", methods=['POST'])
 def bedwars_post():
     data = generateData(request.form['playerName'])
     return render_template("bedwars.html", data=data, bedwarsData=customReturn(data, ['stats', 'Bedwars']))
+
+
+@app.route("/player/bedwars/", methods=['POST'])
+def bedwars_post2():
+    data = generateData(request.form['playerName'])
+    return render_template("bedwars.html", data=data, bedwarsData=customReturn(data, ['stats', 'Bedwars']))
+
 
 
 @app.route("/", methods=['POST'])
@@ -149,6 +175,11 @@ def leaderboardURLFormatting(value):
         output += i
 
     return output
+
+
+@app.route("/player/")
+def player():
+    return render_template("player.html")
 
 
 

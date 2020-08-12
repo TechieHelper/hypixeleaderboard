@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- TODO: REMOVE!!! -->
-    <title>ROOT TEMPLATE</title>
-    <meta name="description" content="Hypixel Leaderboards homepage, showing default data about players.">
+    <title>Player Menu</title>
+    <meta name="description" content="Menu for Players to select statistics.">
     <link rel="stylesheet" href="/static/stylesheet.css" />
-    <link rel="stylesheet" type="text/css" href="/static/Bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -25,15 +26,26 @@
     <div class="row">
         <div class="topnav col-sm-10">
             <a href="/home/">Home</a>
-            <a class="active" href="/leaderboards/">Leaderboards</a>
-            <a href="/bedwars/">Bedwars</a>
-            <a href="/skywars/">Skywars</a>
-            <a href="/duels/">Duels</a>
+            <a class="active" href="/player/">Player Stats</a>
+            <a href="/leaderboards/">Leaderboards</a>
         </div>
         <div class="col-sm-2">
             <a href="/privacy-policy/">Privacy Policy</a>
             <a href="/terms-of-service/">Terms of service</a>
         </div>
+    </div>
+
+    <button onclick="window.location.href='/player/bedwars/'" class="btn btn-primary" type="button">Bedwars</button>
+    <button onclick="window.location.href='/player/skywars/'" class="btn btn-primary" type="button">Skywars</button>
+
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Duels
+        <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <li><a href="#">HTML</a></li>
+            <li><a href="#">CSS</a></li>
+            <li><a href="#">JavaScript</a></li>
+        </ul>
     </div>
 </body>
 </html>
