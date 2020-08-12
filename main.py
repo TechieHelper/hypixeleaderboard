@@ -62,12 +62,12 @@ def robotstxt():
 
 @app.route("/sitemap.xml")
 def sitemap():
-    files = [f for f in listdir("C:/Users/olive/Desktop/coding/After Da USB/sites/proj/templates")]
+    files = [f for f in listdir("./templates")]
     filteredFiles = [f for f in files if f[f.find("."):] == ".html" and f != "ROOT_TEMPLATE.html" and f != "leaderboardAutoGen.html"]
     for index in range(len(filteredFiles)):
         filteredFiles[index] = [filteredFiles[index]]
 
-        filteredFiles[index].append(datetime.fromtimestamp(os.path.getmtime("C:/Users/olive/Desktop/coding/After Da USB/sites/proj/templates/" + filteredFiles[index][0])).strftime("%Y-%m-%d"))
+        filteredFiles[index].append(datetime.fromtimestamp(os.path.getmtime("./templates/" + filteredFiles[index][0])).strftime("%Y-%m-%d"))
 
         temp = filteredFiles[index][0]
         temp2 = ""
@@ -91,7 +91,6 @@ def bedwars():
 def bedwars2():
     data = generateData()
     return render_template("bedwars.html", data=data, bedwarsData=data['stats']['Bedwars'])
-
 
 
 @app.route("/duels/")
