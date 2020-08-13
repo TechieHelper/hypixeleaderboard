@@ -32,8 +32,14 @@ def generateData(name="_"):
     return api['player']
 
 
-@app.route("/")
+@app.route("/home/")
 def home():
+    data = generateData()
+    return render_template("home.html", data=data)
+
+
+@app.route("/")
+def home2():
     data = generateData()
     return render_template("home.html", data=data)
 
