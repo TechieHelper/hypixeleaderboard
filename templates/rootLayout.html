@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- TODO: REMOVE!!! -->
+    <title>{%  block title %}{% endblock %} - Hypixel Leaderboards</title>
+    <meta name="description" content="Hypixel Leaderboards homepage, showing default data about players.">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}" />
+    <link rel="stylesheet" type="text/css" href="/static/Bootstrap/dist/css/bootstrap.min.css">
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-WFPKGQH');</script>
+    <!-- End Google Tag Manager -->
+    {% endblock %}
+</head>
+<body>
+    {% block body %}
+        {% block tag %}
+            <!-- Google Tag Manager (noscript) -->
+            <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WFPKGQH"
+            height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+            <!-- End Google Tag Manager (noscript) -->
+        {% endblock %}
+
+        {% block topnav %}
+            <div class="row">
+                <div class="topnav col-sm-6">
+                    <a href="/home/">Home</a>
+                    <a href="/player/">Player Stats</a>
+                    <a href="/leaderboards/">Leaderboards</a>
+                </div>
+                <div class="col-sm-4">
+                    <h1>Hypixel Leaderboards</h1>
+                </div>
+                <div class="col-sm-2">
+                    <a href="/privacy-policy/">Privacy Policy</a>
+                    <a href="/terms-of-service/">Terms of service</a>
+                </div>
+            </div>
+            <h1>{% block displayTitle %}{% endblock %}</h1>
+        {% endblock %}
+
+        {% block usernameEntryForm %}
+            <form method="POST">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <p>Username: </p>
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="text" name="playerName" alt="Username">
+                    </div>
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-1">
+                        <input type="submit" value="Submit">
+                    </div>
+                    <div class="col-sm-6"></div>
+                </div>
+            </form>
+        {% endblock %}
+
+        <div id="content">{% block content %}{% endblock %}</div>
+
+        {% block footer %}
+            <div class="footer-copyright text-center py-3">
+                    <a href="mailto:oliverlford@icloud.com">Contact Us</a>
+            </div>
+        {% endblock %}
+
+    {% endblock %}
+</body>
+</html>

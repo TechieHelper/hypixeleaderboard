@@ -69,7 +69,7 @@ def robotstxt():
 @app.route("/sitemap.xml")
 def sitemap():
     files = [f for f in listdir("./templates")]
-    filteredFiles = [f for f in files if f[f.find("."):] == ".html" and f != "ROOT_TEMPLATE.html" and f != "leaderboardAutoGen.html"]
+    filteredFiles = [f for f in files if f[f.find("."):] == ".html" and f != "rootLayout.html" and f != "leaderboardAutoGen.html"]
     for index in range(len(filteredFiles)):
         filteredFiles[index] = [filteredFiles[index]]
 
@@ -181,9 +181,9 @@ def bedwars_post2():
 
 
 @app.route("/", methods=['POST'])
-def bedwarsTemp_post():
+def home2_post():
     data = generateData(request.form['playerName'])
-    return render_template("bedwars.html", data=data, bedwarsData=customReturn(data, ['stats', 'Bedwars']))
+    return render_template("home.html", data=data)
 
 
 @app.template_filter()
@@ -265,6 +265,17 @@ def tableTry(dict, pos):
     except:
         return "-"
 
+
+@app.template_filter()
+def customTry(data, dataPoints):
+    try:
+        newData = data
+        for arg in dataPoints:
+            newData = newData[arg]
+
+        return newData
+    except:
+        return "-"
 
 
 @app.template_filter()
