@@ -69,7 +69,9 @@ def robotstxt():
 @app.route("/sitemap.xml")
 def sitemap():
     files = [f for f in listdir("./templates")]
-    filteredFiles = [f for f in files if f[f.find("."):] == ".html" and f != "rootLayout.html" and f != "leaderboardAutoGen.html"]
+    filteredFiles = [f for f in files if f[f.find("."):] == ".html" and f != "rootLayout.html" and
+                     f != "leaderboardAutoGen.html" and f != "401.html" and f != "403.html" and f != "404.html"
+                     and f != "500.html"]
     for index in range(len(filteredFiles)):
         filteredFiles[index] = [filteredFiles[index]]
 
@@ -82,6 +84,9 @@ def sitemap():
                 temp2 += letter
             else:
                 temp2 += "-" + letter.lower()
+
+        if temp2 == "bedwars.html" or temp2 == "skywars.html" or temp2 == "duels.html":
+            temp2 = "player/" + temp2
         filteredFiles[index][0] = temp2
 
     return render_template('sitemap.xml', base_url="http://hypixeleaderboards.com", articles=filteredFiles)
