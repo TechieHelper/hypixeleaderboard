@@ -225,7 +225,7 @@ def bedwars2():
     return render_template("bedwars.html", data=data, bedwarsData=data['stats']['Bedwars'])
 
 
-@app.route("/duels/")
+@app.route("/player/duels/")
 def duels():
     data = generateData()
     return render_template("duels.html", data=data, duelsData=data['stats']['Duels'])
@@ -304,6 +304,11 @@ def bedwars_post2():
     return render_template("bedwars.html", data=data, bedwarsData=customReturn(data, ['stats', 'Bedwars']))
 
 
+@app.route("/player/duels/", methods=['POST'])
+def duels_post():
+    data = generateData(request.form['playerName'])
+    return render_template("duels.html", data=data, duelsData=customReturn(data, ['stats', 'Duels']))
+
 
 @app.route("/", methods=['POST'])
 def home2_post():
@@ -321,17 +326,6 @@ def error_403(e):
 @app.errorhandler(404)
 def error_404(e):
     return render_template("404.html"), 404
-
-
-@app.errorhandler(405)
-def error_405(e):
-    return render_template("405.html"), 405
-
-
-@app.errorhandler(500)
-def error_500(e):
-    return render_template("500.html"), 500
-
 
 if __name__ == "__main__":
     app.run()
