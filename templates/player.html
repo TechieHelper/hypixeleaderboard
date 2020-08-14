@@ -1,40 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Player Menu</title>
-    <meta name="description" content="Menu for Players to select statistics.">
-    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+{% extends "rootLayout.html" %}
+{% block title %}Player Menu{% endblock %}
+{% block meta_desc %}
+<meta name="description" content="Menu for Players to select statistics.">
+{% endblock %}
 
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-WFPKGQH');</script>
-    <!-- End Google Tag Manager -->
-</head>
-<body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WFPKGQH"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-    <div class="row">
-        <div class="topnav col-sm-10">
-            <a href="/home/">Home</a>
-            <a class="active" href="/player/">Player Stats</a>
-            <a href="/leaderboards/">Leaderboards</a>
-        </div>
-        <div class="col-sm-2">
-            <a href="/privacy-policy/">Privacy Policy</a>
-            <a href="/terms-of-service/">Terms of service</a>
-        </div>
-    </div>
+{% block extra_scripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+{% endblock %}
 
+{% block body %}
+
+    {% block tag %}{{ super() }}{% endblock %}
+
+    {% block topnav %}{{ super() }}{% endblock %}
+
+    {% block displayTitle %}Player Stats{% endblock %}
+
+    {% block usernameEntryForm %}{% endblock %}
+
+    {% block content %}
     <button onclick="window.location.href='/player/bedwars/'" class="btn btn-primary" type="button">Bedwars</button>
     <button onclick="window.location.href='/player/skywars/'" class="btn btn-primary" type="button">Skywars</button>
 
@@ -47,5 +32,9 @@
             <li><a href="#">JavaScript</a></li>
         </ul>
     </div>
-</body>
-</html>
+
+    {% endblock %}
+
+    {% block footer %}{{ super() }}{% endblock %}
+
+{% endblock %}

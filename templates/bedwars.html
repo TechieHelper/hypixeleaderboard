@@ -1,83 +1,29 @@
-<!DOCTYPE html>
-<html lang="en-US">
-<head>
-    <title>Bedwars</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Hypixel Leaderboard's Bedwars section, showing specific player data straight from Hypixel.net.">
-    <link rel="stylesheet" href="/static/stylesheet.css" />
-    <link rel="stylesheet" type="text/css" href="/static/Bootstrap/dist/css/bootstrap.min.css">
-    <script type="text/javascript" src="/static/displayDetailsController.js"></script>
+{% extends "rootLayout.html" %}
+{% block title %}Bedwars{% endblock %}
+{% block meta_desc %}
+<meta name="description" content="Hypixel Leaderboard's Bedwars section, showing specific player data straight from Hypixel.net.">
+{% endblock %}
+{% block extra_scripts %}
+<script type="text/javascript" src="/static/displayDetailsController.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+{% endblock %}
 
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+{% set GAME_MODES_BEDWARS = ['', 'eight_one_', 'eight_two_', 'four_three_', 'four_four_', 'two_four_', 'eight_one_rush_', 'eight_two_rush_', 'four_four_rush_', 'eight_one_ultimate_', 'eight_two_ultimate_', 'four_four_ultimate_', 'eight_two_lucky_', 'four_four_lucky_', 'eight_two_voidless_', 'four_four_voidless_', 'castle_'] %}
+{% set REQUIRED_STATS_BEDWARS = ['kills_bedwars', 'deaths_bedwars', '!kills_bedwars;deaths_bedwars', 'final_kills_bedwars', 'final_deaths_bedwars', '!final_kills_bedwars;final_deaths_bedwars', 'wins_bedwars', 'losses_bedwars', '!wins_bedwars;losses_bedwars', 'beds_broken_bedwars', 'beds_lost_bedwars', '!beds_broken_bedwars;beds_lost_bedwars'] %}
+{% set EXTRA_STATS_BEDWARS = ['winstreak', 'games_played_bedwars', 'items_purchased_bedwars', 'permanent _items_purchased_bedwars', 'resources_collected_bedwars', 'iron_resources_collected_bedwars', 'gold_resources_collected_bedwars', 'diamond_resources_collected_bedwars', 'emerald_resources_collected_bedwars'] %}
+{% set GAME_MODES_LISTING = {"": "All Time", "eight_one_": "Solos", "eight_two_": "Duos", "four_three_": "3v3v3v3", "four_four_": "4v4v4v4", "eight_one_rush_": "Solos Rush", "eight_two_rush_": "Duos Rush", "four_four_rush_": "4v4v4v4 Rush", "two_four_": "4v4", "eight_one_ultimate_": "Solos Ultimate", "eight_two_ultimate_": "Duos Ultimate", "four_four_ultimate_": "4v4v4v4 Ultimate", "eight_two_lucky_": "Duos Lucky", "four_four_lucky_": "4v4v4v4 Lucky", "castle_": "Castle", "eight_two_voidless_": "Duos Voidless", "four_four_voidless_": "4v4v4v4 Voidless"} %}
 
-    <script id="mcjs">!function(c,h,i,m,p){m=c.createElement(h),p=c.getElementsByTagName(h)[0],m.async=1,m.src=i,p.parentNode.insertBefore(m,p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/ba24816bac78d265ef8b4df6f/73fc8061a72096f7cad6d1518.js");</script>
+{% block body %}
 
-    <script type="text/javascript">
+    {% block tag %}{{ super() }}{% endblock %}
 
-        window._mNHandle = window._mNHandle || {};
-        window._mNHandle.queue = window._mNHandle.queue || [];
-        medianet_versionId = "3121199";
-    </script>
-    <script src="https://contextual.media.net/dmedianet.js?cid=8CU255VU6" async="async"></script>
+    {% block topnav %}{{ super() }}{% endblock %}
 
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-WFPKGQH');</script>
-    <!-- End Google Tag Manager -->
+    {% block displayTitle %}Bedwars{% endblock %}
 
-    {% set GAME_MODES_BEDWARS = ['', 'eight_one_', 'eight_two_', 'four_three_', 'four_four_', 'two_four_', 'eight_one_rush_', 'eight_two_rush_', 'four_four_rush_', 'eight_one_ultimate_', 'eight_two_ultimate_', 'four_four_ultimate_', 'eight_two_lucky_', 'four_four_lucky_', 'eight_two_voidless_', 'four_four_voidless_', 'castle_'] %}
-    {% set REQUIRED_STATS_BEDWARS = ['kills_bedwars', 'deaths_bedwars', '!kills_bedwars;deaths_bedwars', 'final_kills_bedwars', 'final_deaths_bedwars', '!final_kills_bedwars;final_deaths_bedwars', 'wins_bedwars', 'losses_bedwars', '!wins_bedwars;losses_bedwars', 'beds_broken_bedwars', 'beds_lost_bedwars', '!beds_broken_bedwars;beds_lost_bedwars'] %}
-    {% set EXTRA_STATS_BEDWARS = ['winstreak', 'games_played_bedwars', 'items_purchased_bedwars', 'permanent _items_purchased_bedwars', 'resources_collected_bedwars', 'iron_resources_collected_bedwars', 'gold_resources_collected_bedwars', 'diamond_resources_collected_bedwars', 'emerald_resources_collected_bedwars'] %}
-    {% set GAME_MODES_LISTING = {"": "All Time", "eight_one_": "Solos", "eight_two_": "Duos", "four_three_": "3v3v3v3", "four_four_": "4v4v4v4", "eight_one_rush_": "Solos Rush", "eight_two_rush_": "Duos Rush", "four_four_rush_": "4v4v4v4 Rush", "two_four_": "4v4", "eight_one_ultimate_": "Solos Ultimate", "eight_two_ultimate_": "Duos Ultimate", "four_four_ultimate_": "4v4v4v4 Ultimate", "eight_two_lucky_": "Duos Lucky", "four_four_lucky_": "4v4v4v4 Lucky", "castle_": "Castle", "eight_two_voidless_": "Duos Voidless", "four_four_voidless_": "4v4v4v4 Voidless"} %}
-</head>
-<body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WFPKGQH"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
+    {% block usernameEntryForm %}{{ super() }}{% endblock %}
 
-    <div class="row">
-        <div class="topnav col-sm-6">
-            <a href="/home/">Home</a>
-            <a class="active" href="/player/">Player Stats</a>
-            <a href="/leaderboards/">Leaderboards</a>
-        </div>
-        <div class="col-sm-4">
-            <h1>Hypixel Leaderboards</h1>
-        </div>
-        <div class="col-sm-2">
-            <a href="/privacy-policy/">Privacy Policy</a>
-            <a href="/terms-of-service/">Terms of service</a>
-        </div>
-    </div>
-
-
-    <h2>Bedwars</h2>
-
-    <form method="POST">
-        <div class="row">
-            <div class="col-sm-2">
-                <p>Username: </p>
-            </div>
-            <div class="col-sm-2">
-                <input type="text" name="playerName" alt="Username">
-            </div>
-            <div class="col-sm-1"></div>
-            <div class="col-sm-1">
-                <input type="submit" value="Submit">
-            </div>
-            <div class="col-sm-2"></div>
-
-            <div class="col-sm-4">
-                <a href="/suggestions/">Got any suggestions?</a>
-            </div>
-
-        </div>
-    </form>
-
+    {% block content %}
     <h2>{{data['displayname']}}</h2>
 
     <div class="row">
@@ -164,8 +110,13 @@
             </table>
         </div>
         <div class="col-sm-2">
-            <p>Ad placeholder</p>
+            <script type="text/javascript" src="https://uprimp.com/bnr.php?section=General&pub=559955&format=160x600&ga=g"></script>
+            <noscript><a href="https://yllix.com/publishers/559955" target="_blank"><img src="//ylx-aff.advertica-cdn.com/pub/160x600.png" style="border:none;margin:0;padding:0;vertical-align:baseline;" alt="ylliX - Online Advertising Network" /></a></noscript>
         </div>
     </div>
-</body>
-</html>
+
+    {% endblock %}
+
+    {% block footer %}{{ super() }}{% endblock %}
+
+{% endblock %}

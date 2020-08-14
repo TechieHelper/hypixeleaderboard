@@ -6,6 +6,8 @@ from datetime import datetime
 
 app = Flask(__name__)
 
+# General Functions
+
 
 def getUUIDFromName(name):
     try:
@@ -31,6 +33,125 @@ def generateData(name="_"):
 
     return api['player']
 
+
+def generateLeaderboardData():
+    try:
+        api_request = requests.get("https://api.hypixel.net/leaderboards?key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
+        api = json.loads(api_request.content)
+    except:
+        with open("dashedLeaderboardData.json") as f:
+            api = json.loads(f.read())
+
+    return api['leaderboards']
+
+
+def leaderboardURLFormatting(value):
+    output = ""
+    for i in value:
+        if i == "-":
+            i = "_"
+        else:
+            i = i.upper()
+
+        output += i
+
+    return output
+
+
+def customReturn(data, dataPoints):
+    try:
+        newData = data
+        for arg in dataPoints:
+            newData = newData[arg]
+    except (KeyError, TypeError):
+        with open("dashedData.json") as f:
+            newData = json.loads(f.read())['player']['stats']['Bedwars']
+    return newData
+
+
+
+
+
+# App Commands
+
+
+@app.template_filter()
+def checkIfValid(data, dataPoint):
+    try:
+        return data[dataPoint]
+    except KeyError:
+        return "-"
+
+
+@app.template_filter()
+def format_datetime(value):
+    return value
+
+
+@app.template_filter()
+def capitalizeFirstLetter(value):
+    valueList = value.split("_")
+    return " ".join([i[0].upper() + i[1:].lower() for i in valueList])
+
+
+@app.route("/player/")
+def player():
+    return render_template("player.html")
+
+
+@app.template_filter()
+def getRankFromUUID(uuid):
+    try:
+        try:
+            with open("knownUsers.json") as f:
+                knownUsers = json.loads(f.read())
+
+            return knownUsers[uuid]
+
+        except KeyError:
+            api_request = requests.get("https://api.hypixel.net/player?uuid=" + uuid + "&key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
+            api = json.loads(api_request.content)
+            with open("knownUsers.json") as f:
+                knownUsers = json.loads(f.read())
+            with open("knownUsers.json", "w") as r:
+                knownUsers[uuid] = api['player']['displayname']
+                json.dump(knownUsers, r)
+            return api['player']['displayname']
+
+    except KeyError:
+        return "Unknown Name"
+
+
+@app.template_filter()
+def tableTry(dict, pos):
+    try:
+        return dict[pos]
+    except:
+        return "-"
+
+
+@app.template_filter()
+def customTry(data, dataPoints):
+    try:
+        newData = data
+        for arg in dataPoints:
+            newData = newData[arg]
+
+        return newData
+    except:
+        return "-"
+
+
+@app.template_filter()
+def customEnumerate(value):
+    return enumerate(value)
+
+
+
+
+
+
+# Pages
 
 @app.route("/home/")
 def home():
@@ -151,8 +272,7 @@ def suggestions_post():
     return redirect("../bedwars/", code=302)
 
 
-
-
+# Post / Get Requests
 
 @app.route("/home/", methods=['POST'])
 def home_post():
@@ -191,113 +311,7 @@ def home2_post():
     return render_template("home.html", data=data)
 
 
-@app.template_filter()
-def checkIfValid(data, dataPoint):
-    try:
-        return data[dataPoint]
-    except:
-        return "-"
-
-
-
-@app.template_filter()
-def format_datetime(value):
-    return value
-
-
-@app.template_filter()
-def capitalizeFirstLetter(value):
-    valueList = value.split("_")
-    return " ".join([i[0].upper() + i[1:].lower() for i in valueList])
-
-
-def generateLeaderboardData():
-    try:
-        api_request = requests.get("https://api.hypixel.net/leaderboards?key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
-        api = json.loads(api_request.content)
-    except:
-        with open("dashedLeaderboardData.json") as f:
-            api = json.loads(f.read())
-
-    return api['leaderboards']
-
-
-def leaderboardURLFormatting(value):
-    output = ""
-    for i in value:
-        if i == "-":
-            i = "_"
-        else:
-            i = i.upper()
-
-        output += i
-
-    return output
-
-
-@app.route("/player/")
-def player():
-    return render_template("player.html")
-
-
-@app.template_filter()
-def getRankFromUUID(uuid):
-    try:
-        try:
-            with open("knownUsers.json") as f:
-                knownUsers = json.loads(f.read())
-
-            return knownUsers[uuid]
-
-        except KeyError:
-            api_request = requests.get("https://api.hypixel.net/player?uuid=" + uuid + "&key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
-            api = json.loads(api_request.content)
-            with open("knownUsers.json") as f:
-                knownUsers = json.loads(f.read())
-            with open("knownUsers.json", "w") as r:
-                knownUsers[uuid] = api['player']['displayname']
-                json.dump(knownUsers, r)
-            return api['player']['displayname']
-
-    except KeyError:
-        return "Unknown Name"
-
-
-@app.template_filter()
-def tableTry(dict, pos):
-    try:
-        return dict[pos]
-    except:
-        return "-"
-
-
-@app.template_filter()
-def customTry(data, dataPoints):
-    try:
-        newData = data
-        for arg in dataPoints:
-            newData = newData[arg]
-
-        return newData
-    except:
-        return "-"
-
-
-@app.template_filter()
-def customEnumerate(value):
-    return enumerate(value)
-
-
-def customReturn(data, dataPoints):
-    try:
-        newData = data
-        for arg in dataPoints:
-            newData = newData[arg]
-    except (KeyError, TypeError):
-        with open("dashedData.json") as f:
-            newData = json.loads(f.read())['player']['stats']['Bedwars']
-    return newData
-
+# Error Pages
 
 @app.errorhandler(403)
 def error_403(e):
