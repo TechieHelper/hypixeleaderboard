@@ -8,9 +8,9 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 {% endblock %}
 
-{% set GAME_MODES_BEDWARS = ['mw_duels_'] %}
-{% set REQUIRED_STATS_BEDWARS = ['class'] %}
-{% set GAME_MODES_LISTING = {'mw_duels_': "Mega Walls Duels"} %}
+{% set GAME_MODES_BEDWARS = ['bridge_duels_', 'bridge_doubles_', 'sumo_duel_', 'uhc_duel_', 'uhc_doubles_', 'op_duel_', 'sw_duels_', 'blitz_duels_', 'combo_duel_', 'no_debuff_', 'bowspleef_duel_'] %}
+{% set REQUIRED_STATS_BEDWARS = ['prestige', 'kills', 'deaths', '!kills;deaths', 'wins', 'losses', '!wins;losses', '!bow_hits;bow_shots', '!melee_hits;melee_swings'] %}
+{% set GAME_MODES_LISTING = {'bridge_duels_': '1v1 Bridge', 'bridge_doubles_': '2v2 Bridge', 'sumo_duel_': '1v1 Sumo', 'uhc_duel_': '1v1 UHC', 'uhc_doubles_': '2v2 UHC', 'op_duel_': '1v1 OP', 'sw_duels_': '1v1 Skywars', 'blitz_duels_': '1v1 Blitz', 'combo_duel_': '1v1 Combo', 'no_debuff_': '1v1 No Debuff', 'bowspleef_duel_': '1v1 Bow Spleef'} %}
 
 {% block body %}
 
@@ -30,18 +30,15 @@
             <table class="tableFixHead table-hover table-bordered table-striped table w-100">
                 <tr>
                     <th></th>
-                    <th>Class</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <th>Prestige</th>
+                    <th>Kills</th>
+                    <th>Deaths</th>
+                    <th>KDR</th>
+                    <th>Wins</th>
+                    <th>Losses</th>
+                    <th>Win/Loss Ratio</th>
+                    <th>Bow Hit/Miss Ratio</th>
+                    <th>Melee Hit/Miss Ratio</th>
                 </tr>
                 {% for mode in GAME_MODES_BEDWARS %}
                     <tr>
@@ -55,6 +52,8 @@
                                 {% else %}
                                     <td style="font-weight: bold">-</td>
                                 {% endif %}
+                            {% elif stat == 'prestige' %}
+                                <td>{{ mode|prestigeRank(duelsData) }}</td>
                             {% else %}
                                 <td>{{duelsData|tableTry(mode + stat)}}</td>
                             {% endif %}

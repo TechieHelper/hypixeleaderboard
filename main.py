@@ -69,6 +69,10 @@ def customReturn(data, dataPoints):
     return newData
 
 
+def prestigeStrip(value):
+    value = value[0].upper() + value[1:]
+    return value[:value.find("_")]
+
 
 
 
@@ -147,11 +151,32 @@ def customEnumerate(value):
     return enumerate(value)
 
 
+@app.template_filter()
+def prestigeRank(mode, duelsData):
+    listOfRanks = ['rookie_title_prestige', 'iron_title_prestige', 'gold_title_prestige', 'diamond_title_prestige',
+                   'master_title_prestige', 'legend_title_prestige', 'grandmaster_title_prestige',
+                   'godlike_title_prestige']
 
+    for rank in reversed(listOfRanks):
+        try:
+            level = duelsData[mode + rank]
+            if level == 1:
+                return prestigeStrip(rank) + " I"
+            elif level == 2:
+                return prestigeStrip(rank) + " II"
+            elif level == 3:
+                return prestigeStrip(rank) + " III"
+            elif level == 4:
+                return prestigeStrip(rank) + " IV"
+            elif level == 5:
+                return prestigeStrip(rank) + " V"
+        except KeyError:
+            pass
 
 
 
 # Pages
+
 
 @app.route("/home/")
 def home():
