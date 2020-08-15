@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template, request
+from flask import Flask, redirect, url_for, render_template, request, make_response
 import requests, json, os, time, datetime
 from os import listdir
 from os.path import isfile, join
@@ -153,11 +153,14 @@ def customEnumerate(value):
 
 @app.template_filter()
 def prestigeRank(mode, duelsData):
-    listOfRanks = ['rookie_title_prestige', 'iron_title_prestige', 'gold_title_prestige', 'diamond_title_prestige',
-                   'master_title_prestige', 'legend_title_prestige', 'grandmaster_title_prestige',
-                   'godlike_title_prestige']
+    listOfRanks = ['godlike_title_prestige', 'grandmaster_title_prestige', 'legend_title_prestige',
+                   'master_title_prestige', 'diamond_title_prestige', 'gold_title_prestige', 'iron_title_prestige',
+                   'rookie_title_prestige']
 
-    for rank in reversed(listOfRanks):
+    if mode != 'sw_duels_' and mode != 'bowspleef_duels_' and mode != 'no_debuff_duels_':
+        mode = mode[:mode.find("_")] + "_"
+
+    for rank in listOfRanks:
         try:
             level = duelsData[mode + rank]
             if level == 1:
@@ -171,7 +174,26 @@ def prestigeRank(mode, duelsData):
             elif level == 5:
                 return prestigeStrip(rank) + " V"
         except KeyError:
-            pass
+            continue
+
+    return "No Rank!"
+
+
+@app.template_filter()
+def getSkin(_):
+    try:
+        return "https://crafatar.com/avatars/" + request.cookies.get('uuid')
+    except:
+        return "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxISEhUSEhIVFRUVFRUVFRUVFRcVFRcVFRUXFxUVFRUYHSggGBolHRUVITEhJSkrLi4uFx8zODMtNygtLisBCgoKDQ0NDw0NDisZFRkrKzctLS0tKy0tLTctKy0tKy0tLS0rLTctNy0tNzcrLSstKy0tNystLS03Ny0rLS0rLf/AABEIAOEA4QMBIgACEQEDEQH/xAAWAAEBAQAAAAAAAAAAAAAAAAAAAQL/xAAbEAEBAQACAwAAAAAAAAAAAAAAARECQSGBwf/EABYBAQEBAAAAAAAAAAAAAAAAAAABAv/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AMkBpCqgChIgALgIBQQDACgBixKsBFAAiKBDQANEBdNAEABNFwBQAAAUEAClAogBoigBADQUAqALqYuoCwCgiighQoIACiII0RNBVIQAMACwAASqCIoABoEAAWIAqABqomg0JS0FEKBANA0VABJAFVIApolACABiAKipAUomABgABAVABRAFKICiALAQAAFMDABbCwEAEAUVCKAhhgAABgQBIKAgpQRSQsBIoYCLYYAYACCggqRRSCkBBUAAoFIACKgAoAyqAohAUAFiKgBAgEUAQFBPAagKugCiKAgUDCiggAFMCArKpQEVAFRQBQEkWxMUCgAkUAChQTAxAbAAEKAKgKioCwADCwgBiYpQSwxUAkXABLFxKoJi4AFMAEWgAUQFQAUSKCCoAasNBFMANRSAAAFIYCKigCKARFgESmLQRQoAAIUoCiYAAAtQoABQUQBYIugAAVFAQCgAaBQAMVABaRAAUEoAINYAkoABQAAAABRACKSgJBUAFQAgAigAkXTRApqioFAAAVFwBDQBSosADUBcIIACgi1FABAUSgBQoFomqAIugCatAVAFEXQT0KAyolBRMAUADUVMBQANVFA0pYAhFARLVANQoABIAEUAEwFEAa0QEQFFEXUBQKBgGgIoAACoAAAJpQwEVAFwAAIAqCggEBQASLABDkALCfQEEAVb00AM0oCAgKLEAU5ACCAixQBIUAVOgBYkAUAEf//Z"
+
+
+@app.template_filter()
+def getCookiesName(_):
+    try:
+        api_request = requests.get("https://api.hypixel.net/player?uuid=" + request.cookies.get('uuid') + "&key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
+        return json.loads(api_request.content)['player']['displayname']
+    except:
+        return "-"
 
 
 
@@ -242,6 +264,13 @@ def sitemap():
 def bedwars():
     data = generateData()
     return render_template("bedwars.html", data=data, bedwarsData=data['stats']['Bedwars'])
+
+
+@app.route("/sign-in/")
+def signIn():
+    data = generateData()
+    resp = make_response(render_template("signIn.html", data=data))
+    return resp
 
 
 @app.route("/player/bedwars/")
@@ -339,6 +368,15 @@ def duels_post():
 def home2_post():
     data = generateData(request.form['playerName'])
     return render_template("home.html", data=data)
+
+
+@app.route("/sign-in/", methods=['POST'])
+def signIn_post():
+    data = generateData(request.form['playerName'])
+    resp = make_response(render_template("signIn.html", data=data))
+    resp.set_cookie("uuid", max_age=0)
+    resp.set_cookie("uuid", data['uuid'])
+    return resp
 
 
 # Error Pages

@@ -8,9 +8,9 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 {% endblock %}
 
-{% set GAME_MODES_BEDWARS = ['bridge_duels_', 'bridge_doubles_', 'sumo_duel_', 'uhc_duel_', 'uhc_doubles_', 'op_duel_', 'sw_duels_', 'blitz_duels_', 'combo_duel_', 'no_debuff_', 'bowspleef_duel_'] %}
-{% set REQUIRED_STATS_BEDWARS = ['prestige', 'kills', 'deaths', '!kills;deaths', 'wins', 'losses', '!wins;losses', '!bow_hits;bow_shots', '!melee_hits;melee_swings'] %}
-{% set GAME_MODES_LISTING = {'bridge_duels_': '1v1 Bridge', 'bridge_doubles_': '2v2 Bridge', 'sumo_duel_': '1v1 Sumo', 'uhc_duel_': '1v1 UHC', 'uhc_doubles_': '2v2 UHC', 'op_duel_': '1v1 OP', 'sw_duels_': '1v1 Skywars', 'blitz_duels_': '1v1 Blitz', 'combo_duel_': '1v1 Combo', 'no_debuff_': '1v1 No Debuff', 'bowspleef_duel_': '1v1 Bow Spleef'} %}
+{% set GAME_MODES_DUELS = ['bridge_duels_', 'bridge_doubles_', 'sumo_duel_', 'uhc_duel_', 'uhc_doubles_', 'op_duel_', 'sw_duels_', 'sw_doubles_', 'blitz_duels_', 'combo_duel_', 'no_debuff_', 'classic_duel_', 'bowspleef_duel_'] %}
+{% set REQUIRED_STATS_DUELS = ['prestige', 'kills', 'deaths', '!kills;deaths', 'wins', 'losses', '!wins;losses', '!bow_hits;bow_shots', '!melee_hits;melee_swings'] %}
+{% set GAME_MODES_LISTING = {'bridge_duels_': '1v1 Bridge', 'bridge_doubles_': '2v2 Bridge', 'sumo_duel_': '1v1 Sumo', 'uhc_duel_': '1v1 UHC', 'uhc_doubles_': '2v2 UHC', 'op_duel_': '1v1 OP', 'sw_duels_': '1v1 Skywars', 'blitz_duels_': '1v1 Blitz', 'combo_duel_': '1v1 Combo', 'no_debuff_': '1v1 No Debuff', 'bowspleef_duel_': '1v1 Bow Spleef', 'classic_duel_': '1v1 Classic', 'sw_doubles_': '2v2 Skywars'} %}
 
 {% block body %}
 
@@ -40,14 +40,14 @@
                     <th>Bow Hit/Miss Ratio</th>
                     <th>Melee Hit/Miss Ratio</th>
                 </tr>
-                {% for mode in GAME_MODES_BEDWARS %}
+                {% for mode in GAME_MODES_DUELS %}
                     <tr>
                         <th>{{GAME_MODES_LISTING[mode]}}</th>
 
-                        {% for stat in REQUIRED_STATS_BEDWARS %}
+                        {% for stat in REQUIRED_STATS_DUELS %}
                             {% if stat[:1] == '!' %}
                                 {% set tempList = stat[1:].split(';') %}
-                                {% if duelsData|tableTry(mode + tempList[0]) != "-" and duelsData|tableTry(mode + tempList[1]) != "-" %}
+                                {% if duelsData|tableTry(mode + tempList[0]) != "-" and duelsData|tableTry(mode + tempList[1]) != "-" and (duelsData|tableTry(mode + tempList[0]) != 0 and duelsData|tableTry(mode + tempList[1]) != 0)%}
                                     <td style="font-weight: bold">{{'%0.2f' % (duelsData[mode + tempList[0]] / duelsData[mode + tempList[1]])}}</td>
                                 {% else %}
                                     <td style="font-weight: bold">-</td>
