@@ -182,7 +182,8 @@ def prestigeRank(mode, duelsData):
 @app.template_filter()
 def getSkin(_):
     try:
-        return "https://crafatar.com/avatars/" + request.cookies.get('uuid')
+        print(request.cookies['uuid'])
+        return "https://crafatar.com/avatars/" + request.cookies['uuid']
     except:
         return "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxISEhUSEhIVFRUVFRUVFRUVFRcVFRcVFRUXFxUVFRUYHSggGBolHRUVITEhJSkrLi4uFx8zODMtNygtLisBCgoKDQ0NDw0NDisZFRkrKzctLS0tKy0tLTctKy0tKy0tLS0rLTctNy0tNzcrLSstKy0tNystLS03Ny0rLS0rLf/AABEIAOEA4QMBIgACEQEDEQH/xAAWAAEBAQAAAAAAAAAAAAAAAAAAAQL/xAAbEAEBAQACAwAAAAAAAAAAAAAAARECQSGBwf/EABYBAQEBAAAAAAAAAAAAAAAAAAABAv/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AMkBpCqgChIgALgIBQQDACgBixKsBFAAiKBDQANEBdNAEABNFwBQAAAUEAClAogBoigBADQUAqALqYuoCwCgiighQoIACiII0RNBVIQAMACwAASqCIoABoEAAWIAqABqomg0JS0FEKBANA0VABJAFVIApolACABiAKipAUomABgABAVABRAFKICiALAQAAFMDABbCwEAEAUVCKAhhgAABgQBIKAgpQRSQsBIoYCLYYAYACCggqRRSCkBBUAAoFIACKgAoAyqAohAUAFiKgBAgEUAQFBPAagKugCiKAgUDCiggAFMCArKpQEVAFRQBQEkWxMUCgAkUAChQTAxAbAAEKAKgKioCwADCwgBiYpQSwxUAkXABLFxKoJi4AFMAEWgAUQFQAUSKCCoAasNBFMANRSAAAFIYCKigCKARFgESmLQRQoAAIUoCiYAAAtQoABQUQBYIugAAVFAQCgAaBQAMVABaRAAUEoAINYAkoABQAAAABRACKSgJBUAFQAgAigAkXTRApqioFAAAVFwBDQBSosADUBcIIACgi1FABAUSgBQoFomqAIugCatAVAFEXQT0KAyolBRMAUADUVMBQANVFA0pYAhFARLVANQoABIAEUAEwFEAa0QEQFFEXUBQKBgGgIoAACoAAAJpQwEVAFwAAIAqCggEBQASLABDkALCfQEEAVb00AM0oCAgKLEAU5ACCAixQBIUAVOgBYkAUAEf//Z"
 
@@ -190,7 +191,8 @@ def getSkin(_):
 @app.template_filter()
 def getCookiesName(_):
     try:
-        api_request = requests.get("https://api.hypixel.net/player?uuid=" + request.cookies.get('uuid') + "&key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
+        print(request.cookies['uuid'])
+        api_request = requests.get("https://api.hypixel.net/player?uuid=" + request.cookies['uuid'] + "&key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
         return json.loads(api_request.content)['player']['displayname']
     except:
         return "-"
@@ -270,6 +272,7 @@ def bedwars():
 def signIn():
     data = generateData()
     resp = make_response(render_template("signIn.html", data=data))
+    print(1, request.cookies['uuid'])
     return resp
 
 
@@ -376,6 +379,7 @@ def signIn_post():
     resp = make_response(render_template("signIn.html", data=data))
     resp.set_cookie("uuid", max_age=0)
     resp.set_cookie("uuid", data['uuid'])
+    print(2, request.cookies['uuid'])
     return resp
 
 
@@ -390,5 +394,16 @@ def error_403(e):
 def error_404(e):
     return render_template("404.html"), 404
 
+
+@app.errorhandler(405)
+def error_405(e):
+    return render_template("405.html"), 405
+
+
+@app.errorhandler(500)
+def error_500(e):
+    return render_template("500.html"), 500
+
+
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)

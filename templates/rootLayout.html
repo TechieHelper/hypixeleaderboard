@@ -38,8 +38,8 @@
                     <a href="/leaderboards/">Leaderboards</a>
                 </div>
                 <div class="col-sm-2">
-                    {% set skin = ""|getSkin() %}
-                    <img class="img-responsive" height="64" width="64" src="{{ skin }}" alt="Skin Image" onclick="window.location.href='/sign-in/'">
+                    {% set skin = _|getSkin() %}
+                    <img class="img-responsive" height="64" width="64" src="{{ skin }}" alt="Sign In!" onclick="window.location.href='/sign-in/'">
                 </div>
                 <div class="col-sm-4">
                     <h1>Hypixel Leaderboards</h1>
