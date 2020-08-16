@@ -16,6 +16,7 @@
     {% block usernameEntryForm %}{{ super() }}{% endblock %}
 
     {% block content %}
+    <h4 style="color: red;">After signing in, please refresh the page.</h4>
     <h3>You are currently signed in as: {{ _|getCookiesName() }}</h3>
     {% endblock %}
 

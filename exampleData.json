@@ -876,7 +876,7 @@
         "SkyWars":{
             "souls":10,
             "activeKit_TEAMS":"kit_defending_team_armorer",
-            "activeKit_TEAMS_random":False,
+            "activeKit_TEAMS_random":false,
             "games_played_skywars":736,
             "win_streak":0,
             "lastMode":"SOLO",
@@ -1014,11 +1014,11 @@
                 "kit_basic_solo_disco",
                 "update_opals_prestige"
             ],
-            "luckyBlockResourcePackEnabled":False,
+            "luckyBlockResourcePackEnabled":false,
             "enderpearls_thrown_lab":92,
             "freeLootChestNpc":1537099892216,
             "skywars_chests":0,
-            "activeKit_SOLO_random":False,
+            "activeKit_SOLO_random":false,
             "activeKit_SOLO":"kit_basic_solo_frog",
             "longest_bow_kill_kit_basic_solo_batguy":3,
             "most_kills_game_solo":1,
@@ -1156,7 +1156,7 @@
             "games_lab_team":11,
             "wins_lab_team":4,
             "activeKit_MEGA_DOUBLES":"kit_mega_mega_default",
-            "activeKit_MEGA_DOUBLES_random":False,
+            "activeKit_MEGA_DOUBLES_random":false,
             "games_kit_mega_mega_default":1,
             "games_mega_doubles":1,
             "bow_kills_lab_team":3,
@@ -1705,7 +1705,7 @@
             "solo_revenge":0,
             "soul_well_legendaries":1,
             "activeKit_RANKED":"kit_ranked_ranked_champion",
-            "activeKit_RANKED_random":False,
+            "activeKit_RANKED_random":false,
             "chests_opened_kit_ranked_ranked_champion":1,
             "chests_opened_ranked":1,
             "fastest_win_kit_ranked_ranked_champion":74,
@@ -1887,7 +1887,7 @@
             "weekly_coins_a":770,
             "total_votes":114,
             "votes_Car":3,
-            "music":False,
+            "music":false,
             "monthly_coins_a":726,
             "weekly_coins_b":1908,
             "votes_Trainstation":3
@@ -2197,7 +2197,7 @@
             "tags_bowspleef":27,
             "flags":{
                 "show_tip_holograms":true,
-                "show_tntrun_actionbar_info":False
+                "show_tntrun_actionbar_info":false
             }
         },
         "UHC":{
@@ -3014,12 +3014,12 @@
     "networkExp":4459360,
     "levelingReward_0":true,
     "settings":{
-        "spec_spectators_invisible":False,
+        "spec_spectators_invisible":false,
         "spec_speed":4,
-        "guildChatVisibility":False,
-        "spec_first_person":False,
+        "guildChatVisibility":false,
+        "spec_first_person":false,
         "spec_night_vision":true,
-        "spec_auto_teleport":False
+        "spec_auto_teleport":false
     },
     "petConsumables":{
         "BAKED_POTATO":88,

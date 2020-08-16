@@ -19,7 +19,10 @@ def getUUIDFromName(name):
 
 
 def generateData(name="_"):
-    uuid = getUUIDFromName(name)
+    if len(name.encode('utf-8')) != 32:
+        uuid = getUUIDFromName(name)
+    else:
+        uuid = name
     if uuid == "Unknown Name":
         with open("dashedData.json") as f:
             api = json.loads(f.read())
@@ -182,7 +185,6 @@ def prestigeRank(mode, duelsData):
 @app.template_filter()
 def getSkin(_):
     try:
-        print(request.cookies['uuid'])
         return "https://crafatar.com/avatars/" + request.cookies['uuid']
     except:
         return "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxISEhUSEhIVFRUVFRUVFRUVFRcVFRcVFRUXFxUVFRUYHSggGBolHRUVITEhJSkrLi4uFx8zODMtNygtLisBCgoKDQ0NDw0NDisZFRkrKzctLS0tKy0tLTctKy0tKy0tLS0rLTctNy0tNzcrLSstKy0tNystLS03Ny0rLS0rLf/AABEIAOEA4QMBIgACEQEDEQH/xAAWAAEBAQAAAAAAAAAAAAAAAAAAAQL/xAAbEAEBAQACAwAAAAAAAAAAAAAAARECQSGBwf/EABYBAQEBAAAAAAAAAAAAAAAAAAABAv/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AMkBpCqgChIgALgIBQQDACgBixKsBFAAiKBDQANEBdNAEABNFwBQAAAUEAClAogBoigBADQUAqALqYuoCwCgiighQoIACiII0RNBVIQAMACwAASqCIoABoEAAWIAqABqomg0JS0FEKBANA0VABJAFVIApolACABiAKipAUomABgABAVABRAFKICiALAQAAFMDABbCwEAEAUVCKAhhgAABgQBIKAgpQRSQsBIoYCLYYAYACCggqRRSCkBBUAAoFIACKgAoAyqAohAUAFiKgBAgEUAQFBPAagKugCiKAgUDCiggAFMCArKpQEVAFRQBQEkWxMUCgAkUAChQTAxAbAAEKAKgKioCwADCwgBiYpQSwxUAkXABLFxKoJi4AFMAEWgAUQFQAUSKCCoAasNBFMANRSAAAFIYCKigCKARFgESmLQRQoAAIUoCiYAAAtQoABQUQBYIugAAVFAQCgAaBQAMVABaRAAUEoAINYAkoABQAAAABRACKSgJBUAFQAgAigAkXTRApqioFAAAVFwBDQBSosADUBcIIACgi1FABAUSgBQoFomqAIugCatAVAFEXQT0KAyolBRMAUADUVMBQANVFA0pYAhFARLVANQoABIAEUAEwFEAa0QEQFFEXUBQKBgGgIoAACoAAAJpQwEVAFwAAIAqCggEBQASLABDkALCfQEEAVb00AM0oCAgKLEAU5ACCAixQBIUAVOgBYkAUAEf//Z"
@@ -191,7 +193,6 @@ def getSkin(_):
 @app.template_filter()
 def getCookiesName(_):
     try:
-        print(request.cookies['uuid'])
         api_request = requests.get("https://api.hypixel.net/player?uuid=" + request.cookies['uuid'] + "&key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
         return json.loads(api_request.content)['player']['displayname']
     except:
@@ -272,19 +273,26 @@ def bedwars():
 def signIn():
     data = generateData()
     resp = make_response(render_template("signIn.html", data=data))
-    print(1, request.cookies['uuid'])
     return resp
 
 
 @app.route("/player/bedwars/")
 def bedwars2():
-    data = generateData()
+    try:
+        uuid = request.cookies['uuid']
+        data = generateData(uuid)
+    except KeyError:
+        data = generateData()
     return render_template("bedwars.html", data=data, bedwarsData=data['stats']['Bedwars'])
 
 
 @app.route("/player/duels/")
 def duels():
-    data = generateData()
+    try:
+        uuid = request.cookies['uuid']
+        data = generateData(uuid)
+    except KeyError:
+        data = generateData()
     return render_template("duels.html", data=data, duelsData=data['stats']['Duels'])
 
 
@@ -306,7 +314,11 @@ def skywars():
 
 @app.route("/player/skywars/")
 def skywars2():
-    data = generateData()
+    try:
+        uuid = request.cookies['uuid']
+        data = generateData(uuid)
+    except KeyError:
+        data = generateData()
     return render_template("skywars.html", data=data, skywarsData=data['stats']['SkyWars'])
 
 
@@ -379,7 +391,6 @@ def signIn_post():
     resp = make_response(render_template("signIn.html", data=data))
     resp.set_cookie("uuid", max_age=0)
     resp.set_cookie("uuid", data['uuid'])
-    print(2, request.cookies['uuid'])
     return resp
 
 
@@ -406,4 +417,4 @@ def error_500(e):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
