@@ -4,7 +4,7 @@
 <meta name="description" content="Hypixel Leaderboard's Skywars section, showing specific player data straight from Hypixel.net.">
 {% endblock %}
 
-{% set GAME_MODES_SKYWARS = ['', '_solo_normal', '_solo_insane', '_team', '_team_insane', '_lab', '_lab_team'] %}
+{% set GAME_MODES_SKYWARS = ['', '_solo_normal', '_solo_insane', '_team', '_team_insane', '_lab', '_lab_team', '_ranked'] %}
 {% set REQUIRED_STATS_SKYWARS = ['kills', 'deaths', '!kills;deaths', 'wins', 'losses', '!wins;losses'] %}
 {% set EXTRA_STATS_SKYWARS = [] %}
 
@@ -42,6 +42,7 @@
                         {% elif mode == '_team_insane' %} <th>Team Insane</th>
                         {% elif mode == '_lab' %} <th>Solo Labs</th>
                         {% elif mode == '_lab_team' %} <th>Team Labs</th>
+                        {% elif mode == '_ranked' %} <th>Ranked</th>
                         {% endif %}
 
                         {% for stat in REQUIRED_STATS_SKYWARS %}
