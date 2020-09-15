@@ -5,5 +5,6 @@
     <orderEntry type="jdk" jdkName="Python 3.7 (proj) (2)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="prok5" />
+    <orderEntry type="module" module-name="Pygame Games For CV" />
   </component>
 </module>

@@ -1,7 +1,6 @@
 from flask import Flask, redirect, url_for, render_template, request, make_response
 import requests, json, os, time, datetime
 from os import listdir
-from os.path import isfile, join
 from datetime import datetime
 
 app = Flask(__name__)
