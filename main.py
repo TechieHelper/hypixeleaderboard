@@ -259,7 +259,7 @@ def sitemap():
             temp2 = "player/" + temp2
 
         if temp2[-5:] == ".html":
-            temp2 = temp2[-5:]
+            temp2 = temp2[:-5] + "/"
 
         filteredFiles[index][0] = temp2
 
