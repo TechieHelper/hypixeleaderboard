@@ -17,6 +17,16 @@ def getUUIDFromName(name):
         return "Unknown Name"
 
 
+def getWatchdogstats():
+    try:
+        api_request = requests.get("https://api.hypixel.net/watchdogstats?key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
+        api = json.loads(api_request.content)
+    except:
+        api = json.loads("{'success': true, 'watchdog_lastMinute': 5, 'staff_rollingDaily': 1356, 'watchdog_total': 4924740, 'watchdog_rollingDaily': 7679, 'staff_total': 1608360}")
+
+    return api
+
+
 def generateData(name="_"):
     if len(name.encode('utf-8')) != 32:
         uuid = getUUIDFromName(name)
@@ -198,8 +208,14 @@ def getCookiesName(_):
         return "-"
 
 
-
 # Pages
+
+
+@app.route("/watchdogstats/")
+def watchdogstats():
+    data = getWatchdogstats()
+    print(data)
+    return render_template("watchdogstats.html", data=data)
 
 
 @app.route("/home/")
