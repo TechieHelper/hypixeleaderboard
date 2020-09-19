@@ -27,6 +27,17 @@ def getWatchdogstats():
     return api
 
 
+def getGameCounts():
+    try:
+        api_request = requests.get("https://api.hypixel.net/gameCounts?key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
+        api = json.loads(api_request.content)
+    except:
+        with open("gameCounts.json") as f:
+            api = json.loads(f.read())
+
+    return api
+
+
 def generateData(name="_"):
     if len(name.encode('utf-8')) != 32:
         uuid = getUUIDFromName(name)
@@ -109,10 +120,6 @@ def capitalizeFirstLetter(value):
     valueList = value.split("_")
     return " ".join([i[0].upper() + i[1:].lower() for i in valueList])
 
-
-@app.route("/player/")
-def player():
-    return render_template("player.html")
 
 
 @app.template_filter()
@@ -208,7 +215,36 @@ def getCookiesName(_):
         return "-"
 
 
+@app.template_filter()
+def doesModesExist(data, modeList):
+    try:
+        for mode in modeList:
+            data = data[mode]
+
+        if data == "":
+            return False
+    except:
+        return False
+    return True
+
+
+@app.template_filter()
+def printSomething(thing):
+    print(thing)
+
+
 # Pages
+
+
+@app.route("/game-counts/")
+def gameCounts():
+    data = getGameCounts()
+    return render_template("gameCounts.html", data=data)
+
+
+@app.route("/player/")
+def player():
+    return render_template("player.html")
 
 
 @app.route("/watchdogstats/")

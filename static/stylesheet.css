@@ -139,3 +139,19 @@ background: #555;
 
 .tableFixHead thead th { position: sticky; top: 0; }
 .tableFixHead          { overflow-y: auto; height: 100px; }
+
+@media (min-width: 576px)
+div.listOfButtons {
+    padding: 1.5rem;
+    margin-right: 0;
+    margin-left: 0;
+    border-width: .2rem;
+}
+
+div.listOfButtons {
+    position: relative;
+    padding: 1rem;
+    margin: 1rem -15px 0;
+    border: solid #f7f7f9;
+    border-width: .2rem 0 0;
+}
