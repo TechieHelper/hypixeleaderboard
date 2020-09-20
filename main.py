@@ -477,6 +477,5 @@ def error_500(e):
 
 
 if __name__ == "__main__":
-    website_url = 'hypixeleaderboards.com:5000'
-    app.config['SERVER_NAME'] = website_url
+    app.config['SERVER_NAME'] = 'hypixeleaderboards.com:5000'
     app.run()
