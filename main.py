@@ -236,6 +236,11 @@ def printSomething(thing):
 # Pages
 
 
+@app.route('/', subdomain='skyblock')
+def skyblock():
+    return "Coming Soon!"
+
+
 @app.route("/game-counts/")
 def gameCounts():
     data = getGameCounts()
@@ -472,4 +477,6 @@ def error_500(e):
 
 
 if __name__ == "__main__":
+    website_url = 'hypixeleaderboards.com:5000'
+    app.config['SERVER_NAME'] = website_url
     app.run()
