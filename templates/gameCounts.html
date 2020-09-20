@@ -4,13 +4,6 @@
 <meta name="description" content="Menu for Players to select statistics.">
 {% endblock %}
 
-{% block extra_scripts %}
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-{% endblock %}
-
 {% block body %}
 
     {% block tag %}{{ super() }}{% endblock %}
@@ -24,11 +17,12 @@
     {% block content %}
 
     <div class="listOfButtons">
+    <div class="btn-toolbar" role="toolbar">
     {% for item in data['games'] %}
-
             {% if data|doesModesExist(['games', item, 'modes']) %}
-                <div class="dropdown">
-                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-info dropdown-toggle mr-1 mb-1" data-toggle="dropdown">
                         {{ item|capitalizeFirstLetter() }} - {{ data['games'][item]['players'] }}
                     </button>
 
@@ -39,14 +33,15 @@
                     </div>
                 </div>
             {% else %}
-
-                <button type="button" class="btn btn-info">
-                    {{ item|capitalizeFirstLetter() }} - {{ data['games'][item]['players'] }}
-                </button>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-info mr-1 mb-1">
+                        {{ item|capitalizeFirstLetter() }} - {{ data['games'][item]['players'] }}
+                    </button>
+                </div>
 
             {% endif %}
-
     {% endfor %}
+    </div>
     </div>
 
     {% endblock %}

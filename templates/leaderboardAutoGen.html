@@ -14,14 +14,24 @@
     {% block usernameEntryForm %}{% endblock %}
 
     {% block content %}
-    <div class="dropdown">
+    <div class="listOfButtons">
+        <div class="btn-toolbar" role="toolbar">
         {% for currentData in data %}
-            <h3>{{currentData['prefix']}} {{currentData['title']}}</h3>
-            {% for pos, uuid in currentData['leaders']|customEnumerate %}
-                <p>{{pos + 1}} - {{uuid|getRankFromUUID}}</p>
-            {% endfor %}
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle mr-1 mb-1" data-toggle="dropdown">
+                    {{currentData['prefix']}} {{currentData['title']}}
+                </button>
+
+                <div class="dropdown-menu">
+                    {% for pos, uuid in currentData['leaders']|customEnumerate %}
+                        <a class="dropdown-item" href="#">{{pos + 1}} - {{uuid|getRankFromUUID}}</a>
+                    {% endfor %}
+                </div>
+            </div>
 
         {% endfor %}
+        </div>
     </div>
     {% endblock %}
 
