@@ -1,0 +1,44 @@
+{% extends "rootLayout.html" %}
+{% block title %}{{gameType}}{% endblock %}
+{% block meta_desc %}
+<meta name="description" content="Hypixel's skyblock bazaar section.">
+{% endblock %}
+{% block extra_scripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+        $('a#process_input').bind('click', function() {
+            $.getJSON("/skyblockBazaarPost", {
+                chosenItem: $('input[name="chosenItem"]').val(),
+            }, function(data) {
+                $('#result').html(data.result);
+            });
+            return false
+        });
+    });
+</script>
+{% endblock %}
+{% block body %}
+
+    {% block tag %}{{ super() }}{% endblock %}
+
+    {% block topnav %}{% endblock %}
+
+    {% block displayTitle %}Bazaar{% endblock %}
+
+    {% block usernameEntryForm %}{% endblock %}
+
+    {% block content %}
+
+    <form>
+        <p>Please input the item you are looking for: </p>
+        <input type="text" size="5" name="chosenItem">
+        <a href="#" id="process_input"><button class="btn btn-default">Submit</button></a>
+    </form>
+    <div id="result"></div>
+
+    {% endblock %}
+
+    {% block footer %}{{ super() }}{% endblock %}
+
+{% endblock %}
