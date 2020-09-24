@@ -58,6 +58,16 @@ def getBazaarStats():
 	return api
 
 
+def getAuctionsStats():
+	try:
+		api_request = requests.get("https://api.hypixel.net/skyblock/auctions?key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
+		api = json.loads(api_request.content)
+	except:
+		with open("skyblockdata/auctions.json") as f:
+			api = json.loads(f.read())
+
+	return api
+
 
 def generateData(name="_"):
 	if len(name.encode('utf-8')) != 32:
@@ -121,6 +131,11 @@ def prestigeStrip(value):
 
 
 # App Commands
+
+
+@app.template_filter()
+def unixTimestampToDate(ts):
+	print(datetime.utcfromtimestamp(1571049581232).strftime('%Y-%m-%d %H:%M:%S'))
 
 
 @app.template_filter()
@@ -263,6 +278,13 @@ def skyblock():
 	return render_template("skyblock.html", data=data)
 
 
+@app.route('/skyblock/auctions/')
+def auctions():
+	data = getAuctionsStats()
+	return render_template("auctions.html", data=data)
+
+
+
 @app.route('/skyblock/bazaar/')
 def bazaar():
 	data = getBazaarStats()
@@ -368,7 +390,7 @@ def sitemap():
 		if temp2 == "bedwars.html" or temp2 == "skywars.html" or temp2 == "duels.html":
 			temp2 = "player/" + temp2
 
-		if temp2 == "bazaar.html":
+		if temp2 == "bazaar.html" or temp2 == "auctions.html":
 			temp2 = "skyblock/" + temp2
 
 		if temp2[-5:] == ".html":

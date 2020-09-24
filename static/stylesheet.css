@@ -95,48 +95,6 @@ table.mainTable tfoot .links a{
   border-radius: 5px;
 }
 
-.footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  background-color: red;
-  color: white;
-  text-align: center;
-}
-
-/* width */
-
-::-webkit-scrollbar {
-
-width: 10px;
-
-}
-
-/* Track */
-
-::-webkit-scrollbar-track {
-
-background: #f1f1f1;
-
-}
-
-/* Handle */
-
-::-webkit-scrollbar-thumb {
-
-background: #888;
-
-}
-
-/* Handle on hover */
-
-::-webkit-scrollbar-thumb:hover {
-
-background: #555;
-
-}
-
 .tableFixHead thead th { position: sticky; top: 0; }
 .tableFixHead          { overflow-y: auto; height: 100px; }
 

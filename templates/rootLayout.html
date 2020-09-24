@@ -26,6 +26,53 @@
     {% endblock %}
 </head>
 <body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">
+                {% set skin = _|getSkin() %}
+                <img class="img-responsive" height="64" width="64" src="{{ skin }}" alt="Sign In!" onclick="window.location.href='/sign-in/'">
+                Hypixel Leaderboards
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/home/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/leaderboards/">Leaderboards</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/watchdogstats/">Watchdog Stats</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/game-counts/">Game Counts</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Player Stats
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/player/bedwars/">Bedwars</a>
+                            <a class="dropdown-item" href="/player/skywars/">Skywars</a>
+                            <a class="dropdown-item" href="/player/duels/">Duels</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Skyblock
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="/skyblock/bazaar/">Bazaar</a>
+                            <a class="dropdown-item" href="/skyblock/auctions/">Auctions</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
     {% block body %}
         {% block tag %}
             <!-- Google Tag Manager (noscript) -->
@@ -34,30 +81,7 @@
             <!-- End Google Tag Manager (noscript) -->
         {% endblock %}
 
-        {% block topnav %}
-            <div class="row">
-                <div class="topnav col-sm-4">
-                    <a href="/home/">Home</a>
-                    <a href="/player/">Player Stats</a>
-                    <a href="/leaderboards/">Leaderboards</a>
-                    <a href="/skyblock/">Skyblock</a>
-                    <a href="/watchdogstats/">Watchdog Stats</a>
-                    <a href="/game-counts/">Game Counts</a>
-                </div>
-                <div class="col-sm-2">
-                    {% set skin = _|getSkin() %}
-                    <img class="img-responsive" height="64" width="64" src="{{ skin }}" alt="Sign In!" onclick="window.location.href='/sign-in/'">
-                </div>
-                <div class="col-sm-4">
-                    <h1>Hypixel Leaderboards</h1>
-                </div>
-                <div class="col-sm-2">
-                    <a href="/privacy-policy/">Privacy Policy</a>
-                    <a href="/terms-of-service/">Terms of service</a>
-                </div>
-            </div>
-            <h1>{% block displayTitle %}{% endblock %}</h1>
-        {% endblock %}
+
 
         {% block usernameEntryForm %}
             <form method="POST">
@@ -80,8 +104,12 @@
         <div id="content">{% block content %}{% endblock %}</div>
 
         {% block footer %}
-            <div class="footer-copyright text-center py-3">
+            <div class="row">
+                <div class="footer-copyright text-center py-3">
                     <a href="mailto:oliverlford@icloud.com">Contact Us</a>
+                    <a href="/privacy-policy/">Privacy Policy</a>
+                    <a href="/terms-of-service/">Terms of service</a>
+                </div>
             </div>
         {% endblock %}
 
