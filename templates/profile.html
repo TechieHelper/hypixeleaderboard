@@ -1,0 +1,90 @@
+{% extends "rootLayout.html" %}
+{% block title %}Skyblock Profile{% endblock %}
+{% block meta_desc %}
+<meta name="description" content="Hypixel Leaderboards' skyblock profile section">
+{% endblock %}
+{% block extra_scripts %}
+{% endblock %}
+
+{% set PASSIVE_MOBS = ['_chicken', '_cow', '_pig', '_sheep', '_rabbit', '_bat'] %}
+{% set HOSTILE_MOBS = ['_zombie', '_zombie_villager', '_skeleton', '_spider', '_enderman', '_endermite', '_witch', '_slime', '_lapis_zombie', '_splitter_spider', '_weaver_spider', '_voracious_spider', '_brood_mother_spider', '_jockey_skeleton', '_silverfish', '_blaze', '_wither_skeleton', '_magma_cube', '_magma_cube_boss', '_ghast', '_wolf', '_sea_walker', '_sea_guardian', '_sea_witch', '_sea_archer', '_monster_of_the_deep', '_catfish', '_sea_leech', '_guardian_defender', '_deep_sea_defender', '_water_hydra', '_sea_emperor', '_yeti', '_zealot', '_watcher', '_obsidian_defender', '_endstone_protector', '_ender_dragon', '_crypt_ghoul', '_golden_ghoul', '_pack_spirint', '_howling_spirit', '_soul_of_the_alpha', '_headless_horseman', '_frozen_steve', '_frosty'] %}
+{% set STATS = ['kills', 'deaths', '!kills;deaths'] %}
+
+{% block body %}
+
+    {% block tag %}{{ super() }}{% endblock %}
+
+    {% block usernameEntryForm %}{{ super() }}{% endblock %}
+
+    {% block content %}
+    {% if profileAsk %}
+        <h4>Please choose your skyblock profile:</h4>
+
+        {% for profile in data['stats']['SkyBlock']['profiles'] %}
+            <form method="post">
+                <input type="text" name="profile_id" style="display: none;" value="{{ data['stats']['SkyBlock']['profiles'][profile]['profile_id'] }}">
+                <input type="submit" value="{{ data['stats']['SkyBlock']['profiles'][profile]['cute_name'] }}" class="btn btn-info">
+            </form>
+        {% endfor %}
+    {% else %}
+        {% for profile in skyblockData['members'] %}
+            {% set currentProfile = skyblockData['members'][profile] %}
+            <h2>Current Profile: {{ profile|currentName() }}</h2>
+            <h4>Last save: {{ currentProfile['last_save']|format_datetime() }}</h4>
+            <h5>Current Inventory: </h5>
+            <p>{{ currentProfile['inv_armor']['data']|unHash() }}</p>
+
+            <h5>Stats: </h5>
+            <table class="table-hover table-bordered table-striped table w-100">
+                <tr>
+                    <th></th>
+                    <th>Kills</th>
+                    <th>Deaths</th>
+                    <th>KDR</th>
+                </tr>
+                {% for mob in PASSIVE_MOBS %}
+                    <tr>
+                        <td style="font-weight: bold; text-align: left;">{{ mob|skyblockProfileCapitalise() }}</td>
+
+                        {% for stat in STATS %}
+                            {% if stat[:1] == '!' %}
+                                {% set tempList = stat[1:].split(';') %}
+                                {% if currentProfile['stats']|tableTry(tempList[0] + mob) != "-" and currentProfile['stats']|tableTry(tempList[1] + mob) != "-" %}
+                                    <td style="font-weight: bold">{{'%0.2f' % (currentProfile['stats'][tempList[0] + mob] / currentProfile['stats'][tempList[1] + mob])}}</td>
+                                {% else %}
+                                    <td style="font-weight: bold">-</td>
+                                {% endif %}
+                            {% else %}
+                                <td>{{currentProfile['stats']|tableTry(stat + mob)}}</td>
+                            {% endif %}
+                        {% endfor%}
+                    </tr>
+                {% endfor %}
+                <td colspan="4" style="text-align: center; font-weight: bold;">Hostile Mobs</td>
+                {% for mob in HOSTILE_MOBS %}
+                    <tr>
+                        <td style="font-weight: bold; text-align: left;">{{ mob|skyblockProfileCapitalise() }}</td>
+
+                        {% for stat in STATS %}
+                            {% if stat[:1] == '!' %}
+                                {% set tempList = stat[1:].split(';') %}
+                                {% if currentProfile['stats']|tableTry(tempList[0] + mob) != "-" and currentProfile['stats']|tableTry(tempList[1] + mob) != "-" %}
+                                    <td style="font-weight: bold">{{'%0.2f' % (currentProfile['stats'][tempList[0] + mob] / currentProfile['stats'][tempList[1] + mob])}}</td>
+                                {% else %}
+                                    <td style="font-weight: bold">-</td>
+                                {% endif %}
+                            {% else %}
+                                <td>{{currentProfile['stats']|tableTry(stat + mob)}}</td>
+                            {% endif %}
+                        {% endfor%}
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}
+    {% endif %}
+
+    {% endblock %}
+
+    {% block footer %}{{ super() }}{% endblock %}
+
+{% endblock %}

@@ -2,6 +2,8 @@ from flask import Flask, redirect, url_for, render_template, request, make_respo
 import requests, json, os, time, datetime
 from os import listdir
 from datetime import datetime
+import base64, io, nbt
+
 
 app = Flask(__name__)
 
@@ -67,6 +69,19 @@ def getAuctionsStats():
 			api = json.loads(f.read())
 
 	return api
+
+
+def generateSkyblockPlayerData(playerID):
+	try:
+		api_request = requests.get(
+			"https://api.hypixel.net/skyblock/profile?profile=" + playerID + "&key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
+		api = json.loads(api_request.content)
+	except:
+		with open("skyblockdata/profile.json") as f:
+			api = json.loads(f.read())
+
+	return api['profile']
+
 
 
 def generateData(name="_"):
@@ -200,6 +215,14 @@ def tableTry(dict, pos):
 
 
 @app.template_filter()
+def skyblockProfileCapitalise(word):
+	words = word.split('_')
+	for i in range(len(words)):
+		words[i] = words[i][0:1].upper() + words[i][1:].lower()
+	return " ".join(words)
+
+
+@app.template_filter()
 def customTry(data, dataPoints):
 	try:
 		newData = data
@@ -275,11 +298,34 @@ def doesModesExist(data, modeList):
 
 
 @app.template_filter()
-def printSomething(thing):
-	print(thing)
+def currentName(uuid):
+	try:
+		api_request = requests.get("https://api.mojang.com/user/profiles/" + uuid + "/names")
+		api = json.loads(api_request.content)
+		return api[len(api)-1]['name']
+	except:
+		return "Your name cannot be found"
+
+
+@app.template_filter()
+def unHash(hash):
+	data = nbt.nbt.NBTFile(fileobj=io.BytesIO(base64.b64decode(hash)))
+	print(list(data))
+	return data
+
 
 
 # Pages
+
+
+@app.route('/skyblock/profile/')
+def profile():
+	try:
+		uuid = request.cookies['uuid']
+		data = generateData(uuid)
+	except KeyError:
+		data = generateData()
+	return render_template("profile.html", data=data, profileAsk=True)
 
 
 @app.route('/skyblock/')
@@ -340,7 +386,6 @@ def player():
 @app.route("/watchdogstats/")
 def watchdogstats():
 	data = getWatchdogstats()
-	print(data)
 	return render_template("watchdogstats.html", data=data)
 
 
@@ -408,7 +453,7 @@ def sitemap():
 		if temp2 == "bedwars.html" or temp2 == "skywars.html" or temp2 == "duels.html":
 			temp2 = "player/" + temp2
 
-		if temp2 == "bazaar.html" or temp2 == "auctions.html":
+		if temp2 == "bazaar.html" or temp2 == "auctions.html" or temp2 == "profile.html":
 			temp2 = "skyblock/" + temp2
 
 		if temp2[-5:] == ".html":
@@ -503,6 +548,16 @@ def suggestions_post():
 def home_post():
 	data = generateData(request.form['playerName'])
 	return render_template("home.html", data=data)
+
+
+@app.route('/skyblock/profile/', methods=['POST'])
+def profile_post():
+	try:
+		profileData = generateSkyblockPlayerData(request.form['profile_id'])
+		return render_template("profile.html", skyblockData=profileData, profileAsk=False)
+	except:
+		data = generateData(request.form['playerName'])
+		return render_template("profile.html", data=data, profileAsk=True)
 
 
 @app.route("/skywars/", methods=['POST'])
