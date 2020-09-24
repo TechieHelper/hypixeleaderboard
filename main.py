@@ -154,8 +154,11 @@ def checkIfValid(data, dataPoint):
 
 @app.template_filter()
 def format_datetime(ts):
-	dt = datetime.fromtimestamp(ts / 1000).strftime("%d/%m/%Y %H:%M:%S")
-	return dt
+	if type(ts) == int:
+		dt = datetime.fromtimestamp(ts / 1000).strftime("%d/%m/%Y %H:%M:%S")
+		return dt
+	else:
+		return "-"
 
 
 @app.template_filter()
