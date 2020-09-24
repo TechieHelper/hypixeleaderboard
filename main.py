@@ -348,14 +348,16 @@ def home():
 		data = generateData(uuid)
 	except KeyError:
 		data = generateData()
-
-	print(data)
 	return render_template("home.html", data=data)
 
 
 @app.route("/")
 def home2():
-	data = generateData()
+	try:
+		uuid = request.cookies['uuid']
+		data = generateData(uuid)
+	except KeyError:
+		data = generateData()
 	return render_template("home.html", data=data)
 
 
