@@ -11,16 +11,16 @@
 
     {% block tag %}{{ super() }}{% endblock %}
 
-    {% block displayTitle %}Home{% endblock %}
-
     {% block usernameEntryForm %}{{ super() }}{% endblock %}
 
     {% block content %}
 
         <h2>{{data['displayname']}}</h2>
-
+        <br>
+        <h3>Hypixel Level: {{ data|getHypixelLevel() }}</h3>
+        <br>
         <p>Welcome to Hypixel Leaderboards! To see player stats and leaderboards, please use the top menu. For other stats, please also refer to the top menu.</p>
-
+        <br>
         <p>Most Recent Game Type: {{data|customTry(['mostRecentGameType'])|capitalizeFirstLetter}}</p>
         <p>Particle Pack: {{data|customTry(['particlePack'])|capitalizeFirstLetter}}</p>
         <p>Last Logout: {{data|customTry(['lastLogout'])|format_datetime}}</p>

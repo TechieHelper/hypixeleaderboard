@@ -74,6 +74,7 @@ def generateData(name="_"):
 		uuid = getUUIDFromName(name)
 	else:
 		uuid = name
+
 	if uuid == "Unknown Name":
 		with open("dashedData.json") as f:
 			api = json.loads(f.read())
@@ -134,8 +135,13 @@ def prestigeStrip(value):
 
 
 @app.template_filter()
-def unixTimestampToDate(ts):
-	print(datetime.utcfromtimestamp(1571049581232).strftime('%Y-%m-%d %H:%M:%S'))
+def getHypixelLevel(data):
+	for i in range(1000000):
+		try:
+			if data['levelingReward_' + str(i)]:
+				pass
+		except:
+			return i - 1
 
 
 @app.template_filter()
@@ -147,8 +153,9 @@ def checkIfValid(data, dataPoint):
 
 
 @app.template_filter()
-def format_datetime(value):
-	return value
+def format_datetime(ts):
+	dt = datetime.fromtimestamp(ts / 1000).strftime("%d/%m/%Y %H:%M:%S")
+	return dt
 
 
 @app.template_filter()
@@ -336,7 +343,13 @@ def watchdogstats():
 
 @app.route("/home/")
 def home():
-	data = generateData()
+	try:
+		uuid = request.cookies['uuid']
+		data = generateData(uuid)
+	except KeyError:
+		data = generateData()
+
+	print(data)
 	return render_template("home.html", data=data)
 
 
