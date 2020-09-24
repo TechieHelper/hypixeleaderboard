@@ -389,16 +389,6 @@ def watchdogstats():
 	return render_template("watchdogstats.html", data=data)
 
 
-@app.route("/home/")
-def home():
-	try:
-		uuid = request.cookies['uuid']
-		data = generateData(uuid)
-	except KeyError:
-		data = generateData()
-	return render_template("home.html", data=data)
-
-
 @app.route("/")
 def home2():
 	try:
@@ -455,6 +445,9 @@ def sitemap():
 
 		if temp2 == "bazaar.html" or temp2 == "auctions.html" or temp2 == "profile.html":
 			temp2 = "skyblock/" + temp2
+
+		if temp2 == "home.html":
+			temp2 = "/"
 
 		if temp2[-5:] == ".html":
 			temp2 = temp2[:-5] + "/"
@@ -543,11 +536,6 @@ def suggestions_post():
 
 
 # Post / Get Requests
-
-@app.route("/home/", methods=['POST'])
-def home_post():
-	data = generateData(request.form['playerName'])
-	return render_template("home.html", data=data)
 
 
 @app.route('/skyblock/profile/', methods=['POST'])
