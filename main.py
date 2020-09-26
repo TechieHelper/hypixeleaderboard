@@ -4,6 +4,7 @@ from os import listdir
 from datetime import datetime
 import base64, io, nbt
 
+from jinja2 import Environment
 
 app = Flask(__name__)
 
@@ -215,6 +216,15 @@ def tableTry(dict, pos):
 
 
 @app.template_filter()
+def customTry2(dict, pos):
+	try:
+		_ = dict[pos]
+		return True
+	except:
+		return False
+
+
+@app.template_filter()
 def skyblockProfileCapitalise(word):
 	words = word.split('_')
 	for i in range(len(words)):
@@ -310,8 +320,16 @@ def currentName(uuid):
 @app.template_filter()
 def unHash(hash):
 	data = nbt.nbt.NBTFile(fileobj=io.BytesIO(base64.b64decode(hash)))
-	print(list(data))
 	return data
+
+
+@app.template_filter()
+def profileGeneratorTry(generator, pos):
+	try:
+		_ = generator[pos]
+		return "text-success"
+	except:
+		return "text-warning"
 
 
 

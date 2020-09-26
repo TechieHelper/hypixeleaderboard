@@ -17,6 +17,7 @@
     {% block usernameEntryForm %}{{ super() }}{% endblock %}
 
     {% block content %}
+
     {% if profileAsk %}
         <h4>Please choose your skyblock profile:</h4>
 
@@ -31,8 +32,6 @@
             {% set currentProfile = skyblockData['members'][profile] %}
             <h2>Current Profile: {{ profile|currentName() }}</h2>
             <h4>Last save: {{ currentProfile['last_save']|format_datetime() }}</h4>
-            <h5>Current Inventory: </h5>
-            <p>{{ currentProfile['inv_armor']['data']|unHash() }}</p>
 
             <h5>Stats: </h5>
             <table class="table-hover table-bordered table-striped table w-100">
@@ -77,6 +76,36 @@
                                 <td>{{currentProfile['stats']|tableTry(stat + mob)}}</td>
                             {% endif %}
                         {% endfor%}
+                    </tr>
+                {% endfor %}
+            </table>
+
+            <h5>Crafted Generators: </h5>
+            {% set sortedData = {} %}
+            {% for generator in currentProfile['crafted_generators'] %}
+                {% if sortedData|customTry2(generator[:-2]) %}
+                    {% set _ = sortedData[generator[:-2]].append(generator) %}
+                {% else %}
+                    {% set _ = sortedData.update({generator[:-2]:[]}) %}
+                    {% set _ = sortedData[generator[:-2]].append(generator) %}
+                {% endif %}
+            {% endfor %}
+            <table  class="table-hover table-bordered table-striped table w-100">
+                {% for data in sortedData %}
+                    <tr>
+                        <td style="font-weight: bold; text-align: left;">{{ data }}</td>
+                        <td class="{{ sortedData[data]|sort()|profileGeneratorTry(0) }}">I</td>
+                        <td class="{{ sortedData[data]|sort()|profileGeneratorTry(1) }}">II</td>
+                        <td class="{{ sortedData[data]|sort()|profileGeneratorTry(2) }}">III</td>
+                        <td class="{{ sortedData[data]|sort()|profileGeneratorTry(3) }}">IV</td>
+                        <td class="{{ sortedData[data]|sort()|profileGeneratorTry(4) }}">V</td>
+                        <td class="{{ sortedData[data]|sort()|profileGeneratorTry(5) }}">VI</td>
+                        <td class="{{ sortedData[data]|sort()|profileGeneratorTry(6) }}">VII</td>
+                        <td class="{{ sortedData[data]|sort()|profileGeneratorTry(7) }}">VIII</td>
+                        <td class="{{ sortedData[data]|sort()|profileGeneratorTry(8) }}">IX</td>
+                        <td class="{{ sortedData[data]|sort()|profileGeneratorTry(9) }}">X</td>
+                        <td class="{{ sortedData[data]|sort()|profileGeneratorTry(10) }}">XI</td>
+                        <td class="{{ sortedData[data]|sort()|profileGeneratorTry(11) }}">XII</td>
                     </tr>
                 {% endfor %}
             </table>
