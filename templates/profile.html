@@ -4,6 +4,31 @@
 <meta name="description" content="Hypixel Leaderboards' skyblock profile section">
 {% endblock %}
 {% block extra_scripts %}
+<style>
+.collapsible {
+  background-color: lightgrey;
+  color: black;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: grey;
+  color: white;
+}
+
+.content {
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+}
+</style>
+<link rel="stylesheet" type="text/css" href="/static/stylesheet.css">
 {% endblock %}
 
 {% set PASSIVE_MOBS = ['_chicken', '_cow', '_pig', '_sheep', '_rabbit', '_bat'] %}
@@ -33,84 +58,104 @@
             <h2>Current Profile: {{ profile|currentName() }}</h2>
             <h4>Last save: {{ currentProfile['last_save']|format_datetime() }}</h4>
 
-            <h5>Stats: </h5>
-            <table class="table-hover table-bordered table-striped table w-100">
-                <tr>
-                    <th></th>
-                    <th>Kills</th>
-                    <th>Deaths</th>
-                    <th>KDR</th>
-                </tr>
-                {% for mob in PASSIVE_MOBS %}
+            <button type="button" class="collapsible">Stats</button>
+            <div class="content">
+                <table class="table-hover table-bordered table-striped table w-100">
                     <tr>
-                        <td style="font-weight: bold; text-align: left;">{{ mob|skyblockProfileCapitalise() }}</td>
-
-                        {% for stat in STATS %}
-                            {% if stat[:1] == '!' %}
-                                {% set tempList = stat[1:].split(';') %}
-                                {% if currentProfile['stats']|tableTry(tempList[0] + mob) != "-" and currentProfile['stats']|tableTry(tempList[1] + mob) != "-" %}
-                                    <td style="font-weight: bold">{{'%0.2f' % (currentProfile['stats'][tempList[0] + mob] / currentProfile['stats'][tempList[1] + mob])}}</td>
-                                {% else %}
-                                    <td style="font-weight: bold">-</td>
-                                {% endif %}
-                            {% else %}
-                                <td>{{currentProfile['stats']|tableTry(stat + mob)}}</td>
-                            {% endif %}
-                        {% endfor%}
+                        <th></th>
+                        <th>Kills</th>
+                        <th>Deaths</th>
+                        <th>KDR</th>
                     </tr>
-                {% endfor %}
-                <td colspan="4" style="text-align: center; font-weight: bold;">Hostile Mobs</td>
-                {% for mob in HOSTILE_MOBS %}
-                    <tr>
-                        <td style="font-weight: bold; text-align: left;">{{ mob|skyblockProfileCapitalise() }}</td>
+                    {% for mob in PASSIVE_MOBS %}
+                        <tr>
+                            <td style="font-weight: bold; text-align: left;">{{ mob|skyblockProfileCapitalise() }}</td>
 
-                        {% for stat in STATS %}
-                            {% if stat[:1] == '!' %}
-                                {% set tempList = stat[1:].split(';') %}
-                                {% if currentProfile['stats']|tableTry(tempList[0] + mob) != "-" and currentProfile['stats']|tableTry(tempList[1] + mob) != "-" %}
-                                    <td style="font-weight: bold">{{'%0.2f' % (currentProfile['stats'][tempList[0] + mob] / currentProfile['stats'][tempList[1] + mob])}}</td>
+                            {% for stat in STATS %}
+                                {% if stat[:1] == '!' %}
+                                    {% set tempList = stat[1:].split(';') %}
+                                    {% if currentProfile['stats']|tableTry(tempList[0] + mob) != "-" and currentProfile['stats']|tableTry(tempList[1] + mob) != "-" %}
+                                        <td style="font-weight: bold">{{'%0.2f' % (currentProfile['stats'][tempList[0] + mob] / currentProfile['stats'][tempList[1] + mob])}}</td>
+                                    {% else %}
+                                        <td style="font-weight: bold">-</td>
+                                    {% endif %}
                                 {% else %}
-                                    <td style="font-weight: bold">-</td>
+                                    <td>{{currentProfile['stats']|tableTry(stat + mob)}}</td>
                                 {% endif %}
-                            {% else %}
-                                <td>{{currentProfile['stats']|tableTry(stat + mob)}}</td>
-                            {% endif %}
-                        {% endfor%}
-                    </tr>
-                {% endfor %}
-            </table>
+                            {% endfor%}
+                        </tr>
+                    {% endfor %}
+                    <td colspan="4" style="text-align: center; font-weight: bold;">Hostile Mobs</td>
+                    {% for mob in HOSTILE_MOBS %}
+                        <tr>
+                            <td style="font-weight: bold; text-align: left;">{{ mob|skyblockProfileCapitalise() }}</td>
 
-            <h5>Crafted Generators: </h5>
+                            {% for stat in STATS %}
+                                {% if stat[:1] == '!' %}
+                                    {% set tempList = stat[1:].split(';') %}
+                                    {% if currentProfile['stats']|tableTry(tempList[0] + mob) != "-" and currentProfile['stats']|tableTry(tempList[1] + mob) != "-" %}
+                                        <td style="font-weight: bold">{{'%0.2f' % (currentProfile['stats'][tempList[0] + mob] / currentProfile['stats'][tempList[1] + mob])}}</td>
+                                    {% else %}
+                                        <td style="font-weight: bold">-</td>
+                                    {% endif %}
+                                {% else %}
+                                    <td>{{currentProfile['stats']|tableTry(stat + mob)}}</td>
+                                {% endif %}
+                            {% endfor%}
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+            <button type="button" class="collapsible">Crafted Generators</button>
             {% set sortedData = {} %}
             {% for generator in currentProfile['crafted_generators'] %}
-                {% if sortedData|customTry2(generator[:-2]) %}
-                    {% set _ = sortedData[generator[:-2]].append(generator) %}
+                {% if sortedData|customTry2(generator|stripNumbers()) %}
+                    {% set _ = sortedData[generator|stripNumbers()].append(generator) %}
                 {% else %}
-                    {% set _ = sortedData.update({generator[:-2]:[]}) %}
-                    {% set _ = sortedData[generator[:-2]].append(generator) %}
+                    {% set _ = sortedData.update({generator|stripNumbers():[]}) %}
+                    {% set _ = sortedData[generator|stripNumbers()].append(generator) %}
                 {% endif %}
             {% endfor %}
-            <table  class="table-hover table-bordered table-striped table w-100">
-                {% for data in sortedData %}
-                    <tr>
-                        <td style="font-weight: bold; text-align: left;">{{ data }}</td>
-                        <td class="{{ sortedData[data]|sort()|profileGeneratorTry(0) }}">I</td>
-                        <td class="{{ sortedData[data]|sort()|profileGeneratorTry(1) }}">II</td>
-                        <td class="{{ sortedData[data]|sort()|profileGeneratorTry(2) }}">III</td>
-                        <td class="{{ sortedData[data]|sort()|profileGeneratorTry(3) }}">IV</td>
-                        <td class="{{ sortedData[data]|sort()|profileGeneratorTry(4) }}">V</td>
-                        <td class="{{ sortedData[data]|sort()|profileGeneratorTry(5) }}">VI</td>
-                        <td class="{{ sortedData[data]|sort()|profileGeneratorTry(6) }}">VII</td>
-                        <td class="{{ sortedData[data]|sort()|profileGeneratorTry(7) }}">VIII</td>
-                        <td class="{{ sortedData[data]|sort()|profileGeneratorTry(8) }}">IX</td>
-                        <td class="{{ sortedData[data]|sort()|profileGeneratorTry(9) }}">X</td>
-                        <td class="{{ sortedData[data]|sort()|profileGeneratorTry(10) }}">XI</td>
-                        <td class="{{ sortedData[data]|sort()|profileGeneratorTry(11) }}">XII</td>
-                    </tr>
-                {% endfor %}
-            </table>
+            <div class="content">
+                <table  class="table-hover table-bordered table-striped table w-100">
+                    {% for data in sortedData %}
+                        <tr>
+                            <td style="font-weight: bold; text-align: left;">{{ data|skyblockProfileCapitalise() }}</td>
+                            <td class="{{ sortedData[data]|sort()|profileGeneratorTry(0) }}">I</td>
+                            <td class="{{ sortedData[data]|sort()|profileGeneratorTry(1) }}">II</td>
+                            <td class="{{ sortedData[data]|sort()|profileGeneratorTry(2) }}">III</td>
+                            <td class="{{ sortedData[data]|sort()|profileGeneratorTry(3) }}">IV</td>
+                            <td class="{{ sortedData[data]|sort()|profileGeneratorTry(4) }}">V</td>
+                            <td class="{{ sortedData[data]|sort()|profileGeneratorTry(5) }}">VI</td>
+                            <td class="{{ sortedData[data]|sort()|profileGeneratorTry(6) }}">VII</td>
+                            <td class="{{ sortedData[data]|sort()|profileGeneratorTry(7) }}">VIII</td>
+                            <td class="{{ sortedData[data]|sort()|profileGeneratorTry(8) }}">IX</td>
+                            <td class="{{ sortedData[data]|sort()|profileGeneratorTry(9) }}">X</td>
+                            <td class="{{ sortedData[data]|sort()|profileGeneratorTry(10) }}">XI</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
         {% endfor %}
     {% endif %}
+
+    <script>
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
+
+        for (i = 0; i < coll.length; i++) {
+          coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.display === "block") {
+              content.style.display = "none";
+            } else {
+              content.style.display = "block";
+            }
+          });
+        }
+    </script>
 
     {% endblock %}
 

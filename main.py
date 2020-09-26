@@ -332,6 +332,15 @@ def profileGeneratorTry(generator, pos):
 		return "text-warning"
 
 
+@app.template_filter()
+def stripNumbers(generator):
+	try:
+		_ = int(generator[len(generator)-2])
+		return generator[:-3]
+	except:
+		return generator[:-2]
+
+
 
 # Pages
 
