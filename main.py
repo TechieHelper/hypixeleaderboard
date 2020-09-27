@@ -61,6 +61,18 @@ def getBazaarStats():
 	return api
 
 
+def getSkyblockNews():
+	try:
+		api_request = requests.get("https://api.hypixel.net/skyblock/news?key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
+		api = json.loads(api_request.content)
+	except:
+		with open("skyblockdata/bazaar.json") as f:
+			api = json.loads(f.read())
+
+	return api
+
+
+
 def getAuctionsStats():
 	try:
 		api_request = requests.get("https://api.hypixel.net/skyblock/auctions?key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
@@ -374,6 +386,13 @@ def bazaar():
 	return render_template("bazaar.html", data=data)
 
 
+@app.route('/skyblock/news/')
+def news():
+	data = getSkyblockNews()
+	return render_template("news.html", data=data)
+
+
+
 @app.route('/skyblockBazaarPost')
 def skyblockBazaarPost():
 	try:
@@ -470,7 +489,7 @@ def sitemap():
 		if temp2 == "bedwars.html" or temp2 == "skywars.html" or temp2 == "duels.html":
 			temp2 = "player/" + temp2
 
-		if temp2 == "bazaar.html" or temp2 == "auctions.html" or temp2 == "profile.html":
+		if temp2 == "bazaar.html" or temp2 == "auctions.html" or temp2 == "profile.html" or temp2 == "news.html":
 			temp2 = "skyblock/" + temp2
 
 		if temp2 == "home.html":

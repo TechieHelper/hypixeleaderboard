@@ -1,0 +1,28 @@
+{% extends "rootLayout.html" %}
+{% block title %}Skyblock News{% endblock %}
+{% block meta_desc %}
+<meta name="description" content="Hypixel Leaderboards' skyblock news section.">
+{% endblock %}
+
+{% block body %}
+
+    {% block tag %}{{ super() }}{% endblock %}
+
+    {% block content %}
+
+    <h2>Skyblock news</h2>
+
+    {% for item in data['items'] %}
+
+        <h3>{{ item['title'] }}</h3>
+        <h4>{{ item['text'] }}</h4>
+        <a href="{{ item['link'] }}">{{ item['link'] }}</a>
+        <br><br>
+
+    {% endfor %}
+
+    {% endblock %}
+
+    {% block footer %}{{ super() }}{% endblock %}
+
+{% endblock %}
