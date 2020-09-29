@@ -262,6 +262,12 @@ def customEnumerate(value):
 
 
 @app.template_filter()
+def secondsToTimeParkour(seconds):
+	mins = seconds // 3600
+	return str(mins) + "m " + str(seconds % 60) + "s"
+
+
+@app.template_filter()
 def prestigeRank(mode, duelsData):
 	listOfRanks = ['godlike_title_prestige', 'grandmaster_title_prestige', 'legend_title_prestige',
 				   'master_title_prestige', 'diamond_title_prestige', 'gold_title_prestige', 'iron_title_prestige',
@@ -508,6 +514,10 @@ def bedwars():
 	data = generateData()
 	return render_template("bedwars.html", data=data, bedwarsData=data['stats']['Bedwars'])
 
+@app.route("/player/other/")
+def other():
+	data = generateData()
+	return render_template("other.html", data=data)
 
 @app.route("/sign-in/")
 def signIn():
