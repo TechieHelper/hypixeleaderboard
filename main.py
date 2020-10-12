@@ -4,8 +4,6 @@ from os import listdir
 from datetime import datetime
 import base64, io, nbt
 
-from jinja2 import Environment
-
 app = Flask(__name__)
 
 # General Functions

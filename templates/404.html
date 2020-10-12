@@ -1,5 +1,6 @@
 {% extends 'rootLayout.html' %}
 {% block head %}{{ super() }}{% endblock %}
-{% block body %}
-<p class="text-center">Sorry, we couldn't find that page. To go to our homepage, click <a href="/">here</a>.</p>
+{% block title %}404{% endblock %}
+{% block content %}
+    <p class="text-center">Sorry, we couldn't find that page. To go to our homepage, click <a href="/">here</a>.</p>
 {% endblock %}

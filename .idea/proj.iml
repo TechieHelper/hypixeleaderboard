@@ -6,5 +6,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="prok5" />
     <orderEntry type="module" module-name="Pygame Games For CV" />
+    <orderEntry type="module" module-name="startbootstrap-sb-admin-gh-pages" />
   </component>
 </module>

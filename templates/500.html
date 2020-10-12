@@ -1,5 +1,10 @@
 {% extends 'rootLayout.html' %}
 {% block head %}{{ super() }}{% endblock %}
 {% block body %}
-<p class="text-center">Sorry, we encountered an error. To go to our homepage, click <a href="/">here</a>.</p>
+    {% block topnav %}{{ super() }}{% endblock %}
+    {% block content %}
+        <p class="text-center">Sorry, we encountered an error. To go to our homepage, click <a href="/">here</a>.</p>
+    {% endblock %}
+    {% block sidenav %}{{ super() }}{% endblock %}
+
 {% endblock %}

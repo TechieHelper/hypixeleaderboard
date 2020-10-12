@@ -3,35 +3,39 @@
 {% block meta_desc %}
 <meta name="description" content="Hypixel Leaderboards homepage, showing default data about players.">
 {% endblock %}
-{% block extra_scripts %}
-<script data-ad-client="ca-pub-4000110191768629" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-{% endblock %}
 
 {% block body %}
 
-    {% block tag %}{{ super() }}{% endblock %}
-
     {% block usernameEntryForm %}{{ super() }}{% endblock %}
+
+    {% block breadcrumb %}
+        <li class="breadcrumb-item active">Home</li>
+    {% endblock %}
 
     {% block content %}
 
-        <h2>{{data['displayname']}}</h2>
-        <br>
-        <h3>Hypixel Level: {{ data|getHypixelLevel() }}</h3>
-        <br>
-        <p>Welcome to Hypixel Leaderboards! To see player stats and leaderboards, please use the top menu. For other stats, please also refer to the top menu.</p>
-        <br>
-        <p>Most Recent Game Type: {{data|customTry(['mostRecentGameType'])|capitalizeFirstLetter}}</p>
-        <p>Particle Pack: {{data|customTry(['particlePack'])|capitalizeFirstLetter}}</p>
-        <p>Last Logout: {{data|customTry(['lastLogout'])|format_datetime}}</p>
-        <p>Current Outfit:</p>
-        <p>Helmet: {{data|customTry(['outfit', 'HELMET'])|capitalizeFirstLetter}}</p>
-        <p>Chestplate: {{data|customTry(['outfit', 'CHESTPLATE'])|capitalizeFirstLetter}}</p>
-        <p>Leggings: {{data|customTry(['outfit', 'LEGGINGS'])|capitalizeFirstLetter}}</p>
-        <p>Boots: {{data|customTry(['outfit', 'BOOTS'])|capitalizeFirstLetter}}</p>
-
-
+        <h1 class="mt-4">{{data['displayname']}}</h1>
+        <div class="row">
+            <div class="col-xl-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <svg class="svg-inline--fa fa-chart-area fa-w-16 mr-1" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chart-area" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M500 384c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12H12c-6.6 0-12-5.4-12-12V76c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v308h436zM372.7 159.5L288 216l-85.3-113.7c-5.1-6.8-15.5-6.3-19.9 1L96 248v104h384l-89.9-187.8c-3.2-6.5-11.4-8.7-17.4-4.7z"></path></svg>
+                        Overall Stats
+                    </div>
+                    <div class="card-body">
+                        <h3>Hypixel Level: {{ data|getHypixelLevel() }}</h3>
+                        <p>Most Recent Game Type: {{data|customTry(['mostRecentGameType'])|capitalizeFirstLetter}}</p>
+                        <p>Particle Pack: {{data|customTry(['particlePack'])|capitalizeFirstLetter}}</p>
+                        <p>Last Logout: {{data|customTry(['lastLogout'])|format_datetime}}</p>
+                        <p>Current Outfit:</p>
+                        <p>Helmet: {{data|customTry(['outfit', 'HELMET'])|capitalizeFirstLetter}}</p>
+                        <p>Chestplate: {{data|customTry(['outfit', 'CHESTPLATE'])|capitalizeFirstLetter}}</p>
+                        <p>Leggings: {{data|customTry(['outfit', 'LEGGINGS'])|capitalizeFirstLetter}}</p>
+                        <p>Boots: {{data|customTry(['outfit', 'BOOTS'])|capitalizeFirstLetter}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endblock %}
 
     {% block footer %}{{ super() }}{% endblock %}
