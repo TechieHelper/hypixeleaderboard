@@ -94,7 +94,6 @@ def generateSkyblockPlayerData(playerID):
 	return api['profile']
 
 
-
 def generateData(name="_"):
 	if len(name.encode('utf-8')) != 32:
 		uuid = getUUIDFromName(name)
@@ -191,7 +190,6 @@ def format_datetime(ts):
 def capitalizeFirstLetter(value):
 	valueList = value.split("_")
 	return " ".join([i[0].upper() + i[1:].lower() for i in valueList])
-
 
 
 @app.template_filter()
@@ -534,6 +532,12 @@ def bedwars2():
 	return render_template("bedwars.html", data=data, bedwarsData=data['stats']['Bedwars'])
 
 
+@app.route("/player/bedwars/<username>")
+def bedwars3(username):
+	data = generateData(username)
+	return render_template("bedwars.html", data=data, bedwarsData=data['stats']['Bedwars'])
+
+
 @app.route("/player/duels/")
 def duels():
 	try:
@@ -554,20 +558,21 @@ def termsOfService():
 	return render_template("termsOfService.html")
 
 
-@app.route("/skywars/")
-def skywars():
-	data = generateData()
-	return render_template("skywars.html", data=data, skywarsData=data['stats']['SkyWars'])
-
-
 @app.route("/player/skywars/")
-def skywars2():
+def skywars():
 	try:
 		uuid = request.cookies['uuid']
 		data = generateData(uuid)
 	except KeyError:
 		data = generateData()
 	return render_template("skywars.html", data=data, skywarsData=data['stats']['SkyWars'])
+
+
+@app.route("/player/skywars/<username>")
+def skywars2(username):
+	data = generateData(username)
+	return render_template("skywars.html", data=data, skywarsData=data['stats']['SkyWars'])
+
 
 
 @app.route("/contact-us/")
@@ -602,16 +607,14 @@ def profile_post():
 		return render_template("profile.html", data=data, profileAsk=True)
 
 
-@app.route("/skywars/", methods=['POST'])
-def skywars_post():
-	data = generateData(request.form['playerName'])
-	return render_template("skywars.html", data=data, skywarsData=customReturn(data, ['stats', 'SkyWars']))
-
-
 @app.route("/player/skywars/", methods=['POST'])
-def skywars_post2():
-	data = generateData(request.form['playerName'])
-	return render_template("skywars.html", data=data, skywarsData=customReturn(data, ['stats', 'SkyWars']))
+def skywars_post():
+	return redirect("/player/skywars/" + request.form['playerName'])
+
+
+@app.route("/player/skywars/<username>", methods=['POST'])
+def skywars_post2(username):
+	return redirect("/player/skywars/" + request.form['playerName'])
 
 
 @app.route("/bedwars/", methods=['POST'])
@@ -622,8 +625,13 @@ def bedwars_post():
 
 @app.route("/player/bedwars/", methods=['POST'])
 def bedwars_post2():
-	data = generateData(request.form['playerName'])
-	return render_template("bedwars.html", data=data, bedwarsData=customReturn(data, ['stats', 'Bedwars']))
+	return redirect("/player/bedwars/" + request.form['playerName'])
+
+
+@app.route("/player/bedwars/<username>", methods=['POST'])
+def bedwars_post3(username):
+	return redirect("/player/bedwars/" + request.form['playerName'])
+
 
 
 @app.route("/player/duels/", methods=['POST'])
