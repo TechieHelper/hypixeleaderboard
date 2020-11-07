@@ -97,6 +97,14 @@ def generateSkyblockPlayerData(playerID):
 def generateData(name="_"):
 	if len(name.encode('utf-8')) != 32:
 		uuid = getUUIDFromName(name)
+		if uuid != "Unknown Name":
+			with open("static/knownUsers.json") as f:
+				data = json.load(f)
+
+			if name not in data:
+				data.append(name)
+				with open("static/knownUsers.json", "w") as f:
+					f.write(json.dumps(data))
 	else:
 		uuid = name
 
@@ -502,7 +510,10 @@ def sitemap():
 
 		filteredFiles[index][0] = temp2
 
-	return render_template('sitemap.xml', base_url="http://hypixeleaderboards.com", articles=filteredFiles)
+	with open("static/knownUsers.json") as f:
+		users = json.loads(f.read())
+
+	return render_template('sitemap.xml', base_url="http://hypixeleaderboards.com", articles=filteredFiles, knownUsers=users)
 
 
 @app.route("/bedwars/")

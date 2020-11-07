@@ -15,4 +15,11 @@
     <changefreq>daily</changefreq>
   </url>
   {% endfor %}
+  {% for user in knownUsers %}
+  <url>
+    <loc>{{ base_url }}/player/bedwars/{{ user }}</loc>
+    <lastmod>2020-08-12</lastmod>
+    <changefreq>weekly</changefreq>
+  </url>
+  {% endfor %}
 </urlset>
