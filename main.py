@@ -1,10 +1,12 @@
 from flask import Flask, redirect, url_for, render_template, request, make_response, jsonify
+from flask_mail import Mail, Message
 import requests, json, os, time, datetime
 from os import listdir
 from datetime import datetime
 import base64, io, nbt
 
 app = Flask(__name__)
+mail = Mail(app)
 
 # General Functions
 
@@ -98,13 +100,7 @@ def generateData(name="_"):
 	if len(name.encode('utf-8')) != 32:
 		uuid = getUUIDFromName(name)
 		if uuid != "Unknown Name":
-			with open("static/knownUsers.json") as f:
-				data = json.load(f)
-
-			if name not in data:
-				data.append(name)
-				with open("static/knownUsers.json", "w") as f:
-					f.write(json.dumps(data))
+			pass  # Write name
 	else:
 		uuid = name
 
