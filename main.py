@@ -11,6 +11,7 @@ mail = Mail(app)
 
 # General Functions
 
+API_KEY = ''
 
 
 def letterToSpace(s, l):
@@ -687,9 +688,9 @@ def error_500(e):
 
 
 if __name__ == "__main__":
-	with open('static/config.json') as f:
-		data = json.load(f)
-		API_KEY = data['api_key']
+	# with open('static/config.json') as f:
+	# 	data = json.load(f)
+	# 	API_KEY = data['api_key']
 
 	API_KEY = 'ef79537a-945a-4beb-b6b4-40861c13203e'
 
@@ -702,7 +703,6 @@ if __name__ == "__main__":
 	# 		API_KEY = data['api_key']
 	#
 	# refresh_key()
-
 	#s.enter(60, 1, refresh_key)
 
 	app.run()
