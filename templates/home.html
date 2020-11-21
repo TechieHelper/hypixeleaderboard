@@ -14,7 +14,7 @@
 
     {% block content %}
 
-        <h1 class="mt-4">{{data['displayname']}}</h1>
+        <h1 class="mt-4">{{data['displayname']|nameWrapper()|safe}}</h1>
         <div class="row">
             <div class="col-xl-6">
                 <div class="card mb-4">

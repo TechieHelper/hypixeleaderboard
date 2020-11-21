@@ -27,7 +27,7 @@
     {% block usernameEntryForm %}{{ super() }}{% endblock %}
 
     {% block content %}
-    <h2>{{data['displayname']}}</h2>
+    <h2>{{data['displayname']|nameWrapper()|safe}}</h2>
 
     <h3>Parkour Challenges</h3>
 

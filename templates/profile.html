@@ -55,7 +55,7 @@
     {% else %}
         {% for profile in skyblockData['members'] %}
             {% set currentProfile = skyblockData['members'][profile] %}
-            <h2>Current Profile: {{ profile|currentName() }}</h2>
+            <h2>Current Profile: {{ profile|currentName()|nameWrapper()|safe }}</h2>
             <h4>Last save: {{ currentProfile['last_save']|format_datetime() }}</h4>
 
             <button type="button" class="collapsible">Stats</button>

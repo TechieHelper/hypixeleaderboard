@@ -12,6 +12,45 @@ mail = Mail(app)
 # General Functions
 
 API_KEY = 'ef79537a-945a-4beb-b6b4-40861c13203e'
+minecraftColors = {"GOLD": "FFAA00", "BLACK": "000000", "DARK_BLUE": "0000AA", "DARK_GREEN": "00AA00", "DARK_AQUA": "00AAAA", "DARK_RED": "AA0000", "DARK_PURPLE": "AA00AA", "GRAY": "AAAAAA", "DARK_GREY": "555555", "BLUE": "5555FF", "GREEN": "55FF55", "AQUA": "55FFFF", "RED": "FF5555", "LIGHT_PURPLE": "FF55FF", "YELLOW": "FFFF55", "WHITE": "FFFFFF"}
+
+
+@app.template_filter()
+def nameWrapper(name, asApi=False):
+	data = generateData(name)
+
+	def genericName(text, color):
+		return "<span style=\"text-shadow: 1px 1px #eee; color:#" + color + "\"> " + text + "</span>"
+
+	def genericReturn(text):
+		return "<span style=\"font-family: 'Minecraftia';\">" + text + "</span>"
+
+	html = ""
+	try:
+		rank = data['newPackageRank']
+	# newPackageRank => monthlyRankColor
+		if rank == "VIP":
+			html = genericName("[VIP] " + name, "3CE63C")
+		elif rank == "MVP":
+			html = genericName("[MVP] " + name, "3CE636")
+		elif rank == "VIP_PLUS":
+			html = genericName("[VIP ", "3CE63C") + genericName("+", "FFAA00") + genericName("] " + name, "3CE63C")
+		elif rank == "MVP_PLUS":
+			if data['monthlyPackageRank'] == 'SUPERSTAR':
+				try:
+					html = genericName("[MVP ", minecraftColors[data['monthlyRankColor']]) + genericName("++", minecraftColors[data['rankPlusColor']]) + genericName("] " + name, minecraftColors[data['monthlyRankColor']])
+				except:
+					html = genericName("[MVP ", "3CE6E6") + genericName("++", minecraftColors[data['rankPlusColor']]) + genericName("] " + name, "3CE6E6")
+			else:
+				html = genericName("[MVP ", "3CE6E6") + genericName("+", minecraftColors[data['rankPlusColor']]) + genericName("] " + name, "3CE6E6")
+	except Exception as e:
+		html = genericName(name, "AAAAAA")
+
+	if not asApi:
+		return genericReturn(html)
+	else:
+		return {"html": genericReturn(html)}
+
 
 def letterToSpace(s, l):
 	ans = ""
@@ -701,5 +740,6 @@ if __name__ == "__main__":
 	#
 	# refresh_key()
 	#s.enter(60, 1, refresh_key)
+
 
 	app.run()

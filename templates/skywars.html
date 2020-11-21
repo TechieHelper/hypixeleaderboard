@@ -20,7 +20,7 @@
     {% block usernameEntryForm %}{{ super() }}{% endblock %}
 
     {% block content %}
-    <h1>{{data['displayname']}}</h1>
+    <h1>{{data['displayname']|nameWrapper()|safe}}</h1>
 
     <div class="row">
         <div class="col-sm-10 table-responsive pl-4">
