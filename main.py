@@ -11,6 +11,7 @@ mail = Mail(app)
 # General Functions
 
 
+
 def letterToSpace(s, l):
 	ans = ""
 	for letter in s:
@@ -31,7 +32,7 @@ def getUUIDFromName(name):
 
 def getWatchdogstats():
 	try:
-		api_request = requests.get("https://api.hypixel.net/watchdogstats?key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
+		api_request = requests.get("https://api.hypixel.net/watchdogstats?key=" + API_KEY)
 		api = json.loads(api_request.content)
 	except:
 		api = json.loads("{'success': true, 'watchdog_lastMinute': 5, 'staff_rollingDaily': 1356, 'watchdog_total': 4924740, 'watchdog_rollingDaily': 7679, 'staff_total': 1608360}")
@@ -41,7 +42,7 @@ def getWatchdogstats():
 
 def getGameCounts():
 	try:
-		api_request = requests.get("https://api.hypixel.net/gameCounts?key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
+		api_request = requests.get("https://api.hypixel.net/gameCounts?key=" + API_KEY)
 		api = json.loads(api_request.content)
 	except:
 		with open("gameCounts.json") as f:
@@ -52,7 +53,7 @@ def getGameCounts():
 
 def getBazaarStats():
 	try:
-		api_request = requests.get("https://api.hypixel.net/skyblock/bazaar?key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
+		api_request = requests.get("https://api.hypixel.net/skyblock/bazaar?key=" + API_KEY)
 		api = json.loads(api_request.content)
 	except:
 		with open("skyblockdata/bazaar.json") as f:
@@ -63,7 +64,7 @@ def getBazaarStats():
 
 def getSkyblockNews():
 	try:
-		api_request = requests.get("https://api.hypixel.net/skyblock/news?key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
+		api_request = requests.get("https://api.hypixel.net/skyblock/news?key=" + API_KEY)
 		api = json.loads(api_request.content)
 	except:
 		with open("skyblockdata/bazaar.json") as f:
@@ -75,7 +76,7 @@ def getSkyblockNews():
 
 def getAuctionsStats():
 	try:
-		api_request = requests.get("https://api.hypixel.net/skyblock/auctions?key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
+		api_request = requests.get("https://api.hypixel.net/skyblock/auctions?key=" + API_KEY)
 		api = json.loads(api_request.content)
 	except:
 		with open("skyblockdata/auctions.json") as f:
@@ -87,7 +88,7 @@ def getAuctionsStats():
 def generateSkyblockPlayerData(playerID):
 	try:
 		api_request = requests.get(
-			"https://api.hypixel.net/skyblock/profile?profile=" + playerID + "&key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
+			"https://api.hypixel.net/skyblock/profile?profile=" + playerID + "&key=" + API_KEY)
 		api = json.loads(api_request.content)
 	except:
 		with open("skyblockdata/profile.json") as f:
@@ -109,7 +110,7 @@ def generateData(name="_"):
 			api = json.loads(f.read())
 	else:
 		try:
-			api_request = requests.get("https://api.hypixel.net/player?uuid=" + uuid + "&key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
+			api_request = requests.get("https://api.hypixel.net/player?uuid=" + uuid + "&key=" + API_KEY)
 			api = json.loads(api_request.content)
 		except:
 			with open("dashedData.json") as f:
@@ -120,7 +121,7 @@ def generateData(name="_"):
 
 def generateLeaderboardData():
 	try:
-		api_request = requests.get("https://api.hypixel.net/leaderboards?key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
+		api_request = requests.get("https://api.hypixel.net/leaderboards?key=" + API_KEY)
 		api = json.loads(api_request.content)
 	except:
 		with open("dashedLeaderboardData.json") as f:
@@ -206,7 +207,7 @@ def getRankFromUUID(uuid):
 			return knownUsers[uuid]
 
 		except KeyError:
-			api_request = requests.get("https://api.hypixel.net/player?uuid=" + uuid + "&key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
+			api_request = requests.get("https://api.hypixel.net/player?uuid=" + uuid + "&key=" + API_KEY)
 			api = json.loads(api_request.content)
 			with open("knownUsers.json") as f:
 				knownUsers = json.loads(f.read())
@@ -306,7 +307,7 @@ def getSkin(_):
 @app.template_filter()
 def getCookiesName(_):
 	try:
-		api_request = requests.get("https://api.hypixel.net/player?uuid=" + request.cookies['uuid'] + "&key=bf77aa7d-00d7-47f3-8c27-530b359ccb54")
+		api_request = requests.get("https://api.hypixel.net/player?uuid=" + request.cookies['uuid'] + "&key=" + API_KEY)
 		return json.loads(api_request.content)['player']['displayname']
 	except:
 		return "-"
@@ -685,4 +686,8 @@ def error_500(e):
 
 
 if __name__ == "__main__":
+	with open('static/config.json') as f:
+		data = json.load(f)
+		API_KEY = data['api_key']
+
 	app.run()
