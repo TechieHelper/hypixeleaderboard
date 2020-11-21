@@ -691,17 +691,18 @@ if __name__ == "__main__":
 		data = json.load(f)
 		API_KEY = data['api_key']
 
+	API_KEY = 'ef79537a-945a-4beb-b6b4-40861c13203e'
 
-	s = sched.scheduler(time.time, time.sleep)
+	# s = sched.scheduler(time.time, time.sleep)
+	#
+	#
+	# def refresh_key():
+	# 	with open('static/config.json') as f:
+	# 		data = json.load(f)
+	# 		API_KEY = data['api_key']
+	#
+	# refresh_key()
 
-
-	def refresh_key():
-		with open('static/config.json') as f:
-			data = json.load(f)
-			API_KEY = data['api_key']
-
-	refresh_key()
-
-	s.enter(60, 1, refresh_key)
+	#s.enter(60, 1, refresh_key)
 
 	app.run()
