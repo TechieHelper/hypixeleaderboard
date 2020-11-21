@@ -4,6 +4,7 @@ import requests, json, os, time, datetime
 from os import listdir
 from datetime import datetime
 import base64, io, nbt
+import sched, time
 
 app = Flask(__name__)
 mail = Mail(app)
@@ -689,5 +690,18 @@ if __name__ == "__main__":
 	with open('static/config.json') as f:
 		data = json.load(f)
 		API_KEY = data['api_key']
+
+
+	s = sched.scheduler(time.time, time.sleep)
+
+
+	def refresh_key():
+		with open('static/config.json') as f:
+			data = json.load(f)
+			API_KEY = data['api_key']
+
+	refresh_key()
+
+	s.enter(60, 1, refresh_key)
 
 	app.run()
