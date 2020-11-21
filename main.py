@@ -11,8 +11,7 @@ mail = Mail(app)
 
 # General Functions
 
-API_KEY = ''
-
+API_KEY = 'ef79537a-945a-4beb-b6b4-40861c13203e'
 
 def letterToSpace(s, l):
 	ans = ""
@@ -691,8 +690,6 @@ if __name__ == "__main__":
 	# with open('static/config.json') as f:
 	# 	data = json.load(f)
 	# 	API_KEY = data['api_key']
-
-	API_KEY = 'ef79537a-945a-4beb-b6b4-40861c13203e'
 
 	# s = sched.scheduler(time.time, time.sleep)
 	#
