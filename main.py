@@ -4,7 +4,6 @@ import requests, json, os, time, datetime
 from os import listdir
 from datetime import datetime
 import base64, io, nbt
-import sched, time
 
 app = Flask(__name__)
 mail = Mail(app)
@@ -404,6 +403,11 @@ def stripNumbers(generator):
 # Pages
 
 
+@app.route('/', subdomain='api')
+def apiTest():
+	return "Yes"
+
+
 @app.route('/skyblock/profile/')
 def profile():
 	try:
@@ -740,6 +744,5 @@ if __name__ == "__main__":
 	#
 	# refresh_key()
 	#s.enter(60, 1, refresh_key)
-
-
+	app.config['SERVER_NAME'] = 'hypixeleaderboard.herokuapp.com:5000'
 	app.run()
