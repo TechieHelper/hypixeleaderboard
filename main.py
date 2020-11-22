@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template, request, make_response, jsonify
+from flask import Flask, redirect, url_for, render_template, request, make_response, jsonify, Blueprint
 from flask_mail import Mail, Message
 import requests, json, os, time, datetime
 from os import listdir
@@ -6,7 +6,7 @@ from datetime import datetime
 import base64, io, nbt
 
 app = Flask(__name__)
-mail = Mail(app)
+api = Blueprint('blueprint', __name__, template_folder="templates", subdomain="api")
 
 # General Functions
 
@@ -403,7 +403,7 @@ def stripNumbers(generator):
 # Pages
 
 
-@app.route('/', subdomain='api')
+@api.route('/')
 def apiTest():
 	return "Yes"
 
@@ -745,4 +745,5 @@ if __name__ == "__main__":
 	# refresh_key()
 	#s.enter(60, 1, refresh_key)
 	app.config['SERVER_NAME'] = 'hypixeleaderboard.herokuapp.com:5000'
+	app.register_blueprint(api)
 	app.run()
