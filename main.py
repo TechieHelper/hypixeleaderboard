@@ -744,6 +744,6 @@ if __name__ == "__main__":
 	#
 	# refresh_key()
 	#s.enter(60, 1, refresh_key)
-	app.config['SERVER_NAME'] = 'hypixeleaderboard.herokuapp.com:5000'
+	# app.config['SERVER_NAME'] = 'hypixeleaderboard.herokuapp.com:5000'
 	app.register_blueprint(api)
 	app.run()
