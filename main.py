@@ -15,7 +15,7 @@ minecraftColors = {"GOLD": "FFAA00", "BLACK": "000000", "DARK_BLUE": "0000AA", "
 
 
 @app.template_filter()
-def nameWrapper(name, asApi=False):
+def nameWrapper(name, asApi=False, useGenericReturn=True):
 	data = generateData(name)
 
 	def genericName(text, color):
@@ -23,6 +23,7 @@ def nameWrapper(name, asApi=False):
 
 	def genericReturn(text):
 		return "<span style=\"font-family: 'Minecraftia';\">" + text + "</span>"
+
 
 	html = ""
 	try:
@@ -45,9 +46,108 @@ def nameWrapper(name, asApi=False):
 		html = genericName(name, "AAAAAA")
 
 	if not asApi:
-		return genericReturn(html)
+		if not useGenericReturn:
+			return html
+		else:
+			return genericReturn(html)
 	else:
 		return {"html": genericReturn(html)}
+
+
+@app.template_filter()
+def bedwarsNameWrapper(name, asApi=False):
+	data = generateData(name)
+
+	def starColor(star, color):
+		return "<span style=\"text-shadow: 1px 1px #eee; color:#" + color + "\">[" + str(star) + "✫]</span>"
+
+	def primePrestiges(star, color, starColor=""):
+		if starColor == "":
+			return "<span style=\"text-shadow: 1px 1px #eee; color:#AAAAAA\">[</span>" + \
+					"<span style=\"text-shadow: 1px 1px #eee; color:#" + color + "\">[" + str(star) + "</span>" + \
+					"<span style=\"text-shadow: 1px 1px #eee; color:#" + color + "\">✪</span>" + \
+					"<span style=\"text-shadow: 1px 1px #eee; color:#AAAAAA\">]</span>"
+		else:
+			return "<span style=\"text-shadow: 1px 1px #eee; color:#AAAAAA\">[</span>" + \
+					"<span style=\"text-shadow: 1px 1px #eee; color:#" + color + "\">" + str(star) + "</span>" + \
+					"<span style=\"text-shadow: 1px 1px #eee; color:#" + starColor + "\">✪</span>" + \
+					"<span style=\"text-shadow: 1px 1px #eee; color:#AAAAAA\">]</span>"
+
+	def genericReturn(text):
+		return "<span style=\"font-family: 'Minecraftia';\">" + text + "</span>"
+
+
+	bedwarsStar = data['achievements']['bedwars_level']
+	html = ""
+	if bedwarsStar < 100:
+		html += starColor(bedwarsStar, "AAAAAA")
+
+	elif 100 < bedwarsStar < 200:
+		html += starColor(bedwarsStar, minecraftColors['WHITE'])
+
+	elif 200 < bedwarsStar < 300:
+		html += starColor(bedwarsStar, minecraftColors['GOLD'])
+
+	elif 300 < bedwarsStar < 400:
+		html += starColor(bedwarsStar, minecraftColors['AQUA'])
+
+	elif 400 < bedwarsStar < 500:
+		html += starColor(bedwarsStar, minecraftColors['DARK_GREEN'])
+
+	elif 500 < bedwarsStar < 600:
+		html += starColor(bedwarsStar, minecraftColors['DARK_AQUA'])
+
+	elif 600 < bedwarsStar < 700:
+		html += starColor(bedwarsStar, minecraftColors['DARK_RED'])
+
+	elif 700 < bedwarsStar < 800:
+		html += starColor(bedwarsStar, minecraftColors['LIGHT_PURPLE'])
+
+	elif 800 < bedwarsStar < 900:
+		html += starColor(bedwarsStar, minecraftColors['BLUE'])
+
+	elif 900 < bedwarsStar < 1000:
+		html += starColor(bedwarsStar, minecraftColors['DARK_PURPLE'])
+
+	elif 1000 < bedwarsStar < 1100:
+		html += "<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['RED'] + "\">[" + \
+				"<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['ORANGE'] + "\">[" + str(bedwarsStar[0]) + \
+				"<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['YELLOW'] + "\">[" + str(bedwarsStar[1]) + \
+				"<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['GREEN'] + "\">[" + str(bedwarsStar[2]) + \
+				"<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['AQUA'] + "\">[" + str(bedwarsStar[3]) + \
+				"<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['LIGHT_PURPLE'] + "\">✫" + \
+				"<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['DARK_PURPLE'] + "\">]"
+
+	elif 1100 < bedwarsStar < 1200:
+		html += primePrestiges(bedwarsStar, minecraftColors['WHITE'], "AAAAAA")
+
+	elif 1200 < bedwarsStar < 1300:
+		html += primePrestiges(bedwarsStar, minecraftColors['YELLOW'], minecraftColors['GOLD'])
+
+	elif 1300 < bedwarsStar < 1400:
+		html += primePrestiges(bedwarsStar, minecraftColors['AQUA'], minecraftColors['DARK_AQUA'])
+
+	elif 1400 < bedwarsStar < 1500:
+		html += primePrestiges(bedwarsStar, minecraftColors['GREEN'], minecraftColors['DARK_GREEN'])
+
+	elif 1500 < bedwarsStar < 1600:
+		html += primePrestiges(bedwarsStar, minecraftColors['DARK_AQUA'], minecraftColors['LIGHT_BLUE'])
+
+	elif 1600 < bedwarsStar < 1700:
+		html += primePrestiges(bedwarsStar, minecraftColors['RED'], minecraftColors['DARK_RED'])
+
+	elif 1700 < bedwarsStar < 1800:
+		html += primePrestiges(bedwarsStar, minecraftColors['LIGHT_PURPLE'], minecraftColors['DARK_PURPLE'])
+
+	elif 1800 < bedwarsStar < 1900:
+		html += primePrestiges(bedwarsStar, minecraftColors['LIGHT_BLUE'], minecraftColors['DARK_BLUE'])
+
+	elif 1900 < bedwarsStar < 2000:
+		html += primePrestiges(bedwarsStar, minecraftColors['DARK_PURPLE'], minecraftColors['DARK_GREY'])
+
+
+	html += nameWrapper(name, useGenericReturn=False)
+	return genericReturn(html)
 
 
 def letterToSpace(s, l):
@@ -400,7 +500,6 @@ def stripNumbers(generator):
 # API stuff
 
 
-#https://github.com/TechieHelper/HypixelToolsAPI
 @app.route('/api/nameWrapper/<name>')
 def apiTest(name):
 	return nameWrapper(name, True)
