@@ -6,7 +6,7 @@ from datetime import datetime
 import base64, io, nbt
 
 app = Flask(__name__)
-api = Blueprint('blueprint', __name__, template_folder="templates", subdomain="api")
+#api = Blueprint('blueprint', __name__, template_folder="templates", subdomain="api")
 
 # General Functions
 
@@ -27,7 +27,6 @@ def nameWrapper(name, asApi=False):
 	html = ""
 	try:
 		rank = data['newPackageRank']
-	# newPackageRank => monthlyRankColor
 		if rank == "VIP":
 			html = genericName("[VIP] " + name, "3CE63C")
 		elif rank == "MVP":
@@ -398,15 +397,20 @@ def stripNumbers(generator):
 	except:
 		return generator[:-2]
 
+# API stuff
+
+
+#https://github.com/TechieHelper/HypixelToolsAPI
+@app.route('/api/nameWrapper/<name>')
+def apiTest(name):
+	return nameWrapper(name, True)
 
 
 # Pages
 
-
-@api.route('/')
-def apiTest():
-	return "Yes"
-
+@app.route('/api/documentation/')
+def apiDocumentation():
+	return redirect('https://github.com/TechieHelper/HypixelToolsAPI')
 
 @app.route('/skyblock/profile/')
 def profile():
@@ -745,5 +749,5 @@ if __name__ == "__main__":
 	# refresh_key()
 	#s.enter(60, 1, refresh_key)
 	# app.config['SERVER_NAME'] = 'hypixeleaderboard.herokuapp.com:5000'
-	app.register_blueprint(api)
+	#app.register_blueprint(api)
 	app.run()
