@@ -21,7 +21,7 @@
     {% block usernameEntryForm %}{{ super() }}{% endblock %}
 
     {% block content %}
-    <h2>{{data['displayname']|nameWrapper()|safe}}</h2>
+    <h2>{{data['displayname']|duelsNameWrapper()|safe}}</h2>
 
     <div class="row">
         <div class="col-sm-10 table-responsive pl-4">

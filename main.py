@@ -55,6 +55,62 @@ def nameWrapper(name, asApi=False, useGenericReturn=True):
 
 
 @app.template_filter()
+def duelsNameWrapper(name, asApi=False):
+	data = generateData(name)
+
+	html = ""
+	try:
+		titleKey = data['stats']['Duels']['active_cosmetictitle']
+		pos = titleKey.rfind('_')
+		titleKeyFinal = titleKey[pos+1:] + "_" + titleKey[:pos] + "_title_prestige"
+		title = "✫ The " + capitalizeFirstLetter(titleKey) + " "
+		level = data['stats']['Duels'][titleKeyFinal]
+		color = titleKey[:pos].upper()
+		if level == 1:
+			title += "I"
+		elif level == 2:
+			title += "II"
+		elif level == 3:
+			title += "III"
+		elif level == 4:
+			title += "IV"
+		elif level == 5:
+			title += "V"
+		elif level == 6:
+			title += "VI"
+		elif level == 7:
+			title += "VII"
+		elif level == 8:
+			title += "VIII"
+		elif level == 9:
+			title += "IX"
+		elif level == 10:
+			title += "X"
+		if color == "ROOKIE":
+			html += "<span style=\"text-shadow: 1px 1px #eee; color:#AAAAAA\"> " + title + "</span>"
+		elif color == "IRON":
+			html += "<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['WHITE'] + "\"> " + title + "</span>"
+		elif color == "GOLD":
+			html += "<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['GOLD'] + "\"> " + title + "</span>"
+		elif color == "DIAMOND":
+			html += "<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['AQUA'] + "\"> " + title + "</span>"
+		elif color == "MASTER":
+			html += "<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['GREEN'] + "\"> " + title + "</span>"
+		elif color == "LEGEND":
+			html += "<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['RED'] + "\"> " + title + "</span>"
+		elif color == "GRANDMASTER":
+			html += "<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['YELLOW'] + "\"> " + title + "</span>"
+		elif color == "GODLIKE":
+			html += "<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['DARK_PURPLE'] + "\"> " + title + "</span>"
+
+	except:
+		pass
+
+	html += nameWrapper(name, useGenericReturn=False)
+	return html
+
+
+@app.template_filter()
 def bedwarsNameWrapper(name, asApi=False):
 	data = generateData(name)
 
@@ -448,8 +504,8 @@ def secondsToTimeParkour(seconds):
 @app.template_filter()
 def prestigeRank(mode, duelsData):
 	listOfRanks = ['godlike_title_prestige', 'grandmaster_title_prestige', 'legend_title_prestige',
-				   'master_title_prestige', 'diamond_title_prestige', 'gold_title_prestige', 'iron_title_prestige',
-				   'rookie_title_prestige']
+					'master_title_prestige', 'diamond_title_prestige', 'gold_title_prestige', 'iron_title_prestige',
+					'rookie_title_prestige']
 
 	if mode != 'sw_duels_' and mode != 'bowspleef_duels_' and mode != 'no_debuff_duels_':
 		mode = mode[:mode.find("_")] + "_"
@@ -891,4 +947,5 @@ if __name__ == "__main__":
 	#s.enter(60, 1, refresh_key)
 	# app.config['SERVER_NAME'] = 'hypixeleaderboard.herokuapp.com:5000'
 	#app.register_blueprint(api)
+	duelsNameWrapper("_2147483648")
 	app.run()
