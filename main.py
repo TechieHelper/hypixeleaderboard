@@ -500,8 +500,11 @@ def stripNumbers(generator):
 # API stuff
 
 
-@app.route('/api/nameWrapper/<name>')
-def apiTest(name):
+@app.route('/api/nameWrapper', methods=['GET'])
+def apiTest():
+	name = request.args.get('name', 0, type=str)
+	if name == 0:
+		return {"status": 0, "reason": "Invalid Name"}
 	return nameWrapper(name, True)
 
 
