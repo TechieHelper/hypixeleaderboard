@@ -73,6 +73,13 @@ def bedwarsNameWrapper(name, asApi=False):
 					"<span style=\"text-shadow: 1px 1px #eee; color:#" + starColor + "\">✪</span>" + \
 					"<span style=\"text-shadow: 1px 1px #eee; color:#AAAAAA\">]</span>"
 
+	def specialPresitges(star, color1, color2, color3, starColor, lastColor):
+		return "<span style=\"text-shadow: 1px 1px #eee; color:#" + color1 + "\">[" + str(star)[0] + "</span>" + \
+				"<span style=\"text-shadow: 1px 1px #eee; color:#" + color2 + "\">" + str(star)[1] + str(star)[2] + "</span>" + \
+				"<span style=\"text-shadow: 1px 1px #eee; color:#" + color3 + "\">" + str(star)[3] + "</span>" + \
+				"<span style=\"text-shadow: 1px 1px #eee; color:#" + starColor + "\">⚝</span>" + \
+				"<span style=\"text-shadow: 1px 1px #eee; color:#" + lastColor + "\">]</span>"
+
 	def genericReturn(text):
 		return "<span style=\"font-family: 'Minecraftia';\">" + text + "</span>"
 
@@ -82,34 +89,34 @@ def bedwarsNameWrapper(name, asApi=False):
 	if bedwarsStar < 100:
 		html += starColor(bedwarsStar, "AAAAAA")
 
-	elif 100 < bedwarsStar < 200:
+	elif 100 <= bedwarsStar < 200:
 		html += starColor(bedwarsStar, minecraftColors['WHITE'])
 
-	elif 200 < bedwarsStar < 300:
+	elif 200 <= bedwarsStar < 300:
 		html += starColor(bedwarsStar, minecraftColors['GOLD'])
 
-	elif 300 < bedwarsStar < 400:
+	elif 300 <= bedwarsStar < 400:
 		html += starColor(bedwarsStar, minecraftColors['AQUA'])
 
-	elif 400 < bedwarsStar < 500:
+	elif 400 <= bedwarsStar < 500:
 		html += starColor(bedwarsStar, minecraftColors['DARK_GREEN'])
 
-	elif 500 < bedwarsStar < 600:
+	elif 500 <= bedwarsStar < 600:
 		html += starColor(bedwarsStar, minecraftColors['DARK_AQUA'])
 
-	elif 600 < bedwarsStar < 700:
+	elif 600 <= bedwarsStar < 700:
 		html += starColor(bedwarsStar, minecraftColors['DARK_RED'])
 
-	elif 700 < bedwarsStar < 800:
+	elif 700 <= bedwarsStar < 800:
 		html += starColor(bedwarsStar, minecraftColors['LIGHT_PURPLE'])
 
-	elif 800 < bedwarsStar < 900:
+	elif 800 <= bedwarsStar < 900:
 		html += starColor(bedwarsStar, minecraftColors['BLUE'])
 
-	elif 900 < bedwarsStar < 1000:
+	elif 900 <= bedwarsStar < 1000:
 		html += starColor(bedwarsStar, minecraftColors['DARK_PURPLE'])
 
-	elif 1000 < bedwarsStar < 1100:
+	elif 1000 <= bedwarsStar < 1100:
 		html += "<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['RED'] + "\">[" + \
 				"<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['ORANGE'] + "\">[" + str(bedwarsStar[0]) + \
 				"<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['YELLOW'] + "\">[" + str(bedwarsStar[1]) + \
@@ -118,33 +125,65 @@ def bedwarsNameWrapper(name, asApi=False):
 				"<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['LIGHT_PURPLE'] + "\">✫" + \
 				"<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['DARK_PURPLE'] + "\">]"
 
-	elif 1100 < bedwarsStar < 1200:
+	elif 1100 <= bedwarsStar < 1200:
 		html += primePrestiges(bedwarsStar, minecraftColors['WHITE'], "AAAAAA")
 
-	elif 1200 < bedwarsStar < 1300:
+	elif 1200 <= bedwarsStar < 1300:
 		html += primePrestiges(bedwarsStar, minecraftColors['YELLOW'], minecraftColors['GOLD'])
 
-	elif 1300 < bedwarsStar < 1400:
+	elif 1300 <= bedwarsStar < 1400:
 		html += primePrestiges(bedwarsStar, minecraftColors['AQUA'], minecraftColors['DARK_AQUA'])
 
-	elif 1400 < bedwarsStar < 1500:
+	elif 1400 <= bedwarsStar < 1500:
 		html += primePrestiges(bedwarsStar, minecraftColors['GREEN'], minecraftColors['DARK_GREEN'])
 
-	elif 1500 < bedwarsStar < 1600:
+	elif 1500 <= bedwarsStar < 1600:
 		html += primePrestiges(bedwarsStar, minecraftColors['DARK_AQUA'], minecraftColors['LIGHT_BLUE'])
 
-	elif 1600 < bedwarsStar < 1700:
+	elif 1600 <= bedwarsStar < 1700:
 		html += primePrestiges(bedwarsStar, minecraftColors['RED'], minecraftColors['DARK_RED'])
 
-	elif 1700 < bedwarsStar < 1800:
+	elif 1700 <= bedwarsStar < 1800:
 		html += primePrestiges(bedwarsStar, minecraftColors['LIGHT_PURPLE'], minecraftColors['DARK_PURPLE'])
 
-	elif 1800 < bedwarsStar < 1900:
+	elif 1800 <= bedwarsStar < 1900:
 		html += primePrestiges(bedwarsStar, minecraftColors['LIGHT_BLUE'], minecraftColors['DARK_BLUE'])
 
-	elif 1900 < bedwarsStar < 2000:
+	elif 1900 <= bedwarsStar < 2000:
 		html += primePrestiges(bedwarsStar, minecraftColors['DARK_PURPLE'], minecraftColors['DARK_GREY'])
 
+	elif 2000 <= bedwarsStar < 2100:
+		html += specialPresitges(bedwarsStar, minecraftColors['LIGHT_GREY'], minecraftColors['WHITE'], minecraftColors['LIGHT_GREY'], minecraftColors['LIGHT_GREY'], minecraftColors['DARK_GREY'])
+
+	elif 2100 <= bedwarsStar < 2200:
+		html += specialPresitges(bedwarsStar, minecraftColors['WHITE'], minecraftColors['YELLOW'], minecraftColors['GOLD'], minecraftColors['GOLD'], minecraftColors['GOLD'])
+
+	elif 2200 <= bedwarsStar < 2300:
+		html += specialPresitges(bedwarsStar, minecraftColors['GOLD'], minecraftColors['WHITE'], minecraftColors['AQUA'], minecraftColors['DARK_AQUA'], minecraftColors['DARK_AQUA'])
+
+	elif 2300 <= bedwarsStar < 2400:
+		html += specialPresitges(bedwarsStar, minecraftColors['DARK_PURPLE'], minecraftColors['LIGHT_PURPLE'], minecraftColors['GOLD'], minecraftColors['YELLOW'], minecraftColors['YELLOW'])
+
+	elif 2400 <= bedwarsStar < 2500:
+		html += specialPresitges(bedwarsStar, minecraftColors['AQUA'], minecraftColors['WHITE'], minecraftColors['LIGHT_GREY'], minecraftColors['LIGHT_GREY'], minecraftColors['DARK_GREY'])
+
+	elif 2500 <= bedwarsStar < 2600:
+		html += specialPresitges(bedwarsStar, minecraftColors['WHITE'], minecraftColors['GREEN'], minecraftColors['DARK_GREEN'], minecraftColors['DARK_GREEN'], minecraftColors['DARK_GREEN'])
+
+	elif 2600 <= bedwarsStar < 2700:
+		html += specialPresitges(bedwarsStar, minecraftColors['DARK_RED'], minecraftColors['RED'], minecraftColors['LIGHT_PURPLE'], minecraftColors['LIGHT_PURPLE'], minecraftColors['DARK_PURPLE'])
+
+	elif 2700 <= bedwarsStar < 2800:
+		html += specialPresitges(bedwarsStar, minecraftColors['YELLOW'], minecraftColors['WHITE'], minecraftColors['DARK_GREY'], minecraftColors['DARK_GREY'], minecraftColors['DARK_GREY'])
+
+	elif 2800 <= bedwarsStar < 2900:
+		html += specialPresitges(bedwarsStar, minecraftColors['GREEN'], minecraftColors['DARK_GREEN'], minecraftColors['ORANGE'], minecraftColors['ORANGE'], minecraftColors['YELLOW'])
+
+	elif 2900 <= bedwarsStar < 3000:
+		html += specialPresitges(bedwarsStar, minecraftColors['AQUA'], minecraftColors['DARK_AQUA'], minecraftColors['BLUE'], minecraftColors['BLUE'], minecraftColors['DARK_BLUE'])
+
+	elif 3000 <= bedwarsStar:
+		html += specialPresitges(bedwarsStar, minecraftColors['YELLOW'], minecraftColors['ORANGE'], minecraftColors['RED'], minecraftColors['RED'], minecraftColors['DARK_RED'])
 
 	html += nameWrapper(name, useGenericReturn=False)
 	return genericReturn(html)
