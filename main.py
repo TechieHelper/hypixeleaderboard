@@ -107,7 +107,10 @@ def duelsNameWrapper(name, asApi=False):
 		pass
 
 	html += nameWrapper(name, useGenericReturn=False)
-	return html
+	if asApi:
+		return {"html": html}
+	else:
+		return html
 
 
 @app.template_filter()
@@ -242,7 +245,10 @@ def bedwarsNameWrapper(name, asApi=False):
 		html += specialPresitges(bedwarsStar, minecraftColors['YELLOW'], minecraftColors['ORANGE'], minecraftColors['RED'], minecraftColors['RED'], minecraftColors['DARK_RED'])
 
 	html += nameWrapper(name, useGenericReturn=False)
-	return genericReturn(html)
+	if asApi:
+		return {"html": genericReturn(html)}
+	else:
+		return genericReturn(html)
 
 
 def letterToSpace(s, l):
@@ -595,8 +601,24 @@ def stripNumbers(generator):
 # API stuff
 
 
+@app.route('/api/bedwarsNameWrapper', methods=['GET'])
+def apiBedwarsNameWrapper():
+	name = request.args.get('name', 0, type=str)
+	if name == 0:
+		return {"status": 0, "reason": "Invalid Name"}
+	return bedwarsNameWrapper(name, True)
+
+
+@app.route('/api/duelsNameWrapper', methods=['GET'])
+def apiDuelsNameWrapper():
+	name = request.args.get('name', 0, type=str)
+	if name == 0:
+		return {"status": 0, "reason": "Invalid Name"}
+	return duelsNameWrapper(name, True)
+
+
 @app.route('/api/nameWrapper', methods=['GET'])
-def apiTest():
+def apiNameWrapper():
 	name = request.args.get('name', 0, type=str)
 	if name == 0:
 		return {"status": 0, "reason": "Invalid Name"}
@@ -947,5 +969,5 @@ if __name__ == "__main__":
 	#s.enter(60, 1, refresh_key)
 	# app.config['SERVER_NAME'] = 'hypixeleaderboard.herokuapp.com:5000'
 	#app.register_blueprint(api)
-	duelsNameWrapper("_2147483648")
+	# _2147483648
 	app.run()
