@@ -566,7 +566,7 @@ def getHypixelLevel(data) -> int:
 	:param data: The API data previously grabbed
 	:return: The hypxiel level
 	"""
-	highest = 1000000
+	highest = 0
 	for i in range(10000):
 		try:
 			if data['levelingReward_' + str(i)]:
