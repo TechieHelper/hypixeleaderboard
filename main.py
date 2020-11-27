@@ -9,8 +9,8 @@ app = Flask(__name__)
 #api = Blueprint('blueprint', __name__, template_folder="templates", subdomain="api")
 
 # General Functions
-
-API_KEY = 'ef79537a-945a-4beb-b6b4-40861c13203e'
+#ef79537a-945a-4beb-b6b4-40861c13203e
+API_KEY = os.environ['API_KEY']
 minecraftColors = {"GOLD": "FFAA00", "BLACK": "000000", "DARK_BLUE": "0000AA", "DARK_GREEN": "00AA00", "DARK_AQUA": "00AAAA", "DARK_RED": "AA0000", "DARK_PURPLE": "AA00AA", "GRAY": "AAAAAA", "DARK_GREY": "555555", "BLUE": "5555FF", "GREEN": "55FF55", "AQUA": "55FFFF", "RED": "FF5555", "LIGHT_PURPLE": "FF55FF", "YELLOW": "FFFF55", "WHITE": "FFFFFF"}
 
 
@@ -249,6 +249,16 @@ def bedwarsNameWrapper(name, asApi=False):
 		return {"html": genericReturn(html)}
 	else:
 		return genericReturn(html)
+
+
+def getGuildStats(name):
+	try:
+		api_request = requests.get("https://api.hypixel.net/guild?key=" + API_KEY + "&name=" + name)
+		api = json.loads(api_request.content)
+	except:
+		with open('guildExampleData.json') as f:
+			api = json.load(f)
+	return api['guild']
 
 
 def letterToSpace(s, l):
@@ -627,9 +637,27 @@ def apiNameWrapper():
 
 # Pages
 
+
+@app.route('/guild/<name>')
+def guild(name):
+	data = getGuildStats(name)
+	if data is None:
+		return render_template('guild.html', data=0)
+	else:
+		for i in range(len(data['members'])):
+			data['members'][i]['name'] = currentName(data['members'][i]['uuid'])
+		return render_template('guild.html', data=data)
+
+
+@app.route('/guild/')
+def guildN():
+	return render_template('guild.html', data=0)
+
+
 @app.route('/api/documentation/')
 def apiDocumentation():
 	return redirect('https://github.com/TechieHelper/HypixelToolsAPI')
+
 
 @app.route('/skyblock/profile/')
 def profile():
@@ -870,6 +898,11 @@ def suggestions_post():
 
 
 # Post / Get Requests
+
+
+@app.route('/guild/', methods=['POST'])
+def guildPost():
+	return redirect('../guild/' + request.form['playerName'])
 
 
 @app.route('/skyblock/profile/', methods=['POST'])

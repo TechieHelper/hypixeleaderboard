@@ -1,0 +1,30 @@
+{% extends "rootLayout.html" %}
+{% block title %}Guilds{% endblock %}
+{% block meta_desc %}
+<meta name="description" content="Hypixel Leaderboard's Guilds section.">
+{% endblock %}
+{% block extra_scripts %}
+{% endblock %}
+{% block body %}
+
+    {% block tag %}{{ super() }}{% endblock %}
+
+    {% block displayTitle %}Auctions{% endblock %}
+
+    {% block usernameEntryForm %}{% endblock %}
+
+    {% block content %}
+
+    {% if data == 0 %}
+        <h2>Please enter your guild name in the username tab.</h2>
+    {% else %}
+        {% for member in data['members'] %}
+            <p>{{ member['name']|nameWrapper()|safe }}</p>
+        {% endfor %}
+    {% endif %}
+
+    {% endblock %}
+
+    {% block footer %}{{ super() }}{% endblock %}
+
+{% endblock %}
