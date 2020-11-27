@@ -1,5 +1,6 @@
 from flask import Flask, redirect, url_for, render_template, request, make_response, jsonify, Blueprint
 from flask_mail import Mail, Message
+from flask_sqlalchemy import SQLAlchemy
 import requests, json, os, time, datetime
 from os import listdir
 from datetime import datetime
@@ -9,13 +10,25 @@ app = Flask(__name__)
 #api = Blueprint('blueprint', __name__, template_folder="templates", subdomain="api")
 
 # General Functions
-#ef79537a-945a-4beb-b6b4-40861c13203e
+
 API_KEY = os.environ['API_KEY']
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 minecraftColors = {"GOLD": "FFAA00", "BLACK": "000000", "DARK_BLUE": "0000AA", "DARK_GREEN": "00AA00", "DARK_AQUA": "00AAAA", "DARK_RED": "AA0000", "DARK_PURPLE": "AA00AA", "GRAY": "AAAAAA", "DARK_GREY": "555555", "BLUE": "5555FF", "GREEN": "55FF55", "AQUA": "55FFFF", "RED": "FF5555", "LIGHT_PURPLE": "FF55FF", "YELLOW": "FFFF55", "WHITE": "FFFFFF"}
 
+#db = SQLAlchemy(app)
+
+#from models import Result
 
 @app.template_filter()
-def nameWrapper(name, asApi=False, useGenericReturn=True):
+def nameWrapper(name: str, asApi=False, useGenericReturn=True):
+	"""
+	A function to wrap a name with html to format it, as would be in the game.
+
+	:param name: Name to format
+	:param asApi: Whether to return data in API form
+	:param useGenericReturn: Whether to include the font tag in the return statement
+	:return: Data, in API list or string form
+	"""
 	data = generateData(name)
 
 	def genericName(text, color):
@@ -55,7 +68,14 @@ def nameWrapper(name, asApi=False, useGenericReturn=True):
 
 
 @app.template_filter()
-def duelsNameWrapper(name, asApi=False):
+def duelsNameWrapper(name: str, asApi=False):
+	"""
+	A function to wrap a name with html to format it, as well as its duels title, as would be in the game.
+
+	:param name: Name to format
+	:param asApi: Whether to return data in API form
+	:return: Data, in API list or string form
+	"""
 	data = generateData(name)
 
 	html = ""
@@ -115,12 +135,27 @@ def duelsNameWrapper(name, asApi=False):
 
 @app.template_filter()
 def bedwarsNameWrapper(name, asApi=False):
+	"""
+	A function to wrap a name with html to format it, as well as its bedwars star, as would be in the game.
+
+	:param name: Name to format
+	:param asApi: Whether to return data in API form
+	:return: Data, in API list or string form
+	"""
 	data = generateData(name)
 
 	def starColor(star, color):
 		return "<span style=\"text-shadow: 1px 1px #eee; color:#" + color + "\">[" + str(star) + "✫]</span>"
 
-	def primePrestiges(star, color, starColor=""):
+	def primePrestiges(star: int, color: str, starColor="") -> str:
+		"""
+		A function to wrap a prime prestige star with a color.
+
+		:param star: Star to format (1100-1999)
+		:param color: Color to format the star text with
+		:param starColor: Color to format the actual star with
+		:return: A html formatted star with the parameters given
+		"""
 		if starColor == "":
 			return "<span style=\"text-shadow: 1px 1px #eee; color:#AAAAAA\">[</span>" + \
 					"<span style=\"text-shadow: 1px 1px #eee; color:#" + color + "\">[" + str(star) + "</span>" + \
@@ -132,7 +167,19 @@ def bedwarsNameWrapper(name, asApi=False):
 					"<span style=\"text-shadow: 1px 1px #eee; color:#" + starColor + "\">✪</span>" + \
 					"<span style=\"text-shadow: 1px 1px #eee; color:#AAAAAA\">]</span>"
 
-	def specialPresitges(star, color1, color2, color3, starColor, lastColor):
+	def specialPresitges(star: int, color1: str, color2: str, color3: str, starColor: str, lastColor: str) -> str:
+		"""
+		A function to wrap a star above 2000 star with its correct in-game formatting.
+
+		:param star: Star to format (2000+)
+		:param color1: The color of the first letter of the star number
+		:param color2: The color of the second letter of the star number
+		:param color3: The color of the third letter of the star number
+		:param starColor: The color of the star and the last number of the star
+		:param color3: The color of the last bracket in the star
+		:param lastColor: Color to format the actual star with
+		:return: A html formatted star with the parameters given
+		"""
 		return "<span style=\"text-shadow: 1px 1px #eee; color:#" + color1 + "\">[" + str(star)[0] + "</span>" + \
 				"<span style=\"text-shadow: 1px 1px #eee; color:#" + color2 + "\">" + str(star)[1] + str(star)[2] + "</span>" + \
 				"<span style=\"text-shadow: 1px 1px #eee; color:#" + color3 + "\">" + str(star)[3] + "</span>" + \
@@ -252,6 +299,12 @@ def bedwarsNameWrapper(name, asApi=False):
 
 
 def getGuildStats(name):
+	"""
+	A function to get guild data for a given guild name from the hypixel API.
+
+	:param name: Guild name
+	:return: API data, or example data for test purposes
+	"""
 	try:
 		api_request = requests.get("https://api.hypixel.net/guild?key=" + API_KEY + "&name=" + name)
 		api = json.loads(api_request.content)
@@ -261,7 +314,14 @@ def getGuildStats(name):
 	return api['guild']
 
 
-def letterToSpace(s, l):
+def letterToSpace(s: str, l: chr) -> str:
+	"""
+	A simple function to take a string, find all times a certain character is used and replace them with a space.
+
+	:param s: String to modify
+	:param l: Character to find in string
+	:return: Formatted string
+	"""
 	ans = ""
 	for letter in s:
 		if letter == l: ans += " "
@@ -270,7 +330,14 @@ def letterToSpace(s, l):
 	return ans
 
 
-def getUUIDFromName(name):
+def getUUIDFromName(name: str) -> str:
+	"""
+	A function to contact the minecraft mojang API with a username and convert it to a UUID, returning 'Unknown Name'
+	if it cannot be found.
+
+	:param name: Player name to be converted
+	:return: Player UUID or 'Unknown Name'
+	"""
 	try:
 		api_request = requests.get("https://api.mojang.com/users/profiles/minecraft/" + name)
 		api = json.loads(api_request.content)
@@ -280,6 +347,12 @@ def getUUIDFromName(name):
 
 
 def getWatchdogstats():
+	"""
+	A function to get the hypixel watchdog statistics from the hypixel API, and load a JSON string if the API is
+	unreachable or for testing purposes.
+
+	:return: API data
+	"""
 	try:
 		api_request = requests.get("https://api.hypixel.net/watchdogstats?key=" + API_KEY)
 		api = json.loads(api_request.content)
@@ -290,6 +363,12 @@ def getWatchdogstats():
 
 
 def getGameCounts():
+	"""
+	A function to get the hypixel player game counts from the hypixel API, and load a JSON file if the API is
+	unreachable or for debug purposes.
+
+	:return: The API data
+	"""
 	try:
 		api_request = requests.get("https://api.hypixel.net/gameCounts?key=" + API_KEY)
 		api = json.loads(api_request.content)
@@ -301,6 +380,12 @@ def getGameCounts():
 
 
 def getBazaarStats():
+	"""
+	A function to get the hypixel bazaar data from the hypixel API, and load a JSON file if the API is unreachable or
+	for debug purposes.
+
+	:return: The API data
+	"""
 	try:
 		api_request = requests.get("https://api.hypixel.net/skyblock/bazaar?key=" + API_KEY)
 		api = json.loads(api_request.content)
@@ -312,6 +397,12 @@ def getBazaarStats():
 
 
 def getSkyblockNews():
+	"""
+	A function to get the hypixel skyblock news data from the hypixel API, and load a JSON file if the API is
+	unreachable or for debug purposes.
+
+	:return: The API data
+	"""
 	try:
 		api_request = requests.get("https://api.hypixel.net/skyblock/news?key=" + API_KEY)
 		api = json.loads(api_request.content)
@@ -322,8 +413,13 @@ def getSkyblockNews():
 	return api
 
 
-
 def getAuctionsStats():
+	"""
+	A function to get the hypixel skyblock auctions data from the hypixel API, and load a JSON file if the API is
+	unreachable or for debug purposes.
+
+	:return: The API data
+	"""
 	try:
 		api_request = requests.get("https://api.hypixel.net/skyblock/auctions?key=" + API_KEY)
 		api = json.loads(api_request.content)
@@ -335,6 +431,14 @@ def getAuctionsStats():
 
 
 def generateSkyblockPlayerData(playerID):
+	"""
+	A function to get the hypixel skyblock player profile data from the hypixel API, and load a JSON file if the API is
+	unreachable or for debug purposes.
+
+	:param playerID: The player UUID
+	:return: The API data
+	"""
+
 	try:
 		api_request = requests.get(
 			"https://api.hypixel.net/skyblock/profile?profile=" + playerID + "&key=" + API_KEY)
@@ -347,10 +451,20 @@ def generateSkyblockPlayerData(playerID):
 
 
 def generateData(name="_"):
+	"""
+	The main player data grabber from the hypixel API. This function does a few things. First, it checks if the name
+	given is a UUID, and if it is not then it turns it into a UUID using the function. If the UUID is an unknown name,
+	the function opens another file that contains an empty data set for the data. If the UUID is known, it tries to get
+	the corresponding data from the hypixel API for that player. On fail, it reads this data from a file. It then
+	returns this data.
+
+	:param name: The player name or player UUID
+	:return: The player data for the given name or UUID
+	"""
 	if len(name.encode('utf-8')) != 32:
 		uuid = getUUIDFromName(name)
 		if uuid != "Unknown Name":
-			pass  # Write name
+			pass  # TODO: Write name
 	else:
 		uuid = name
 
@@ -365,10 +479,17 @@ def generateData(name="_"):
 			with open("dashedData.json") as f:
 				api = json.loads(f.read())
 
+	print(api)
 	return api['player']
 
 
 def generateLeaderboardData():
+	"""
+	A function to get the hypixel leaderboards data from the hypixel API, and load a JSON file if the API is unreachable
+	or for debug purposes.
+
+	:return: The API data
+	"""
 	try:
 		api_request = requests.get("https://api.hypixel.net/leaderboards?key=" + API_KEY)
 		api = json.loads(api_request.content)
@@ -379,7 +500,14 @@ def generateLeaderboardData():
 	return api['leaderboards']
 
 
-def leaderboardURLFormatting(value):
+def leaderboardURLFormatting(value: str) -> str:
+	"""
+	A function that takes a value, finds all occurrences of the character '-', changing all of these occurrences to '-'.
+	It also capitalises the output
+
+	:param value: The input string
+	:return: The output after parsing the string
+	"""
 	output = ""
 	for i in value:
 		if i == "-":
@@ -392,7 +520,15 @@ def leaderboardURLFormatting(value):
 	return output
 
 
-def customReturn(data, dataPoints):
+def customReturn(data, dataPoints: list):
+	"""
+	A function to get a datapoint of a dictionary, and add it to another dictionary. If one cannot be found, it catches
+	the subsequent error and opens some filler data instead.
+
+	:param data: The dictionary
+	:param dataPoints: The datapoints
+	:return: The dictionary after processing
+	"""
 	try:
 		newData = data
 		for arg in dataPoints:
@@ -403,7 +539,14 @@ def customReturn(data, dataPoints):
 	return newData
 
 
-def prestigeStrip(value):
+def prestigeStrip(value: str) -> str:
+	"""
+	A function to capitalise the first letter of a string, and return all of the data to the right of the first (and
+	only) underscore ('_').
+
+	:param value: The string to parse
+	:return: The parsed string
+	"""
 	value = value[0].upper() + value[1:]
 	return value[:value.find("_")]
 
@@ -414,17 +557,35 @@ def prestigeStrip(value):
 
 
 @app.template_filter()
-def getHypixelLevel(data):
-	for i in range(1000000):
+def getHypixelLevel(data) -> int:
+	"""
+	A function to loop through all of the possible hypixel levels, and extract them from the data given, and find the
+	maximal level that the user has - this is because the API often produces mangled results, with levels above 100
+	often not existing.
+
+	:param data: The API data previously grabbed
+	:return: The hypxiel level
+	"""
+	highest = 1000000
+	for i in range(10000):
 		try:
 			if data['levelingReward_' + str(i)]:
-				pass
+				highest = i-1 if highest < i-1 else highest
 		except:
-			return i - 1
+			pass
+	return highest if highest != 1000000 else 0
 
 
 @app.template_filter()
-def checkIfValid(data, dataPoint):
+def checkIfValid(data, dataPoint: str):
+	"""
+	A function to check if a dataPoint is present in a dictionary of data, and to return the datapoint if it is, else
+	to return '-'. This is because try, catch statements don't exist in jinja2.
+
+	:param data: The full dictionary
+	:param dataPoint: The datapoint that should be found in the dictionary
+	:return: The datapoint if it is valid, else '-'
+	"""
 	try:
 		return data[dataPoint]
 	except KeyError:
@@ -432,7 +593,14 @@ def checkIfValid(data, dataPoint):
 
 
 @app.template_filter()
-def format_datetime(ts):
+def format_datetime(ts) -> str:
+	"""
+	A function to take a UNIX timestamp, and turn it into a formatted datetime. If it is not a UNIX timestamp, the
+	function returns '-'.
+
+	:param ts: The UNIX timestamp
+	:return: The formatted datetime if ts is a UNIX timestamp, else '-'
+	"""
 	if type(ts) == int:
 		dt = datetime.fromtimestamp(ts / 1000).strftime("%d/%m/%Y %H:%M:%S")
 		return dt
@@ -441,13 +609,28 @@ def format_datetime(ts):
 
 
 @app.template_filter()
-def capitalizeFirstLetter(value):
-	valueList = value.split("_")
-	return " ".join([i[0].upper() + i[1:].lower() for i in valueList])
+def capitalizeFirstLetter(value: str) -> str:
+	"""
+	A function to split a string by its underscores ('_') and to replace these with spaces, as well as capitalising the
+	first letter of each new word.
+
+	:param value: The string to be formatted
+	:return: The formatted string
+	"""
+	return " ".join([i[0].upper() + i[1:].lower() for i in value.split('_')])
 
 
 @app.template_filter()
-def getRankFromUUID(uuid):
+def getRankFromUUID(uuid: str) -> str:
+	"""
+	A function to get a players name display name from their UUID, and also to cache this in a file if it was not
+	already there. To get the display name, first the cache file is checked for the name, and if it is not present
+	there, the hypixel API is contacted for the name. Then the data is cached and the name returned. If neither of
+	these places contain the UUID corresponding to a name, then 'Unknown Name' is returned.
+
+	:param uuid: The player's UUID
+	:return: The players display name, or 'Unknown Name'
+	"""
 	try:
 		try:
 			with open("knownUsers.json") as f:
