@@ -5,8 +5,6 @@
 {% endblock %}
 
 {% block extra_scripts %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 {% endblock %}
 
 {% block body %}
@@ -18,9 +16,8 @@
     {% block usernameEntryForm %}{% endblock %}
 
     {% block content %}
-    <button onclick="window.location.href='/player/bedwars/'" class="btn btn-primary" type="button">Bedwars</button>
-    <button onclick="window.location.href='/player/skywars/'" class="btn btn-primary" type="button">Skywars</button>
-    <button onclick="window.location.href='/player/duels/'" class="btn btn-primary" type="button">Duels</button>
+    <h2>{{ data['displayname']|nameWrapper|safe }}</h2>
+    <a href="/player/bedwars/{{ data['displayname'] }}">Bedwars</a>
 
     {% endblock %}
 

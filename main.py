@@ -46,28 +46,36 @@ def nameWrapper(name: str, asApi=False, useGenericReturn=True):
 		return "<span style=\"text-shadow: 1px 1px #eee; color:#" + color + "\"> " + text + "</span>"
 
 	def genericReturn(text):
-		return "<span style=\"font-family: 'Minecraftia';\">" + text + "</span>"
-
+		return "<span style=\"font-family: 'Minecraftia'; background-color: #F5F5F5;\">" + text + "</span>"
 
 	html = ""
 	try:
-		rank = data['newPackageRank']
-		if rank == "VIP":
-			html = genericName("[VIP] " + name, "3CE63C")
-		elif rank == "MVP":
-			html = genericName("[MVP] " + name, "3CE636")
-		elif rank == "VIP_PLUS":
-			html = genericName("[VIP ", "3CE63C") + genericName("+", "FFAA00") + genericName("] " + name, "3CE63C")
-		elif rank == "MVP_PLUS":
-			if data['monthlyPackageRank'] == 'SUPERSTAR':
-				try:
-					html = genericName("[MVP ", minecraftColors[data['monthlyRankColor']]) + genericName("++", minecraftColors[data['rankPlusColor']]) + genericName("] " + name, minecraftColors[data['monthlyRankColor']])
-				except:
-					html = genericName("[MVP ", "3CE6E6") + genericName("++", minecraftColors[data['rankPlusColor']]) + genericName("] " + name, "3CE6E6")
-			else:
-				html = genericName("[MVP ", "3CE6E6") + genericName("+", minecraftColors[data['rankPlusColor']]) + genericName("] " + name, "3CE6E6")
-	except Exception as e:
-		html = genericName(name, "AAAAAA")
+		rank = data['rank']
+		if rank == "YOUTUBER":
+			html = "<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['RED'] + "\">[</span>" + \
+					"<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['WHITE'] + "\">YOUTUBE</span>" + \
+					"<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['RED'] + "\">]" + name + "</span>"
+		else:
+			raise Exception()
+	except:
+		try:
+			rank = data['newPackageRank']
+			if rank == "VIP":
+				html = genericName("[VIP] " + name, "3CE63C")
+			elif rank == "MVP":
+				html = genericName("[MVP] " + name, "3CE636")
+			elif rank == "VIP_PLUS":
+				html = genericName("[VIP ", "3CE63C") + genericName("+", "FFAA00") + genericName("] " + name, "3CE63C")
+			elif rank == "MVP_PLUS":
+				if data['monthlyPackageRank'] == 'SUPERSTAR':
+					try:
+						html = genericName("[MVP ", minecraftColors[data['monthlyRankColor']]) + genericName("++", minecraftColors[data['rankPlusColor']]) + genericName("] " + name, minecraftColors[data['monthlyRankColor']])
+					except:
+						html = genericName("[MVP ", "3CE6E6") + genericName("++", minecraftColors[data['rankPlusColor']]) + genericName("] " + name, "3CE6E6")
+				else:
+					html = genericName("[MVP ", "3CE6E6") + genericName("+", minecraftColors[data['rankPlusColor']]) + genericName("] " + name, "3CE6E6")
+		except Exception as e:
+			html = genericName(name, "AAAAAA")
 
 	if not asApi:
 		if not useGenericReturn:
@@ -198,7 +206,7 @@ def bedwarsNameWrapper(name, asApi=False):
 				"<span style=\"text-shadow: 1px 1px #eee; color:#" + lastColor + "\">]</span>"
 
 	def genericReturn(text):
-		return "<span style=\"font-family: 'Minecraftia';\">" + text + "</span>"
+		return "<span style=\"font-family: 'Minecraftia'; background-color: #F5F5F5;\">" + text + "</span>"
 
 
 	bedwarsStar = data['achievements']['bedwars_level']
@@ -1027,7 +1035,24 @@ def gameCounts():
 
 @app.route("/player/")
 def player():
-	return render_template("player.html")
+	try:
+		uuid = request.cookies['uuid']
+		data = generateData(uuid)
+	except KeyError:
+		data = generateData()
+	return render_template("player.html", data=data)
+
+
+@app.route("/player/<username>")
+def playerUsername(username):
+	data = generateData(username)
+	return render_template("player.html", data=data)
+
+
+@app.route("/player/bedwars/<username>")
+def player2(username):
+	data = generateData(username)
+	return render_template("bedwars.html", data=data, bedwarsData=data['stats']['Bedwars'])
 
 
 @app.route("/watchdogstats/")
@@ -1204,6 +1229,11 @@ def guildPost():
 	return redirect('../guild/' + request.form['playerName'])
 
 
+@app.route('/guild/<username>', methods=['POST'])
+def guildPost2(username):
+	return redirect('/guild/' + request.form['playerName'])
+
+
 @app.route('/skyblock/profile/', methods=['POST'])
 def profile_post():
 	try:
@@ -1239,6 +1269,15 @@ def bedwars_post2():
 def bedwars_post3(username):
 	return redirect("/player/bedwars/" + request.form['playerName'])
 
+
+@app.route("/player/", methods=['POST'])
+def player_post1():
+	return redirect("/player/" + request.form['playerName'])
+
+
+@app.route("/player/<username>", methods=['POST'])
+def player_post2(username):
+	return redirect("/player/" + request.form['playerName'])
 
 
 @app.route("/player/duels/", methods=['POST'])
