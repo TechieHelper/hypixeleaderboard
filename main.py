@@ -14,6 +14,7 @@ app = Flask(__name__)
 API_KEY = os.environ['API_KEY']
 DATABASE_URL = os.environ['DATABASE_URL']
 minecraftColors = {"GOLD": "FFAA00", "BLACK": "000000", "DARK_BLUE": "0000AA", "DARK_GREEN": "00AA00", "DARK_AQUA": "00AAAA", "DARK_RED": "AA0000", "DARK_PURPLE": "AA00AA", "GRAY": "AAAAAA", "DARK_GREY": "555555", "BLUE": "5555FF", "GREEN": "55FF55", "AQUA": "55FFFF", "RED": "FF5555", "LIGHT_PURPLE": "FF55FF", "YELLOW": "FFFF55", "WHITE": "FFFFFF"}
+minecraftChatCodes = {"GOLD": "§6", "BLACK": "§0", "DARK_BLUE": "§1", "DARK_GREEN": "§2", "DARK_AQUA": "§3", "DARK_RED": "§4", "DARK_PURPLE": "§5", "GRAY": "§7", "DARK_GREY": "§8", "BLUE": "§9", "GREEN": "§a", "AQUA": "§b", "RED": "§c", "LIGHT_PURPLE": "§d", "YELLOW": "§e", "WHITE": "§f"}
 
 
 @app.template_filter()
@@ -31,7 +32,7 @@ def guildTagWrapper(text: str, tagColor: str) -> str:
 
 
 @app.template_filter()
-def nameWrapper(name: str, asApi=False, useGenericReturn=True):
+def nameWrapper(name: str, asApi=False, useGenericReturn=True, useChatCodes=False):
 	"""
 	A function to wrap a name with html to format it, as would be in the game.
 
@@ -52,30 +53,54 @@ def nameWrapper(name: str, asApi=False, useGenericReturn=True):
 	try:
 		rank = data['rank']
 		if rank == "YOUTUBER":
-			html = "<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['RED'] + "\">[</span>" + \
-					"<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['WHITE'] + "\">YOUTUBE</span>" + \
-					"<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['RED'] + "\">]" + name + "</span>"
+			if useChatCodes:
+				html = "§c[§fYOUTUBE§c] " + name
+			else:
+				html = "<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['RED'] + "\">[</span>" + \
+						"<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['WHITE'] + "\">YOUTUBE</span>" + \
+						"<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['RED'] + "\">]" + name + "</span>"
 		else:
 			raise Exception()
 	except:
 		try:
 			rank = data['newPackageRank']
 			if rank == "VIP":
-				html = genericName("[VIP] " + name, "3CE63C")
+				if useChatCodes:
+					html = "§a[VIP]" + name
+				else:
+					html = genericName("[VIP] " + name, "3CE63C")
 			elif rank == "MVP":
-				html = genericName("[MVP] " + name, "3CE636")
+				if useChatCodes:
+					html = "§a[MVP]" + name
+				else:
+					html = genericName("[MVP] " + name, "3CE636")
 			elif rank == "VIP_PLUS":
-				html = genericName("[VIP ", "3CE63C") + genericName("+", "FFAA00") + genericName("] " + name, "3CE63C")
+				if useChatCodes:
+					html = "§a[VIP§6+§a]" + name
+				else:
+					html = genericName("[VIP ", "3CE63C") + genericName("+", "FFAA00") + genericName("] " + name, "3CE63C")
 			elif rank == "MVP_PLUS":
 				if data['monthlyPackageRank'] == 'SUPERSTAR':
 					try:
-						html = genericName("[MVP ", minecraftColors[data['monthlyRankColor']]) + genericName("++", minecraftColors[data['rankPlusColor']]) + genericName("] " + name, minecraftColors[data['monthlyRankColor']])
+						if useChatCodes:
+							html = minecraftChatCodes[data['monthlyRankColor']] + "[MVP" + minecraftChatCodes[data['rankPlusColor']] + "++" + minecraftChatCodes[data['monthlyRankData']] + "] " + name
+						else:
+							html = genericName("[MVP ", minecraftColors[data['monthlyRankColor']]) + genericName("++", minecraftColors[data['rankPlusColor']]) + genericName("] " + name, minecraftColors[data['monthlyRankColor']])
 					except:
-						html = genericName("[MVP ", "3CE6E6") + genericName("++", minecraftColors[data['rankPlusColor']]) + genericName("] " + name, "3CE6E6")
+						if useChatCodes:
+							html = "§a[MVP" + minecraftChatCodes[data['rankPlusColor']] + "++§a] " + name
+						else:
+							html = genericName("[MVP ", "3CE6E6") + genericName("++", minecraftColors[data['rankPlusColor']]) + genericName("] " + name, "3CE6E6")
 				else:
-					html = genericName("[MVP ", "3CE6E6") + genericName("+", minecraftColors[data['rankPlusColor']]) + genericName("] " + name, "3CE6E6")
+					if useChatCodes:
+						html = "§a[MVP" + minecraftChatCodes[data['rankPlusColor']] + "+§a] " + name
+					else:
+						html = genericName("[MVP", "3CE6E6") + genericName("+", minecraftColors[data['rankPlusColor']]) + genericName("] " + name, "3CE6E6")
 		except Exception as e:
-			html = genericName(name, "AAAAAA")
+			if useChatCodes:
+				html = "§7" + name
+			else:
+				html = genericName(name, "AAAAAA")
 
 	if not asApi:
 		if not useGenericReturn:
@@ -83,7 +108,10 @@ def nameWrapper(name: str, asApi=False, useGenericReturn=True):
 		else:
 			return genericReturn(html)
 	else:
-		return {"html": genericReturn(html)}
+		if useChatCodes:
+			return {"html": html}
+		else:
+			return {"html": genericReturn(html)}
 
 
 @app.template_filter()
@@ -207,7 +235,6 @@ def bedwarsNameWrapper(name, asApi=False):
 
 	def genericReturn(text):
 		return "<span style=\"font-family: 'Minecraftia'; background-color: #F5F5F5;\">" + text + "</span>"
-
 
 	bedwarsStar = data['achievements']['bedwars_level']
 	html = ""
@@ -933,9 +960,13 @@ def apiDuelsNameWrapper():
 @app.route('/api/nameWrapper', methods=['GET'])
 def apiNameWrapper():
 	name = request.args.get('name', 0, type=str)
+	useChatCodes = request.args.get('useChatCodes', False, type=str)
 	if name == 0:
 		return {"status": 0, "reason": "Invalid Name"}
-	return nameWrapper(name, True)
+	if useChatCodes.lower() == "true":
+		return nameWrapper(name, True, useChatCodes=True)
+	else:
+		return nameWrapper(name, True)
 
 
 # Pages
