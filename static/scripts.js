@@ -20,3 +20,9 @@
         $("body").toggleClass("sb-sidenav-toggled");
     });
 })(jQuery);
+
+(function ($) {
+    $('#dtGuild').DataTable({
+    "ordering": true
+    });
+});

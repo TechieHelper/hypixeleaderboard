@@ -45,7 +45,7 @@
                         {% for stat in REQUIRED_STATS_DUELS %}
                             {% if stat[:1] == '!' %}
                                 {% set tempList = stat[1:].split(';') %}
-                                {% if duelsData|tableTry(mode + tempList[0]) != "-" and duelsData|tableTry(mode + tempList[1]) != "-" and (duelsData|tableTry(mode + tempList[0]) != 0 and duelsData|tableTry(mode + tempList[1]) != 0)%}
+                                {% if duelsData|checkIfValid(mode + tempList[0]) != "-" and duelsData|checkIfValid(mode + tempList[1]) != "-" and (duelsData|checkIfValid(mode + tempList[0]) != 0 and duelsData|checkIfValid(mode + tempList[1]) != 0)%}
                                     <td style="font-weight: bold">{{'%0.2f' % (duelsData[mode + tempList[0]] / duelsData[mode + tempList[1]])}}</td>
                                 {% else %}
                                     <td style="font-weight: bold">-</td>
@@ -53,7 +53,7 @@
                             {% elif stat == 'prestige' %}
                                 <td>{{ mode|prestigeRank(duelsData) }}</td>
                             {% else %}
-                                <td>{{duelsData|tableTry(mode + stat)}}</td>
+                                <td>{{duelsData|checkIfValid(mode + stat)}}</td>
                             {% endif %}
                         {% endfor%}
                     </tr>

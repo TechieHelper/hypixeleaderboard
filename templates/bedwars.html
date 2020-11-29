@@ -53,13 +53,13 @@
                         {% for stat in REQUIRED_STATS_BEDWARS %}
                             {% if stat[:1] == '!' %}
                                 {% set tempList = stat[1:].split(';') %}
-                                {% if bedwarsData|tableTry(mode + tempList[0]) != "-" and bedwarsData|tableTry(mode + tempList[1]) != "-" %}
+                                {% if bedwarsData|checkIfValid(mode + tempList[0]) != "-" and bedwarsData|checkIfValid(mode + tempList[1]) != "-" %}
                                     <td style="font-weight: bold">{{'%0.2f' % (bedwarsData[mode + tempList[0]] / bedwarsData[mode + tempList[1]])}}</td>
                                 {% else %}
                                     <td style="font-weight: bold">-</td>
                                 {% endif %}
                             {% else %}
-                                <td>{{bedwarsData|tableTry(mode + stat)}}</td>
+                                <td>{{bedwarsData|checkIfValid(mode + stat)}}</td>
                             {% endif %}
                         {% endfor%}
                     </tr>
@@ -94,13 +94,13 @@
                         {% for stat in EXTRA_STATS_BEDWARS %}
                             {% if stat[:1] == '!' %}
                                 {% set tempList = stat[1:].split(';') %}
-                                {% if bedwarsData|tableTry(mode + tempList[0]) != "-" %}
-                                    <td style="font-weight: bold">{{'%0.2f' % (bedwarsData|tableTry(mode + tempList[0]) / bedwarsData|tableTry(mode + tempList[1]))}}</td>
+                                {% if bedwarsData|checkIfValid(mode + tempList[0]) != "-" %}
+                                    <td style="font-weight: bold">{{'%0.2f' % (bedwarsData|checkIfValid(mode + tempList[0]) / bedwarsData|checkIfValid(mode + tempList[1]))}}</td>
                                 {% else %}
                                     <td style="font-weight: bold">-</td>
                                 {% endif %}
                             {% else %}
-                                <td>{{bedwarsData|tableTry(mode + stat)}}</td>
+                                <td>{{bedwarsData|checkIfValid(mode + stat)}}</td>
                             {% endif %}
                         {% endfor%}
                     </tr>

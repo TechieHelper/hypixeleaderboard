@@ -69,18 +69,18 @@
                     </tr>
                     {% for mob in PASSIVE_MOBS %}
                         <tr>
-                            <td style="font-weight: bold; text-align: left;">{{ mob|skyblockProfileCapitalise() }}</td>
+                            <td style="font-weight: bold; text-align: left;">{{ mob|capitalizeFirstLetter() }}</td>
 
                             {% for stat in STATS %}
                                 {% if stat[:1] == '!' %}
                                     {% set tempList = stat[1:].split(';') %}
-                                    {% if currentProfile['stats']|tableTry(tempList[0] + mob) != "-" and currentProfile['stats']|tableTry(tempList[1] + mob) != "-" %}
+                                    {% if currentProfile['stats']|checkIfValid(tempList[0] + mob) != "-" and currentProfile['stats']|checkIfValid(tempList[1] + mob) != "-" %}
                                         <td style="font-weight: bold">{{'%0.2f' % (currentProfile['stats'][tempList[0] + mob] / currentProfile['stats'][tempList[1] + mob])}}</td>
                                     {% else %}
                                         <td style="font-weight: bold">-</td>
                                     {% endif %}
                                 {% else %}
-                                    <td>{{currentProfile['stats']|tableTry(stat + mob)}}</td>
+                                    <td>{{currentProfile['stats']|checkIfValid(stat + mob)}}</td>
                                 {% endif %}
                             {% endfor%}
                         </tr>
@@ -88,18 +88,18 @@
                     <td colspan="4" style="text-align: center; font-weight: bold;">Hostile Mobs</td>
                     {% for mob in HOSTILE_MOBS %}
                         <tr>
-                            <td style="font-weight: bold; text-align: left;">{{ mob|skyblockProfileCapitalise() }}</td>
+                            <td style="font-weight: bold; text-align: left;">{{ mob|capitalizeFirstLetter() }}</td>
 
                             {% for stat in STATS %}
                                 {% if stat[:1] == '!' %}
                                     {% set tempList = stat[1:].split(';') %}
-                                    {% if currentProfile['stats']|tableTry(tempList[0] + mob) != "-" and currentProfile['stats']|tableTry(tempList[1] + mob) != "-" %}
+                                    {% if currentProfile['stats']|checkIfValid(tempList[0] + mob) != "-" and currentProfile['stats']|checkIfValid(tempList[1] + mob) != "-" %}
                                         <td style="font-weight: bold">{{'%0.2f' % (currentProfile['stats'][tempList[0] + mob] / currentProfile['stats'][tempList[1] + mob])}}</td>
                                     {% else %}
                                         <td style="font-weight: bold">-</td>
                                     {% endif %}
                                 {% else %}
-                                    <td>{{currentProfile['stats']|tableTry(stat + mob)}}</td>
+                                    <td>{{currentProfile['stats']|checkIfValid(stat + mob)}}</td>
                                 {% endif %}
                             {% endfor%}
                         </tr>
@@ -121,7 +121,7 @@
                 <table  class="table-hover table-bordered table-striped table w-100">
                     {% for data in sortedData %}
                         <tr>
-                            <td style="font-weight: bold; text-align: left;">{{ data|skyblockProfileCapitalise() }}</td>
+                            <td style="font-weight: bold; text-align: left;">{{ data|capitalizeFirstLetter() }}</td>
                             <td class="{{ sortedData[data]|sort()|profileGeneratorTry(0) }}">I</td>
                             <td class="{{ sortedData[data]|sort()|profileGeneratorTry(1) }}">II</td>
                             <td class="{{ sortedData[data]|sort()|profileGeneratorTry(2) }}">III</td>

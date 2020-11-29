@@ -16,11 +16,52 @@
     {% block content %}
 
     {% if data == 0 %}
-        <h2>Please enter your guild name in the username tab.</h2>
+        <h1 class="mt-4">Please enter your guild name in the username tab.</h1>
     {% else %}
-        {% for member in data['members'] %}
-            <p>{{ member['name']|nameWrapper()|safe }}</p>
-        {% endfor %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <svg class="svg-inline--fa fa-chart-area fa-w-16 mr-1" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chart-area" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M500 384c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12H12c-6.6 0-12-5.4-12-12V76c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v308h436zM372.7 159.5L288 216l-85.3-113.7c-5.1-6.8-15.5-6.3-19.9 1L96 248v104h384l-89.9-187.8c-3.2-6.5-11.4-8.7-17.4-4.7z"></path></svg>
+                Guild Stats
+            </div>
+            <div class="card-body">
+                <h2>{{ data['name'] }} {{ ("[" + data['tag'] + "]")|guildTagWrapper(data['tagColor'])|safe }}</h2>
+                <b>Created: </b> {{ data['created']|format_datetime }}<br>
+                <b>Total Members: </b> {{ data['members']|length }}<br>
+                <br>
+                <b>Publicly Listed: </b> {{ "Yes" if data['publiclyListed'] else "No" }}<br>
+                <b>Preferred Games: </b><br>
+                {% for gameID in range(data['preferredGames']|length) %}
+                    {{ data['preferredGames'][gameID]|capitalizeFirstLetter }}{{ ',' if gameID < data['preferredGames']|length-1 else '' }}
+                {% endfor %}
+                <!-- TODO: IMPLEMENT GUILD XP BY GAME -->
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-header">
+                <svg class="svg-inline--fa fa-chart-area fa-w-16 mr-1" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chart-area" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M500 384c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12H12c-6.6 0-12-5.4-12-12V76c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v308h436zM372.7 159.5L288 216l-85.3-113.7c-5.1-6.8-15.5-6.3-19.9 1L96 248v104h384l-89.9-187.8c-3.2-6.5-11.4-8.7-17.4-4.7z"></path></svg>
+                Guild Members
+            </div>
+            <div class="card-body">
+                <table class="table-bordered table-striped table w-100 table-sm" id="dtGuild">
+                    <thead>
+                    <tr>
+                        <th class="th-sm">Name</th>
+                        <th class="th-sm">Rank</th>
+                        <th class="th-sm">Joined</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for member in data['members'] %}
+                        <tr>
+                            <td><a href="../player/bedwars/{{ member['name'] }}">{{ member['name'] }}</a></td>
+                            <td>{{ member['rank'] }}</td>
+                            <td>{{ member['joined']|format_datetime }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     {% endif %}
 
     {% endblock %}

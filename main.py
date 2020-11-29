@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 import requests, json, os, time, datetime
 from os import listdir
 from datetime import datetime
-import base64, io, nbt
+import base64, io, nbt, psycopg2, atexit
 
 app = Flask(__name__)
 #api = Blueprint('blueprint', __name__, template_folder="templates", subdomain="api")
@@ -12,12 +12,22 @@ app = Flask(__name__)
 # General Functions
 
 API_KEY = os.environ['API_KEY']
-#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 minecraftColors = {"GOLD": "FFAA00", "BLACK": "000000", "DARK_BLUE": "0000AA", "DARK_GREEN": "00AA00", "DARK_AQUA": "00AAAA", "DARK_RED": "AA0000", "DARK_PURPLE": "AA00AA", "GRAY": "AAAAAA", "DARK_GREY": "555555", "BLUE": "5555FF", "GREEN": "55FF55", "AQUA": "55FFFF", "RED": "FF5555", "LIGHT_PURPLE": "FF55FF", "YELLOW": "FFFF55", "WHITE": "FFFFFF"}
 
-#db = SQLAlchemy(app)
 
-#from models import Result
+@app.template_filter()
+def guildTagWrapper(text: str, tagColor: str) -> str:
+	"""
+	A function to correctly color the guild tag for a given guild.
+
+	:param text: The text that should be coloured
+	:param tagColor: The color of the tag
+	:return: The formatted text
+	"""
+
+	return "<span style=\"color:#" + minecraftColors[tagColor] + ";\"> " + text + "</span>"
+
+
 
 @app.template_filter()
 def nameWrapper(name: str, asApi=False, useGenericReturn=True):
@@ -330,7 +340,7 @@ def letterToSpace(s: str, l: chr) -> str:
 	return ans
 
 
-def getUUIDFromName(name: str) -> str:
+def getUUIDFromName(name: str, conn=None, cur=None) -> str:
 	"""
 	A function to contact the minecraft mojang API with a username and convert it to a UUID, returning 'Unknown Name'
 	if it cannot be found.
@@ -338,11 +348,49 @@ def getUUIDFromName(name: str) -> str:
 	:param name: Player name to be converted
 	:return: Player UUID or 'Unknown Name'
 	"""
+	if conn is None:
+		conn = psycopg2.connect(DATABASE_URL)
+		cur = conn.cursor()
+		endConn = True
+	else:
+		endConn = False
+
 	try:
-		api_request = requests.get("https://api.mojang.com/users/profiles/minecraft/" + name)
-		api = json.loads(api_request.content)
-		return api['id']
-	except:
+		cur.execute(
+			f"""
+			SELECT uuid 
+			FROM uuids
+			WHERE username = '{name}';
+			"""
+		)
+		try:
+			username = cur.fetchall()
+			return username[0][0]
+		except:
+			api_request = requests.get("https://api.mojang.com/users/profiles/minecraft/" + name)
+			api = json.loads(api_request.content)
+			username = api['id']
+
+			cur.execute(
+				f"""
+				INSERT INTO uuids (uuid, username)
+				SELECT '{username}', '{name}'
+				ON CONFLICT DO NOTHING;
+				"""
+			)
+			print(username, name)
+
+			if endConn:
+				conn.commit()
+				cur.close()
+			return username
+	except KeyError as e:
+		print(api)
+	except Exception as e:
+		print(e)
+		if endConn:
+			conn.commit()
+			cur.close()
 		return "Unknown Name"
 
 
@@ -464,7 +512,7 @@ def generateData(name="_"):
 	if len(name.encode('utf-8')) != 32:
 		uuid = getUUIDFromName(name)
 		if uuid != "Unknown Name":
-			pass  # TODO: Write name
+			pass
 	else:
 		uuid = name
 
@@ -479,7 +527,6 @@ def generateData(name="_"):
 			with open("dashedData.json") as f:
 				api = json.loads(f.read())
 
-	print(api)
 	return api['player']
 
 
@@ -653,32 +700,32 @@ def getRankFromUUID(uuid: str) -> str:
 
 
 @app.template_filter()
-def tableTry(dict, pos):
-	try:
-		return dict[pos]
-	except:
-		return "-"
+def customTry2(dictionary: dict, pos: str) -> bool:
+	"""
+	A function to get a dictionary position, and if it is found, to return True. Else, it returns False.
 
-
-@app.template_filter()
-def customTry2(dict, pos):
+	:param dictionary: The dictionary to find the datapoint in
+	:param pos: The datapoint
+	:return: True if datapoint is valid, else false
+	"""
 	try:
-		_ = dict[pos]
+		_ = dictionary[pos]
 		return True
-	except:
+	except KeyError:
 		return False
 
 
-@app.template_filter()
-def skyblockProfileCapitalise(word):
-	words = word.split('_')
-	for i in range(len(words)):
-		words[i] = words[i][0:1].upper() + words[i][1:].lower()
-	return " ".join(words)
-
 
 @app.template_filter()
-def customTry(data, dataPoints):
+def customTry(data: dict, dataPoints: list):
+	"""
+	A function to cycle through a path of datapoints in a dictionary (e.g. data['test']['test2']), and check if they
+	are valid. If they are, it will return what is found at then end of that path, else it will return '-'.
+
+	:param data: The dictionary
+	:param dataPoints: The datapoints
+	:return: What is at the end of the datapoints, or '-'
+	"""
 	try:
 		newData = data
 		for arg in dataPoints:
@@ -691,6 +738,12 @@ def customTry(data, dataPoints):
 
 @app.template_filter()
 def customEnumerate(value):
+	"""
+	A function to simply return the enumerated value of a list, as this is not in-built into jinja2.
+
+	:param value: The list
+	:return: The enumerated list
+	"""
 	return enumerate(value)
 
 
@@ -702,6 +755,13 @@ def secondsToTimeParkour(seconds):
 
 @app.template_filter()
 def prestigeRank(mode, duelsData):
+	"""
+	A function to get the rank of a player in duels, as the hypixel API returns the data in a complex way.
+
+	:param mode: The duels mode
+	:param duelsData: The data to find the rank of the given mode in
+	:return: The rank of the player, or 'No Rank!'
+	"""
 	listOfRanks = ['godlike_title_prestige', 'grandmaster_title_prestige', 'legend_title_prestige',
 					'master_title_prestige', 'diamond_title_prestige', 'gold_title_prestige', 'iron_title_prestige',
 					'rookie_title_prestige']
@@ -730,6 +790,12 @@ def prestigeRank(mode, duelsData):
 
 @app.template_filter()
 def getSkin(_):
+	"""
+	A program to get the skin of the player.
+
+	:param _: Temp variable, as jinja2 doesn't like filters with no parameters.
+	:return: A link to the skin, or a link to a grey box as a filler
+	"""
 	try:
 		return "https://crafatar.com/avatars/" + request.cookies['uuid']
 	except:
@@ -759,12 +825,49 @@ def doesModesExist(data, modeList):
 
 
 @app.template_filter()
-def currentName(uuid):
+def currentName(uuid, conn=None, cur=None):
+	if conn is None:
+		conn = psycopg2.connect(DATABASE_URL)
+		cur = conn.cursor()
+		endConn = True
+	else:
+		endConn = False
+
 	try:
-		api_request = requests.get("https://api.mojang.com/user/profiles/" + uuid + "/names")
-		api = json.loads(api_request.content)
-		return api[len(api)-1]['name']
-	except:
+		cur.execute(
+			f"""
+			SELECT username 
+			FROM uuids
+			WHERE uuid = '{uuid}';
+			"""
+		)
+		try:
+			username = cur.fetchall()
+			return username[0][0]
+		except:
+			api_request = requests.get("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid)
+			api = json.loads(api_request.content)
+			username = api['name']
+
+			cur.execute(
+				f"""
+				INSERT INTO uuids (uuid, username)
+				SELECT '{uuid}', '{username}'
+				ON CONFLICT DO NOTHING;
+				"""
+			)
+
+			if endConn:
+				conn.commit()
+				cur.close()
+			return username
+	except KeyError as e:
+		print(api)
+	except Exception as e:
+		print(e)
+		if endConn:
+			conn.commit()
+			cur.close()
 		return "Your name cannot be found"
 
 
@@ -775,7 +878,15 @@ def unHash(hash):
 
 
 @app.template_filter()
-def profileGeneratorTry(generator, pos):
+def profileGeneratorTry(generator, pos) -> str:
+	"""
+	A function to try to get a position of a dictionary, on success returning 'text-success', else returning
+	'text-warning'.
+
+	:param generator: The dictionary
+	:param pos: The dataPoint
+	:return: 'text-success' or 'text-warning'
+	"""
 	try:
 		_ = generator[pos]
 		return "text-success"
@@ -827,8 +938,12 @@ def guild(name):
 	if data is None:
 		return render_template('guild.html', data=0)
 	else:
+		conn = psycopg2.connect(DATABASE_URL)
+		cur = conn.cursor()
 		for i in range(len(data['members'])):
-			data['members'][i]['name'] = currentName(data['members'][i]['uuid'])
+			data['members'][i]['name'] = currentName(data['members'][i]['uuid'], cur=cur, conn=conn)
+		conn.commit()
+		cur.close()
 		return render_template('guild.html', data=data)
 
 
@@ -1168,6 +1283,10 @@ def error_500(e):
 	return render_template("500.html"), 500
 
 
+def exit_handler():
+	pass
+
+
 if __name__ == "__main__":
 	# with open('static/config.json') as f:
 	# 	data = json.load(f)
@@ -1186,4 +1305,27 @@ if __name__ == "__main__":
 	# app.config['SERVER_NAME'] = 'hypixeleaderboard.herokuapp.com:5000'
 	#app.register_blueprint(api)
 	# _2147483648
+	DATABASE_URL = os.environ['DATABASE_URL']
+
+	atexit.register(exit_handler)
+	commands = [
+		"""
+		CREATE TABLE IF NOT EXISTS uuids (
+			uuid text,
+			username text
+		);
+		"""
+	]
+
+	conn = psycopg2.connect(DATABASE_URL)
+	cur = conn.cursor()
+	for command in commands:
+		cur.execute(command)
+
+	cur.execute("""SELECT * from uuids;""")
+	print(cur.fetchall())
+
+	conn.commit()
+	cur.close()
+
 	app.run()
