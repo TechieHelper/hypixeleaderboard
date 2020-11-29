@@ -360,7 +360,7 @@ def getUUIDFromName(name: str, conn=None, cur=None) -> str:
 		cur.execute(
 			f"""
 			SELECT uuid 
-			FROM information_schema.uuids
+			FROM uuids
 			WHERE username = '{name}';
 			"""
 		)
@@ -374,7 +374,7 @@ def getUUIDFromName(name: str, conn=None, cur=None) -> str:
 
 			cur.execute(
 				f"""
-				INSERT INTO information_schema.uuids (uuid, username)
+				INSERT INTO uuids (uuid, username)
 				SELECT '{username}', '{name}'
 				ON CONFLICT DO NOTHING;
 				"""
@@ -838,7 +838,7 @@ def currentName(uuid, conn=None, cur=None):
 		cur.execute(
 			f"""
 			SELECT username 
-			FROM information_schema.uuids
+			FROM uuids
 			WHERE uuid = '{uuid}';
 			"""
 		)
@@ -852,7 +852,7 @@ def currentName(uuid, conn=None, cur=None):
 
 			cur.execute(
 				f"""
-				INSERT INTO information_schema.uuids (uuid, username)
+				INSERT INTO uuids (uuid, username)
 				SELECT '{uuid}', '{username}'
 				ON CONFLICT DO NOTHING;
 				"""
@@ -1322,7 +1322,7 @@ if __name__ == "__main__":
 	for command in commands:
 		cur.execute(command)
 
-	cur.execute("""SELECT * from information_schema.uuids;""")
+	cur.execute("""SELECT * from uuids;""")
 	print(cur.fetchall())
 
 	conn.commit()
