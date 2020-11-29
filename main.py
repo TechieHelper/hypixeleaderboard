@@ -12,6 +12,7 @@ app = Flask(__name__)
 # General Functions
 
 API_KEY = os.environ['API_KEY']
+DATABASE_URL = os.environ['DATABASE_URL']
 minecraftColors = {"GOLD": "FFAA00", "BLACK": "000000", "DARK_BLUE": "0000AA", "DARK_GREEN": "00AA00", "DARK_AQUA": "00AAAA", "DARK_RED": "AA0000", "DARK_PURPLE": "AA00AA", "GRAY": "AAAAAA", "DARK_GREY": "555555", "BLUE": "5555FF", "GREEN": "55FF55", "AQUA": "55FFFF", "RED": "FF5555", "LIGHT_PURPLE": "FF55FF", "YELLOW": "FFFF55", "WHITE": "FFFFFF"}
 
 
@@ -1305,7 +1306,6 @@ if __name__ == "__main__":
 	# app.config['SERVER_NAME'] = 'hypixeleaderboard.herokuapp.com:5000'
 	#app.register_blueprint(api)
 	# _2147483648
-	DATABASE_URL = os.environ['DATABASE_URL']
 
 	atexit.register(exit_handler)
 	commands = [
