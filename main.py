@@ -1322,7 +1322,7 @@ if __name__ == "__main__":
 	for command in commands:
 		cur.execute(command)
 
-	cur.execute("""SELECT * from uuids;""")
+	cur.execute("""SELECT * from <schema>.uuids;""")
 	print(cur.fetchall())
 
 	conn.commit()
