@@ -16,8 +16,66 @@
     {% block usernameEntryForm %}{% endblock %}
 
     {% block content %}
+    <br>
+    <br>
     <h2>{{ data['displayname']|nameWrapper|safe }}</h2>
-    <a href="/player/bedwars/{{ data['displayname'] }}">Bedwars</a>
+
+
+    <div id="accordion">
+        <div class="card">
+            <div class="card-header" id="generalHeading">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#generalCollapse" aria-expanded="true" aria-controls="generalCollapse">
+                        Game Modes
+                    </button>
+                </h5>
+            </div>
+            <div id="generalCollapse" class="collapse show" aria-labelledby="generalHeading" data-parent="#accordion">
+                <div class="card-body">
+                    <a href="/player/bedwars/{{ data['displayname'] }}">Bedwars</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div id="pets">
+        <div class="card">
+            <div class="card-header" id="petsHeading">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#petsCollapse" aria-expanded="false" aria-controls="petsCollapse">
+                        Pet Stats
+                    </button>
+                </h5>
+            </div>
+            <div id="petsCollapse" class="collapse show" aria-labelledby="petsHeading" data-parent="#pets">
+                <div class="card-body">
+                    {% for pet, petData in data['petStats'].items() %}
+                        <p>{{ pet|capitalizeFirstLetter }} - {{ petData|customTry(['name'])|chatCodeParser|safe }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    {% if data|doSocialsExist %}
+        <div id="socials">
+        <div class="card">
+            <div class="card-header" id="socialsHeading">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#socialsCollapse" aria-expanded="false" aria-controls="socialsCollapse">
+                        Socials
+                    </button>
+                </h5>
+            </div>
+            <div id="socialsCollapse" class="collapse show" aria-labelledby="socialsHeading" data-parent="#socials">
+                <div class="card-body">
+                    {{ data|getSocials|safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
 
     {% endblock %}
 

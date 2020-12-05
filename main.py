@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 import requests, json, os, time, datetime
 from os import listdir
 from datetime import datetime
-import base64, io, nbt, psycopg2, atexit
+import base64, io, nbt, psycopg2, atexit, math
 
 app = Flask(__name__)
 #api = Blueprint('blueprint', __name__, template_folder="templates", subdomain="api")
@@ -15,6 +15,7 @@ API_KEY = os.environ['API_KEY']
 DATABASE_URL = os.environ['DATABASE_URL']
 minecraftColors = {"GOLD": "FFAA00", "BLACK": "000000", "DARK_BLUE": "0000AA", "DARK_GREEN": "00AA00", "DARK_AQUA": "00AAAA", "DARK_RED": "AA0000", "DARK_PURPLE": "AA00AA", "GRAY": "AAAAAA", "DARK_GREY": "555555", "BLUE": "5555FF", "GREEN": "55FF55", "AQUA": "55FFFF", "RED": "FF5555", "LIGHT_PURPLE": "FF55FF", "YELLOW": "FFFF55", "WHITE": "FFFFFF"}
 minecraftChatCodes = {"GOLD": "§6", "BLACK": "§0", "DARK_BLUE": "§1", "DARK_GREEN": "§2", "DARK_AQUA": "§3", "DARK_RED": "§4", "DARK_PURPLE": "§5", "GRAY": "§7", "DARK_GREY": "§8", "BLUE": "§9", "GREEN": "§a", "AQUA": "§b", "RED": "§c", "LIGHT_PURPLE": "§d", "YELLOW": "§e", "WHITE": "§f"}
+minecraftCodesToHTML = {"§6": "FFAA00", "§0": "000000", "§1": "0000AA", "§2": "00AA00", "§3": "00AAAA", "§4": "AA0000", "§5": "AA00AA", "§7": "AAAAAA", "§8": "555555", "§9": "5555FF", "§a": "55FF55", "§b": "55FFFF", "§c": "FF5555", "§d": "FF55FF", "§e": "FFFF55", "§f": "FFFFFF"}
 
 
 @app.template_filter()
@@ -29,6 +30,55 @@ def guildTagWrapper(text: str, tagColor: str) -> str:
 
 	return "<span style=\"color:#" + minecraftColors[tagColor] + ";\"> " + text + "</span>"
 
+
+@app.template_filter()
+def tryFunc(func):
+	"""
+	A function to try a function, and return nothing on fail.
+
+	:param func: The function to be tried
+	:return: The function output or nothing.
+	"""
+	try:
+		return func
+	except:
+		return ""
+
+
+@app.template_filter()
+def chatCodeParser(text: str, asApi=False):
+	"""
+	A function to parse a piece of minecraft text with chat codes and format it in HTML.
+	Example: '§4George'.
+
+	:param text: The minecraft text to be formatted
+	:param asApi: Whether to return the data for the API or not
+	:return: The formatted HTML
+	"""
+
+	def wrapText(text: str, color: str):
+		return "<span style=\"text-shadow: 1px 1px #eee; color:#" + color + "\"> " + text + "</span>"
+	currentColor = minecraftColors['BLACK']
+	cachedText = ""
+	outputText = ""
+	isKey = False
+	for c in text:
+		if isKey:
+			try:
+				currentColor = minecraftCodesToHTML["§" + c]
+			except KeyError:
+				return "Invalid String"
+			isKey = False
+		elif c == "§":
+			outputText += wrapText(cachedText, currentColor)
+			cachedText = ""
+			isKey = True
+		else:
+			cachedText += c
+	if cachedText != "":
+		return outputText + wrapText(cachedText, currentColor)
+	else:
+		return outputText
 
 
 @app.template_filter()
@@ -47,7 +97,7 @@ def nameWrapper(name: str, asApi=False, useGenericReturn=True, useChatCodes=Fals
 		return "<span style=\"text-shadow: 1px 1px #eee; color:#" + color + "\"> " + text + "</span>"
 
 	def genericReturn(text):
-		return "<span style=\"font-family: 'Minecraftia'; background-color: #F5F5F5;\">" + text + "</span>"
+		return "<span style=\"font-family: 'Minecraftia';\">" + text + "</span>"
 
 	html = ""
 	try:
@@ -57,7 +107,7 @@ def nameWrapper(name: str, asApi=False, useGenericReturn=True, useChatCodes=Fals
 				html = "§c[§fYOUTUBE§c] " + name
 			else:
 				html = "<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['RED'] + "\">[</span>" + \
-						"<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['WHITE'] + "\">YOUTUBE</span>" + \
+						"<span style=\"text-shadow: 1px 1px #aaa; color:#E0E0E0;\">YOUTUBE</span>" + \
 						"<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['RED'] + "\">]" + name + "</span>"
 		else:
 			raise Exception()
@@ -928,6 +978,65 @@ def profileGeneratorTry(generator, pos) -> str:
 		return "text-success"
 	except:
 		return "text-warning"
+
+
+@app.template_filter()
+def doSocialsExist(data) -> bool:
+	try:
+		_ = data['socialMedia']['links']
+		return True
+	except KeyError:
+		return False
+
+
+@app.template_filter()
+def guildExpToLevel(exp: int) -> int:
+	"""
+	A function to change the guild xp of a guild into the level of that guild
+
+	:param exp: The xp of the guild
+	:return: The level of the guild
+	"""
+	if exp < 100000:
+		return 0
+	elif exp < 250000:
+		return 1
+	elif exp < 500000:
+		return 2
+	elif exp < 1000000:
+		return 3
+	elif exp < 1750000:
+		return 4
+	elif exp < 2750000:
+		return 5
+	elif exp < 4000000:
+		return 6
+	elif exp < 5500000:
+		return 7
+	elif exp < 7500000:
+		return 8
+	elif exp >= 7500000:
+		if exp < 15000000:
+			return math.floor((exp - 7500000) // 2500000) + 9
+		else:
+			return math.floor((exp - 15000000) // 3000000) + 12
+
+
+@app.template_filter()
+def getSocials(data):
+	"""
+	A function to get the links to the socials of people on hypixel.
+
+	:param data: The data of the person
+	:return: HTML data relating to the persons links
+	"""
+	html = ""
+	for key, value in data['socialMedia']['links'].items():
+		if key == "YOUTUBE":
+			html += "<a href=\"" + value + "\"><img src=\"../static/images/youtubeLogo.png\", height=\"80\", width=\"80\"</img></a>"
+		elif key == "TWITTER":
+			html += "<a href=\"" + value + "\"><img src=\"../static/images/twitterLogo.png\", height=\"80\", width=\"80\"</img></a>"
+	return html
 
 
 @app.template_filter()

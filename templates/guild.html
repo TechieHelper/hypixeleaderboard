@@ -27,6 +27,7 @@
                 <h2>{{ data['name'] }} {{ ("[" + data['tag'] + "]")|guildTagWrapper(data['tagColor'])|safe }}</h2>
                 <b>Created: </b> {{ data['created']|format_datetime }}<br>
                 <b>Total Members: </b> {{ data['members']|length }}<br>
+                <b>Guild level: </b> {{ data['exp']|guildExpToLevel() }}
                 <br>
                 <b>Publicly Listed: </b> {{ "Yes" if data['publiclyListed'] else "No" }}<br>
                 <b>Preferred Games: </b><br>
