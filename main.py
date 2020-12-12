@@ -584,6 +584,28 @@ def generateSkyblockPlayerData(playerID):
 	return api['profile']
 
 
+def getPlayerStatus(name="_"):
+	if len(name.encode('utf-8')) != 32:
+		uuid = getUUIDFromName(name)
+		if uuid != "Unknown Name":
+			pass
+	else:
+		uuid = name
+
+	if uuid == "Unknown Name":
+		with open("dashedSessionData.json") as f:
+			api = json.loads(f.read())
+	else:
+		try:
+			api_request = requests.get("https://api.hypixel.net/status?uuid=" + uuid + "&key=" + API_KEY)
+			api = json.loads(api_request.content)
+		except:
+			with open("dashedSessionData.json") as f:
+				api = json.loads(f.read())
+
+	return api
+
+
 def generateData(name="_"):
 	"""
 	The main player data grabber from the hypixel API. This function does a few things. First, it checks if the name
@@ -1206,9 +1228,11 @@ def home2():
 	try:
 		uuid = request.cookies['uuid']
 		data = generateData(uuid)
+		playerData = getPlayerStatus(uuid)
 	except KeyError:
 		data = generateData()
-	return render_template("home.html", data=data)
+		playerData = getPlayerStatus()
+	return render_template("home.html", data=data, status=playerData['session'])
 
 
 @app.route("/suggestions/")
@@ -1429,7 +1453,8 @@ def duels_post():
 @app.route("/", methods=['POST'])
 def home2_post():
 	data = generateData(request.form['playerName'])
-	return render_template("home.html", data=data)
+	status = getPlayerStatus(request.form['playerName'])
+	return render_template("home.html", data=data, status=status['session'])
 
 
 @app.route("/sign-in/", methods=['POST'])

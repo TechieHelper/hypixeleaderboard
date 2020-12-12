@@ -23,6 +23,19 @@
                         Overall Stats
                     </div>
                     <div class="card-body">
+                        {% if status['online'] %}
+                            <svg height="20" width="20">
+                                <circle cx="10" cy="10" r="10" fill="#5cff26" stroke="grey" stroke-width="1" />
+                            </svg>Online
+                            <p><b>Current Game: </b>{{ status['gameType']|capitalizeFirstLetter }}</p>
+                            <p><b>Current Mode: </b>{{ status['mode']|capitalizeFirstLetter }}</p>
+                            <p><b>Current Map: </b>{{ status['map']|capitalizeFirstLetter }}</p>
+
+                        {% else %}
+                            <svg height="20" width="20">
+                                <circle cx="10" cy="10" r="10" fill="red" stroke="grey" stroke-width="1" />
+                            </svg>Offline
+                        {% endif %}
                         <h3>Hypixel Level: {{ data|getHypixelLevel() }}</h3>
                         <p>Most Recent Game Type: {{data|customTry(['mostRecentGameType'])|capitalizeFirstLetter}}</p>
                         <p>Particle Pack: {{data|customTry(['particlePack'])|capitalizeFirstLetter}}</p>
