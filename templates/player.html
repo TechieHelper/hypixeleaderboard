@@ -38,6 +38,7 @@
         </div>
     </div>
     <br>
+    {% if data|customTry2('petStats') %}
     <div id="pets">
         <div class="card">
             <div class="card-header" id="petsHeading">
@@ -54,8 +55,10 @@
                     {% endfor %}
                 </div>
             </div>
+
         </div>
     </div>
+    {% endif %}
     <br>
     {% if data|doSocialsExist %}
         <div id="socials">
