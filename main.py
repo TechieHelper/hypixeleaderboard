@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template, request, make_response, jsonify, Blueprint
+from flask import Flask, redirect, url_for, render_template, request, make_response, jsonify, Blueprint, Response
 from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
 import requests, json, os, time, datetime
@@ -13,6 +13,8 @@ app = Flask(__name__)
 
 API_KEY = os.environ['API_KEY']
 DATABASE_URL = os.environ['DATABASE_URL']
+OCP_API_KEY = os.environ["OCP_API_KEY"]
+PSTACK_API_KEY = os.environ["PSTACK_API_KEY"]
 minecraftColors = {"GOLD": "FFAA00", "BLACK": "000000", "DARK_BLUE": "0000AA", "DARK_GREEN": "00AA00", "DARK_AQUA": "00AAAA", "DARK_RED": "AA0000", "DARK_PURPLE": "AA00AA", "GRAY": "AAAAAA", "DARK_GREY": "555555", "BLUE": "5555FF", "GREEN": "55FF55", "AQUA": "55FFFF", "RED": "FF5555", "LIGHT_PURPLE": "FF55FF", "YELLOW": "FFFF55", "WHITE": "FFFFFF"}
 minecraftChatCodes = {"GOLD": "§6", "BLACK": "§0", "DARK_BLUE": "§1", "DARK_GREEN": "§2", "DARK_AQUA": "§3", "DARK_RED": "§4", "DARK_PURPLE": "§5", "GRAY": "§7", "DARK_GREY": "§8", "BLUE": "§9", "GREEN": "§a", "AQUA": "§b", "RED": "§c", "LIGHT_PURPLE": "§d", "YELLOW": "§e", "WHITE": "§f"}
 minecraftCodesToHTML = {"§6": "FFAA00", "§0": "000000", "§1": "0000AA", "§2": "00AA00", "§3": "00AAAA", "§4": "AA0000", "§5": "AA00AA", "§7": "AAAAAA", "§8": "555555", "§9": "5555FF", "§a": "55FF55", "§b": "55FFFF", "§c": "FF5555", "§d": "FF55FF", "§e": "FFFF55", "§f": "FFFFFF"}
@@ -1100,6 +1102,25 @@ def apiNameWrapper():
 		return nameWrapper(name, True)
 
 
+@app.route("/private-proxy/", methods=['GET'])
+def privateProxy_get():
+	response = Response()
+	response.headers["Access-Control-Allow-Origin"] = "*"
+	response.headers["content-type"] = "application/json"
+
+	url = request.args.get('url', 0, type=str)
+	header = request.args.get("header", 0, type=str)
+	if header == "ocp":
+		response.set_data(requests.get(url, headers={"Ocp-Apim-Subscription-Key": OCP_API_KEY}).text)
+		return response
+	elif header == "pstack":
+		query = request.args.get("query", 0, type=str)
+		response.set_data(requests.get(url + "?access_key=" + PSTACK_API_KEY + "&query=" + query).text)
+		return response
+
+	return {"status": 0, "reason": "no"}
+
+
 # Pages
 
 
@@ -1150,7 +1171,6 @@ def auctions():
 	return render_template("auctions.html", data=data)
 
 
-
 @app.route('/skyblock/bazaar/')
 def bazaar():
 	data = getBazaarStats()
@@ -1161,7 +1181,6 @@ def bazaar():
 def news():
 	data = getSkyblockNews()
 	return render_template("news.html", data=data)
-
 
 
 @app.route('/skyblockBazaarPost')
@@ -1301,6 +1320,7 @@ def bedwars():
 	data = generateData()
 	return render_template("bedwars.html", data=data, bedwarsData=data['stats']['Bedwars'])
 
+
 @app.route("/player/other/")
 def other():
 	data = generateData()
@@ -1363,7 +1383,6 @@ def skywars():
 def skywars2(username):
 	data = generateData(username)
 	return render_template("skywars.html", data=data, skywarsData=data['stats']['SkyWars'])
-
 
 
 @app.route("/contact-us/")
@@ -1467,6 +1486,7 @@ def signIn_post():
 
 
 # Error Pages
+
 
 @app.errorhandler(403)
 def error_403(e):
