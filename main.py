@@ -1312,7 +1312,7 @@ def sitemap():
 	with open("static/knownUsers.json") as f:
 		users = json.loads(f.read())
 
-	return render_template('sitemap.xml', base_url="http://hypixeleaderboards.com", articles=filteredFiles, knownUsers=users)
+	return render_template('sitemap.xml', base_url="https://hypixeleaderboards.com", articles=filteredFiles, knownUsers=users)
 
 
 @app.route("/bedwars/")
