@@ -4,8 +4,8 @@
   width: 160px; /* Set the width of the sidebar */
   height: 100%; /* Full-height: remove this if you want "auto" height */
   top: 0; /* Stay at the top */
-  z-index: 1; /* Stay on top */
   left: 0;
+  z-index: 1; /* Stay on top */
   padding-top: 20px;
   overflow-x: hidden; /* Disable horizontal scroll */
   background-color: #111; /* Black */
@@ -16,8 +16,8 @@
   display: block;
   padding: 6px 8px 6px 16px;
   font-size: 25px;
-  text-decoration: none;
   color: #818181;
+  text-decoration: none;
 }
 
 /* When you mouse over the navigation links, change their color */

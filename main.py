@@ -119,7 +119,7 @@ def nameWrapper(name: str, asApi=False, useGenericReturn=True, useChatCodes=Fals
 						"<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['RED'] + "\">]" + name + "</span>"
 		else:
 			raise Exception()
-	except:
+	except Exception:
 		try:
 			rank = data['newPackageRank']
 			if rank == "VIP":
@@ -144,7 +144,7 @@ def nameWrapper(name: str, asApi=False, useGenericReturn=True, useChatCodes=Fals
 							html = minecraftChatCodes[data['monthlyRankColor']] + "[MVP" + minecraftChatCodes[data['rankPlusColor']] + "++" + minecraftChatCodes[data['monthlyRankData']] + "] " + name
 						else:
 							html = genericName("[MVP ", minecraftColors[data['monthlyRankColor']]) + genericName("++", minecraftColors[data['rankPlusColor']]) + genericName("] " + name, minecraftColors[data['monthlyRankColor']])
-					except:
+					except Exception:
 						if useChatCodes:
 							html = "§a[MVP" + minecraftChatCodes[data['rankPlusColor']] + "++§a] " + name
 						else:
@@ -154,7 +154,7 @@ def nameWrapper(name: str, asApi=False, useGenericReturn=True, useChatCodes=Fals
 						html = "§a[MVP" + minecraftChatCodes[data['rankPlusColor']] + "+§a] " + name
 					else:
 						html = genericName("[MVP", "3CE6E6") + genericName("+", minecraftColors[data['rankPlusColor']]) + genericName("] " + name, "3CE6E6")
-		except Exception as e:
+		except Exception:
 			if useChatCodes:
 				html = "§7" + name
 			else:
@@ -228,7 +228,7 @@ def duelsNameWrapper(name: str, asApi=False):
 		elif color == "GODLIKE":
 			html += "<span style=\"text-shadow: 1px 1px #eee; color:#" + minecraftColors['DARK_PURPLE'] + "\"> " + title + "</span>"
 
-	except:
+	except Exception:
 		pass
 
 	html += nameWrapper(name, useGenericReturn=False)
@@ -412,7 +412,7 @@ def getGuildStats(name):
 	try:
 		api_request = requests.get("https://api.hypixel.net/guild?key=" + API_KEY + "&name=" + name)
 		api = json.loads(api_request.content)
-	except:
+	except Exception:
 		with open('guildExampleData.json') as f:
 			api = json.load(f)
 	return api['guild']
@@ -452,7 +452,7 @@ def getUUIDFromName(name: str, conn=None, cur=None) -> str:
 	try:
 		cur.execute(
 			f"""
-			SELECT uuid 
+			SELECT uuid
 			FROM uuids
 			WHERE username = '{name}';
 			"""
@@ -460,7 +460,7 @@ def getUUIDFromName(name: str, conn=None, cur=None) -> str:
 		try:
 			username = cur.fetchall()
 			return username[0][0]
-		except:
+		except Exception:
 			api_request = requests.get("https://api.mojang.com/users/profiles/minecraft/" + name)
 			api = json.loads(api_request.content)
 			username = api['id']
@@ -498,7 +498,7 @@ def getWatchdogstats():
 	try:
 		api_request = requests.get("https://api.hypixel.net/watchdogstats?key=" + API_KEY)
 		api = json.loads(api_request.content)
-	except:
+	except Exception:
 		api = json.loads("{'success': true, 'watchdog_lastMinute': 5, 'staff_rollingDaily': 1356, 'watchdog_total': 4924740, 'watchdog_rollingDaily': 7679, 'staff_total': 1608360}")
 
 	return api
@@ -514,7 +514,7 @@ def getGameCounts():
 	try:
 		api_request = requests.get("https://api.hypixel.net/gameCounts?key=" + API_KEY)
 		api = json.loads(api_request.content)
-	except:
+	except Exception:
 		with open("gameCounts.json") as f:
 			api = json.loads(f.read())
 
@@ -531,7 +531,7 @@ def getBazaarStats():
 	try:
 		api_request = requests.get("https://api.hypixel.net/skyblock/bazaar?key=" + API_KEY)
 		api = json.loads(api_request.content)
-	except:
+	except Exception:
 		with open("skyblockdata/bazaar.json") as f:
 			api = json.loads(f.read())
 
@@ -548,7 +548,7 @@ def getSkyblockNews():
 	try:
 		api_request = requests.get("https://api.hypixel.net/skyblock/news?key=" + API_KEY)
 		api = json.loads(api_request.content)
-	except:
+	except Exception:
 		with open("skyblockdata/bazaar.json") as f:
 			api = json.loads(f.read())
 
@@ -565,7 +565,7 @@ def getAuctionsStats():
 	try:
 		api_request = requests.get("https://api.hypixel.net/skyblock/auctions?key=" + API_KEY)
 		api = json.loads(api_request.content)
-	except:
+	except Exception:
 		with open("skyblockdata/auctions.json") as f:
 			api = json.loads(f.read())
 
@@ -585,7 +585,7 @@ def generateSkyblockPlayerData(playerID):
 		api_request = requests.get(
 			"https://api.hypixel.net/skyblock/profile?profile=" + playerID + "&key=" + API_KEY)
 		api = json.loads(api_request.content)
-	except:
+	except Exception:
 		with open("skyblockdata/profile.json") as f:
 			api = json.loads(f.read())
 
@@ -607,7 +607,7 @@ def getPlayerStatus(name="_"):
 		try:
 			api_request = requests.get("https://api.hypixel.net/status?uuid=" + uuid + "&key=" + API_KEY)
 			api = json.loads(api_request.content)
-		except:
+		except Exception:
 			with open("dashedSessionData.json") as f:
 				api = json.loads(f.read())
 
@@ -639,7 +639,7 @@ def generateData(name="_"):
 		try:
 			api_request = requests.get("https://api.hypixel.net/player?uuid=" + uuid + "&key=" + API_KEY)
 			api = json.loads(api_request.content)
-		except:
+		except Exception:
 			with open("dashedData.json") as f:
 				api = json.loads(f.read())
 
@@ -656,7 +656,7 @@ def generateLeaderboardData():
 	try:
 		api_request = requests.get("https://api.hypixel.net/leaderboards?key=" + API_KEY)
 		api = json.loads(api_request.content)
-	except:
+	except Exception:
 		with open("dashedLeaderboardData.json") as f:
 			api = json.loads(f.read())
 
@@ -734,7 +734,7 @@ def getHypixelLevel(data) -> int:
 		try:
 			if data['levelingReward_' + str(i)]:
 				highest = i-1 if highest < i-1 else highest
-		except:
+		except Exception:
 			pass
 	return highest if highest != 1000000 else 0
 
@@ -848,7 +848,7 @@ def customTry(data: dict, dataPoints: list):
 			newData = newData[arg]
 
 		return newData
-	except:
+	except Exception:
 		return "-"
 
 
@@ -914,7 +914,7 @@ def getSkin(_):
 	"""
 	try:
 		return "https://crafatar.com/avatars/" + request.cookies['uuid']
-	except:
+	except Exception:
 		return "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxISEhUSEhIVFRUVFRUVFRUVFRcVFRcVFRUXFxUVFRUYHSggGBolHRUVITEhJSkrLi4uFx8zODMtNygtLisBCgoKDQ0NDw0NDisZFRkrKzctLS0tKy0tLTctKy0tKy0tLS0rLTctNy0tNzcrLSstKy0tNystLS03Ny0rLS0rLf/AABEIAOEA4QMBIgACEQEDEQH/xAAWAAEBAQAAAAAAAAAAAAAAAAAAAQL/xAAbEAEBAQACAwAAAAAAAAAAAAAAARECQSGBwf/EABYBAQEBAAAAAAAAAAAAAAAAAAABAv/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AMkBpCqgChIgALgIBQQDACgBixKsBFAAiKBDQANEBdNAEABNFwBQAAAUEAClAogBoigBADQUAqALqYuoCwCgiighQoIACiII0RNBVIQAMACwAASqCIoABoEAAWIAqABqomg0JS0FEKBANA0VABJAFVIApolACABiAKipAUomABgABAVABRAFKICiALAQAAFMDABbCwEAEAUVCKAhhgAABgQBIKAgpQRSQsBIoYCLYYAYACCggqRRSCkBBUAAoFIACKgAoAyqAohAUAFiKgBAgEUAQFBPAagKugCiKAgUDCiggAFMCArKpQEVAFRQBQEkWxMUCgAkUAChQTAxAbAAEKAKgKioCwADCwgBiYpQSwxUAkXABLFxKoJi4AFMAEWgAUQFQAUSKCCoAasNBFMANRSAAAFIYCKigCKARFgESmLQRQoAAIUoCiYAAAtQoABQUQBYIugAAVFAQCgAaBQAMVABaRAAUEoAINYAkoABQAAAABRACKSgJBUAFQAgAigAkXTRApqioFAAAVFwBDQBSosADUBcIIACgi1FABAUSgBQoFomqAIugCatAVAFEXQT0KAyolBRMAUADUVMBQANVFA0pYAhFARLVANQoABIAEUAEwFEAa0QEQFFEXUBQKBgGgIoAACoAAAJpQwEVAFwAAIAqCggEBQASLABDkALCfQEEAVb00AM0oCAgKLEAU5ACCAixQBIUAVOgBYkAUAEf//Z"
 
 
@@ -923,7 +923,7 @@ def getCookiesName(_):
 	try:
 		api_request = requests.get("https://api.hypixel.net/player?uuid=" + request.cookies['uuid'] + "&key=" + API_KEY)
 		return json.loads(api_request.content)['player']['displayname']
-	except:
+	except Exception:
 		return "-"
 
 
@@ -935,7 +935,7 @@ def doesModesExist(data, modeList):
 
 		if data == "":
 			return False
-	except:
+	except Exception:
 		return False
 	return True
 
@@ -952,7 +952,7 @@ def currentName(uuid, conn=None, cur=None):
 	try:
 		cur.execute(
 			f"""
-			SELECT username 
+			SELECT username
 			FROM uuids
 			WHERE uuid = '{uuid}';
 			"""
@@ -960,7 +960,7 @@ def currentName(uuid, conn=None, cur=None):
 		try:
 			username = cur.fetchall()
 			return username[0][0]
-		except:
+		except Exception:
 			api_request = requests.get("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid)
 			api = json.loads(api_request.content)
 			username = api['name']
@@ -977,7 +977,7 @@ def currentName(uuid, conn=None, cur=None):
 				conn.commit()
 				cur.close()
 			return username
-	except KeyError as e:
+	except KeyError:
 		print(api)
 	except Exception as e:
 		print(e)
@@ -1006,7 +1006,7 @@ def profileGeneratorTry(generator, pos) -> str:
 	try:
 		_ = generator[pos]
 		return "text-success"
-	except:
+	except Exception:
 		return "text-warning"
 
 
@@ -1074,7 +1074,7 @@ def stripNumbers(generator):
 	try:
 		_ = int(generator[len(generator)-2])
 		return generator[:-3]
-	except:
+	except Exception:
 		return generator[:-2]
 
 # API stuff
@@ -1427,7 +1427,7 @@ def profile_post():
 	try:
 		profileData = generateSkyblockPlayerData(request.form['profile_id'])
 		return render_template("profile.html", skyblockData=profileData, profileAsk=False)
-	except:
+	except Exception:
 		data = generateData(request.form['playerName'])
 		return render_template("profile.html", data=data, profileAsk=True)
 

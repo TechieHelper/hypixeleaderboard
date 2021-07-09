@@ -1,8 +1,8 @@
 h1 {
-  background-color: #329da8;
   text-align: center;
+  background-color: #329da8;
   letter-spacing: -2px;
-  text-color: #000000;
+  text-color: #000;
   text-size: 18px;
 }
 h2 {
@@ -17,66 +17,71 @@ th {
   position: sticky;
   top: 0;
   z-index: 2;
-  border: 1px solid black;
+  border: 1px solid #000;
 }
 
 td {
-  border: 1px solid black;
+  border: 1px solid #000;
   text-align: center;
 }
 
 .topnav {
-  background-color: #ffffff;
   overflow: hidden;
-  color: black;
+  background-color: #fff;
+  color: #000;
 }
 
 .topnav a {
   float: left;
-  color: black;
-  text-align: center;
+  color: #000;
   padding: 14px 16px;
+  text-align: center;
   text-decoration: none;
   font-size: 17px;
 }
 
 .topnav a:hover {
   background-color: #329da8;
-  color: black;
+  color: #000;
 }
 
 .topnav a.active {
   background-color: #329da8;
-  color: white;
+  color: #fff;
 }
 
 table.mainTable {
-  border: 1px solid #329DA8;
-  background-color: #F0FFFF;
   width: 100%;
+  background-color: #f0ffff;
+  border: 1px solid #329da8;
   text-align: left;
   border-collapse: collapse;
 }
+
 table.mainTable td, table.mainTable th {
-  border: 1px solid #AAAAAA;
+  border: 1px solid #aaaaaa;
   padding: 3px 2px;
 }
+
 table.mainTable tbody td {
   font-size: 13px;
 }
+
 table.mainTable thead {
-  background: #329DA8;
-  background: -moz-linear-gradient(top, #65b5be 0%, #46a6b0 66%, #329DA8 100%);
-  background: -webkit-linear-gradient(top, #65b5be 0%, #46a6b0 66%, #329DA8 100%);
-  background: linear-gradient(to bottom, #65b5be 0%, #46a6b0 66%, #329DA8 100%);
-  border-bottom: 2px solid #444444;
+  background: #329da8;
+  background: -moz-linear-gradient(top, #65b5be 0%, #46a6b0 66%, #329da8 100%);
+  background: -webkit-linear-gradient(top, #65b5be 0%, #46a6b0 66%, #329da8 100%);
+  background: linear-gradient(to bottom, #65b5be 0%, #46a6b0 66%, #329da8 100%);
+  border-bottom: 2px solid #444;
 }
+
 table.mainTable thead th {
   font-size: 15px;
   font-weight: bold;
-  color: #FFFFFF;
-  border-left: 2px solid #D0E4F5;
+  color: #fff;
+  border-left: 2px solid #d0e4F5;
 }
+
 table.mainTable thead th:first-child {
   border-left: none;
 }
@@ -89,14 +94,21 @@ table.mainTable tfoot .links {
 }
 table.mainTable tfoot .links a{
   display: inline-block;
-  background: #1C6EA4;
-  color: #FFFFFF;
+  color: #fff;
+  background: #1c6ea4;
   padding: 2px 8px;
   border-radius: 5px;
 }
 
-.tableFixHead thead th { position: sticky; top: 0; }
-.tableFixHead          { overflow-y: auto; height: 100px; }
+.tableFixHead thead th {
+  position: sticky;
+  top: 0;
+ }
+
+.tableFixHead {
+  height: 100px;
+  overflow-y: auto;
+}
 
 @media (min-width: 576px) {
   div.listOfButtons {
@@ -108,9 +120,9 @@ table.mainTable tfoot .links a{
 }
 
 div.listOfButtons {
-    position: relative;
-    padding: 1rem;
-    margin: 1rem -15px 0;
-    border: solid #f7f7f9;
-    border-width: .2rem 0 0;
+  position: relative;
+  padding: 1rem;
+  margin: 1rem -15px 0;
+  border: solid #f7f7f9;
+  border-width: .2rem 0 0;
 }
