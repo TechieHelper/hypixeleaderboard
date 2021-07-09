@@ -36,7 +36,7 @@ td {
   color: black;
   text-align: center;
   padding: 14px 16px;
-  text-decoration: none
+  text-decoration: none;
   font-size: 17px;
 }
 
@@ -98,12 +98,13 @@ table.mainTable tfoot .links a{
 .tableFixHead thead th { position: sticky; top: 0; }
 .tableFixHead          { overflow-y: auto; height: 100px; }
 
-@media (min-width: 576px)
-div.listOfButtons {
+@media (min-width: 576px) {
+  div.listOfButtons {
     padding: 1.5rem;
     margin-right: 0;
     margin-left: 0;
     border-width: .2rem;
+  }
 }
 
 div.listOfButtons {

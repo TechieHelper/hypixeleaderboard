@@ -1,10 +1,16 @@
-from flask import Flask, redirect, url_for, render_template, request, make_response, jsonify, Blueprint, Response
-from flask_mail import Mail, Message
-from flask_sqlalchemy import SQLAlchemy
-import requests, json, os, time, datetime
+from flask import Flask, redirect, render_template, request, make_response, jsonify, Response
 from os import listdir
 from datetime import datetime
-import base64, io, nbt, psycopg2, atexit, math
+
+import requests
+import json
+import os
+import base64
+import io
+import nbt
+import psycopg2
+import atexit
+import math
 
 app = Flask(__name__)
 #api = Blueprint('blueprint', __name__, template_folder="templates", subdomain="api")
@@ -43,7 +49,7 @@ def tryFunc(func):
 	"""
 	try:
 		return func
-	except:
+	except Exception:
 		return ""
 
 
@@ -472,7 +478,7 @@ def getUUIDFromName(name: str, conn=None, cur=None) -> str:
 				conn.commit()
 				cur.close()
 			return username
-	except KeyError as e:
+	except KeyError:
 		print(api)
 	except Exception as e:
 		print(e)
@@ -758,7 +764,7 @@ def format_datetime(ts) -> str:
 	:param ts: The UNIX timestamp
 	:return: The formatted datetime if ts is a UNIX timestamp, else '-'
 	"""
-	if type(ts) == int:
+	if isinstance(ts, int):
 		dt = datetime.fromtimestamp(ts / 1000).strftime("%d/%m/%Y %H:%M:%S")
 		return dt
 	else:
@@ -1256,7 +1262,6 @@ def home2():
 
 @app.route("/suggestions/")
 def suggestions():
-	data = generateData()
 	return render_template("suggestions.html")
 
 
@@ -1282,12 +1287,12 @@ def sitemap():
 	filteredFiles = [f for f in files if f[f.find("."):] == ".html" and f != "rootLayout.html" and
 					 f != "leaderboardAutoGen.html" and f != "401.html" and f != "403.html" and f != "404.html"
 					 and f != "405.html" and f != "500.html"]
-	for index in range(len(filteredFiles)):
-		filteredFiles[index] = [filteredFiles[index]]
+	for index, item in enumerate(filteredFiles):
+		filteredFiles[index] = [item]
 
-		filteredFiles[index].append(datetime.fromtimestamp(os.path.getmtime("./templates/" + filteredFiles[index][0])).strftime("%Y-%m-%d"))
+		filteredFiles[index].append(datetime.fromtimestamp(os.path.getmtime("./templates/" + item[0])).strftime("%Y-%m-%d"))
 
-		temp = filteredFiles[index][0]
+		temp = item[0]
 		temp2 = ""
 		for letter in temp:
 			if letter.islower() or letter == ".":

@@ -1,9 +1,9 @@
 @media only screen and (min-width: 768px) {
-    .smallScreen { display: none; }
-    .largeScreen { display: inline-block; }
+  .smallScreen { display: none; }
+  .largeScreen { display: inline-block; }
 }
 
 @media only screen and (max-width: 767px) {
-    .smallScreen { display: inline-block; }
-    .largeScreen { display: none; }
+  .smallScreen { display: inline-block; }
+  .largeScreen { display: none; }
 }
