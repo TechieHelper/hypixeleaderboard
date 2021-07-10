@@ -62,7 +62,7 @@
     <!-- End Google Tag Manager (noscript) -->
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-            <a class="navbar-brand" href="/">Hypixel Leaderboards</a>
+            <a class="navbar-brand" href="/">{{ _('Hypixel Leaderboards') }}</a>
             <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
             {% block usernameEntryForm %}
             <form method="POST" class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
@@ -79,10 +79,10 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="#">Settings</a>
-                        <a class="dropdown-item" href="#">Activity Log</a>
+                        <a class="dropdown-item" href="#">{{ _('Settings') }}</a>
+                        <a class="dropdown-item" href="#">{{ _('Activity Log') }}</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="login.html">Logout</a>
+                        <a class="dropdown-item" href="login.html">{{ _('Logout') }}</a>
                     </div>
                 </li>
             </ul>
@@ -92,49 +92,49 @@
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
-                            <div class="sb-sidenav-menu-heading">General</div>
+                            <div class="sb-sidenav-menu-heading">{{ _('General') }}</div>
                             <a class="nav-link" href="/">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Home
+                                {{ _('Home') }}
                             </a>
                             <a class="nav-link" href="/leaderboards/">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Leaderboards
+                                {{ _('Leaderboards') }}
                             </a>
                             <a class="nav-link" href="/watchdogstats/">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Watchdog Stats
+                                {{ _('Watchdog Stats') }}
                             </a>
                             <a class="nav-link" href="/game-counts/">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Game Counts
+                                {{ _('Game Counts') }}
                             </a>
                             <div class="sb-sidenav-menu-heading">Stats</div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Player
+                                {{ _('Player') }}
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="/player/">Stats Homepage</a>
-                                    <a class="nav-link" href="/player/bedwars/">Bedwars</a>
-                                    <a class="nav-link" href="/player/skywars/">Skywars</a>
-                                    <a class="nav-link" href="/player/duels/">Duels</a>
-                                    <a class="nav-link" href="/player/other/">Other</a>
+                                    <a class="nav-link" href="/player/">{{ _('Stats Homepage') }}</a>
+                                    <a class="nav-link" href="/player/bedwars/">{{ _('Bedwars') }}</a>
+                                    <a class="nav-link" href="/player/skywars/">{{ _('Skywars') }}</a>
+                                    <a class="nav-link" href="/player/duels/">{{ _('Duels') }}</a>
+                                    <a class="nav-link" href="/player/other/">{{ _('Other') }}</a>
                                 </nav>
                             </div>
                             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                Skyblock
+                                {{ _('Skyblock') }}
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="collapsePages" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="/skyblock/bazaar/">Bazaar</a>
-                                    <a class="nav-link" href="/skyblock/auctions/">Auctions</a>
-                                    <a class="nav-link" href="/skyblock/profile/">Profile</a>
-                                    <a class="nav-link" href="/skyblock/news/">News</a>
+                                    <a class="nav-link" href="/skyblock/bazaar/">{{ _('Bazaar') }}</a>
+                                    <a class="nav-link" href="/skyblock/auctions/">{{ _('Auctions') }}</a>
+                                    <a class="nav-link" href="/skyblock/profile/">{{ _('Profile') }}</a>
+                                    <a class="nav-link" href="/skyblock/news/">{{ _('News') }}</a>
                                 </nav>
                             </div>
                             <a class="nav-link" href="/guild/">
@@ -145,16 +145,16 @@
                                 </div>
                                 Guild
                             </a>
-                            <div class="sb-sidenav-menu-heading">API</div>
+                            <div class="sb-sidenav-menu-heading">{{ _('API') }}</div>
                             <a class="nav-link" href="/api/documentation/">
                                 <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                Documentation
+                                {{ _('Documentation') }}
                             </a>
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
-                        <div class="small">Logged in as:</div>
-                        None
+                        <div class="small">{{ _('Logged in as:') }}</div>
+                        {{ _('None') }}
                     </div>
                 </nav>
             </div>
@@ -184,11 +184,11 @@
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">
                         <div class="d-flex align-items-center justify-content-between small">
-                            <div class="text-muted">Copyright &copy; Hypixel Leaderboards 2020</div>
+                            <div class="text-muted">{{ _('Copyright &copy; Hypixel Leaderboards 2020') }}</div>
                             <div>
-                                <a href="/privacy-policy/">Privacy Policy</a>
+                                <a href="/privacy-policy/">{{ _('Privacy Policy') }}</a>
                                 &middot;
-                                <a href="/terms-of-service/">Terms &amp; Conditions</a>
+                                <a href="/terms-of-service/">{{ _('Terms &amp; Conditions') }}</a>
                             </div>
                         </div>
                     </div>

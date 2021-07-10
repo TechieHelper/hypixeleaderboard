@@ -1,0 +1,127 @@
+# Translations template for PROJECT.
+# Copyright (C) 2021 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2021-07-10 11:57+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: templates/rootLayout.html:65
+msgid "Hypixel Leaderboards"
+msgstr ""
+
+#: templates/rootLayout.html:82
+msgid "Settings"
+msgstr ""
+
+#: templates/rootLayout.html:83
+msgid "Activity Log"
+msgstr ""
+
+#: templates/rootLayout.html:85
+msgid "Logout"
+msgstr ""
+
+#: templates/rootLayout.html:95
+msgid "General"
+msgstr ""
+
+#: templates/rootLayout.html:98
+msgid "Home"
+msgstr ""
+
+#: templates/rootLayout.html:102
+msgid "Leaderboards"
+msgstr ""
+
+#: templates/rootLayout.html:106
+msgid "Watchdog Stats"
+msgstr ""
+
+#: templates/rootLayout.html:110
+msgid "Game Counts"
+msgstr ""
+
+#: templates/rootLayout.html:115
+msgid "Player"
+msgstr ""
+
+#: templates/rootLayout.html:120
+msgid "Stats Homepage"
+msgstr ""
+
+#: templates/rootLayout.html:121
+msgid "Bedwars"
+msgstr ""
+
+#: templates/rootLayout.html:122
+msgid "Skywars"
+msgstr ""
+
+#: templates/rootLayout.html:123
+msgid "Duels"
+msgstr ""
+
+#: templates/rootLayout.html:124
+msgid "Other"
+msgstr ""
+
+#: templates/rootLayout.html:129
+msgid "Skyblock"
+msgstr ""
+
+#: templates/rootLayout.html:134
+msgid "Bazaar"
+msgstr ""
+
+#: templates/rootLayout.html:135
+msgid "Auctions"
+msgstr ""
+
+#: templates/rootLayout.html:136
+msgid "Profile"
+msgstr ""
+
+#: templates/rootLayout.html:137
+msgid "News"
+msgstr ""
+
+#: templates/rootLayout.html:148
+msgid "API"
+msgstr ""
+
+#: templates/rootLayout.html:151
+msgid "Documentation"
+msgstr ""
+
+#: templates/rootLayout.html:156
+msgid "Logged in as:"
+msgstr ""
+
+#: templates/rootLayout.html:157
+msgid "None"
+msgstr ""
+
+#: templates/rootLayout.html:187
+msgid "Copyright &copy; Hypixel Leaderboards 2020"
+msgstr ""
+
+#: templates/rootLayout.html:189
+msgid "Privacy Policy"
+msgstr ""
+
+#: templates/rootLayout.html:191
+msgid "Terms &amp; Conditions"
+msgstr ""
+

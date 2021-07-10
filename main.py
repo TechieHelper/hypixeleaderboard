@@ -1,4 +1,5 @@
 from flask import Flask, redirect, render_template, request, make_response, jsonify, Response
+from flask_babel import gettext, Babel
 from os import listdir
 from datetime import datetime
 
@@ -13,6 +14,7 @@ import atexit
 import math
 
 app = Flask(__name__)
+babel = Babel(app)
 #api = Blueprint('blueprint', __name__, template_folder="templates", subdomain="api")
 
 # General Functions
@@ -24,6 +26,11 @@ PSTACK_API_KEY = os.environ["PSTACK_API_KEY"]
 minecraftColors = {"GOLD": "FFAA00", "BLACK": "000000", "DARK_BLUE": "0000AA", "DARK_GREEN": "00AA00", "DARK_AQUA": "00AAAA", "DARK_RED": "AA0000", "DARK_PURPLE": "AA00AA", "GRAY": "AAAAAA", "DARK_GREY": "555555", "BLUE": "5555FF", "GREEN": "55FF55", "AQUA": "55FFFF", "RED": "FF5555", "LIGHT_PURPLE": "FF55FF", "YELLOW": "FFFF55", "WHITE": "FFFFFF"}
 minecraftChatCodes = {"GOLD": "§6", "BLACK": "§0", "DARK_BLUE": "§1", "DARK_GREEN": "§2", "DARK_AQUA": "§3", "DARK_RED": "§4", "DARK_PURPLE": "§5", "GRAY": "§7", "DARK_GREY": "§8", "BLUE": "§9", "GREEN": "§a", "AQUA": "§b", "RED": "§c", "LIGHT_PURPLE": "§d", "YELLOW": "§e", "WHITE": "§f"}
 minecraftCodesToHTML = {"§6": "FFAA00", "§0": "000000", "§1": "0000AA", "§2": "00AA00", "§3": "00AAAA", "§4": "AA0000", "§5": "AA00AA", "§7": "AAAAAA", "§8": "555555", "§9": "5555FF", "§a": "55FF55", "§b": "55FFFF", "§c": "FF5555", "§d": "FF55FF", "§e": "FFFF55", "§f": "FFFFFF"}
+
+
+@babel.localeselector
+def get_locale():
+	return request.accept_languages.best_match(["en", "fr"])
 
 
 @app.template_filter()
